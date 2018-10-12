@@ -1,0 +1,7 @@
+.eslint
+.git
+*Dockerfile*
+*docker-compose*
+/docs
+/node_modules
+/test

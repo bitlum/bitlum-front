@@ -1,0 +1,16 @@
+.root {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 2em;
+}
+
+.icon {
+  height: 1.4em;
+  width: 1.4em;
+  margin-right: 0.5em;
+}
+
+.name {
+  opacity: 0.85;
+}

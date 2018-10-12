@@ -1,0 +1,28 @@
+debug = false
+
+logLevel = "INFO"
+defaultEntryPoints = ["https","http"]
+
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+    [entryPoints.http.redirect]
+    entryPoint = "https"
+  [entryPoints.https]
+  address = ":443"
+    [entryPoints.https.tls]
+
+[api]
+
+[docker]
+watch = true
+exposedByDefault = false
+
+[acme]
+email = "talionarwork@gmail.com"
+storage = "/etc/traefik/acme/acme.json"
+OnHostRule=true
+acmeLogging = true
+entryPoint = "https"
+  [acme.httpChallenge]
+  entryPoint = "http"

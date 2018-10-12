@@ -1,0 +1,26 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "linebreak-style": "off",
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "no-unused-vars": ["warn"],
+    "import/no-unresolved": "off",
+    "react/require-default-props": "warn",
+    "react/no-array-index-key": "warn",
+    "arrow-parens": ["error", "as-needed"],
+    "no-nested-ternary": ["warn"],
+    "jsx-a11y/no-static-element-interactions": ["warn"],
+    "jsx-a11y/label-has-for": [
+      2,
+      {
+        "required": {
+          "every": ["id"]
+        }
+      }
+    ]
+  },
+  "extends": "airbnb"
+}

@@ -1,0 +1,47 @@
+version: '3.4'
+# ----------------------------------------------------------------------------
+# Setup default logging for all services
+# ----------------------------------------------------------------------------
+x-logging:
+  &default-logging
+  driver: json-file
+  options:
+    max-size: '10m'
+    max-file: '10'
+
+services:
+  # ----------------------------------------------------------------------------
+  # Reverse proxy and SSL provider for all services
+  # ----------------------------------------------------------------------------
+  traefik:
+    build:
+      context: ./
+      dockerfile: Dockerfile-traefik
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: on-failure:3
+    logging: *default-logging
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ssl:/etc/traefik/acme
+
+  # ----------------------------------------------------------------------------
+  # Static file server with UI inside
+  # ----------------------------------------------------------------------------
+  ui:
+    build: ./app
+    restart: on-failure:3
+    logging: *default-logging
+    expose:
+      - "80"
+    environment:
+      - INTERCOM_TOKEN=replace
+      - NODE_ENV=production
+    labels:
+      - "traefik.enable=true"
+      - "traefik.port=80"
+      - "traefik.frontend.rule=Host:testnet.bitlum.io"
+
+volumes:
+  ssl:

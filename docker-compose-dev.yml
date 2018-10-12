@@ -1,0 +1,20 @@
+# Here changes of docker-compose for development
+version: '3.4'
+
+services:
+  ui:
+    build:
+      context: ./app
+      target: development
+    volumes:
+      - ./app/src:/opt/app/src:delegated
+      - ./app/public:/opt/app/public:delegated
+      - ./app/package.json:/opt/app/package.json
+    ports:
+      - "3005:3000"
+    environment:
+      - NODE_ENV=development
+      # Allows you to use any host like lvh.me and others
+      - DANGEROUSLY_DISABLE_HOST_CHECK=true
+      # Enables live reload inside VM or Docker
+      - CHOKIDAR_USEPOLLING=true

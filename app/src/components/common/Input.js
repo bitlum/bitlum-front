@@ -19,7 +19,6 @@ const StyledInput = styled.input`
   padding: 1.15em;
   font-size: 1em;
   background-color: #fff;
-  color: var(--colors-text-main);
 
   :not(:placeholder-shown) {
     padding-top: 1.7em;
@@ -27,7 +26,7 @@ const StyledInput = styled.input`
   }
 
   :invalid:not(:placeholder-shown) {
-    background-color: #ffb7a8;
+    background-color: var(--colors-bg-error);
   }
 `;
 
@@ -47,11 +46,11 @@ const StyledLabel = styled.label`
     content: attr(data-label-valid);
   }
 
-  ${StyledInput}:invalid & {
-    color: red;
+  ${StyledInput}:invalid:not(:placeholder-shown) + & {
+    color: var(--colors-text-error);
   }
 
-  ${StyledInput}:invalid + &:before {
+  ${StyledInput}:invalid:not(:placeholder-shown) + &:before {
     content: attr(data-label-invalid);
   }
 `;

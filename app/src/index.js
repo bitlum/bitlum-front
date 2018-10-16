@@ -27,7 +27,7 @@ import stores from 'stores';
 
 import Home from 'scenes/Home';
 
-import Theme from 'theme';
+import { Global, Root, Header, Footer, Nav, Main, Aside } from './styles';
 
 import { ReactComponent as ProductLogo } from 'assets/img/logo/main.svg';
 
@@ -43,18 +43,29 @@ configure({
 // IC.boot();
 
 const App = () => (
-  <div className="App">
-    <Theme />
-    <header className="App-header">
-      <NavLink to="/" data-net={getNet() !== 'mainnet' ? getNet().toUpperCase() : ''}>
-        {/* <ProductLogo className="logo" /> */}
-      </NavLink>
-    </header>
-    <section>
+  <Root>
+    <Global />
+    <Header>Heading and logo here</Header>
+    <Aside>
+      <Nav>
+        <NavLink to="/" data-net={getNet() !== 'mainnet' ? getNet().toUpperCase() : ''}>
+          {/* <ProductLogo className="logo" /> */}
+        </NavLink>
+        <NavLink to="/" data-net={getNet() !== 'mainnet' ? getNet().toUpperCase() : ''}>
+          Link
+        </NavLink>
+        <NavLink to="/" data-net={getNet() !== 'mainnet' ? getNet().toUpperCase() : ''}>
+          Link
+        </NavLink>
+        <NavLink to="/" data-net={getNet() !== 'mainnet' ? getNet().toUpperCase() : ''}>
+          Link
+        </NavLink>
+      </Nav>
+    </Aside>
+    <Main>
       <Route exact path="/" component={Home} />
-    </section>
-    {process.env.NODE_ENV === 'development' ? <MobxDevTools /> : null}
-  </div>
+    </Main>
+  </Root>
 );
 
 const AppWrap = withRouter(App);
@@ -69,5 +80,19 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root'),
 );
+
+if (process.env.NODE_ENV === 'development') {
+  window.stores = stores;
+  ReactDOM.render(
+    <Provider {...stores}>
+      <I18nextProvider i18n={i18nConfig}>
+        <Router>
+          <MobxDevTools />
+        </Router>
+      </I18nextProvider>
+    </Provider>,
+    document.getElementById('dev'),
+  );
+}
 
 // registerServiceWorker();

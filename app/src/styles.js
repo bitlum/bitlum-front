@@ -9,7 +9,7 @@
 
 import styled, { createGlobalStyle } from 'styled-components';
 
-import { Header, Footer } from 'components/common';
+import { Header, Footer, Main, Aside } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -19,14 +19,39 @@ export * from 'components/common';
 
 export const Root = styled.div`
   display: grid;
-  grid-template-columns: 25vw 75vw;
+  grid-template-columns: 25vw 75vw; 
+  grid-template-rows: 4em 1fr 4em;
+  grid-template-areas:  "header header"
+                        "aside main"
+                        "footer footer";
   color: var(--main-color);
   font: var(--main-font);
   min-height: 100vh;
   background: var(--alt-bg-color);
-  & > ${Header},
+  /* & > ${Header},
   & > ${Footer} {
-    grid-column: 1 / span 2;
+    grid-column: start / end;
+  } */
+  & > ${Header} {
+    grid-area: header;
+  }
+  & > ${Footer} {
+    grid-area: footer;
+  }
+  & > ${Aside} {
+    grid-area: aside;
+  }
+  & > ${Main} {
+    grid-area: main;
+  }
+  & > ${Main},
+  & > ${Aside} {
+    display: flex;
+    flex-direction: column;    
+  }
+  & > ${Main} > :first-child,
+  & > ${Aside} > :first-child {
+    height: 15em;
   }
 `;
 

@@ -23,7 +23,7 @@ import {
 import { t } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 
-import registerServiceWorker from 'registerServiceWorker';
+// import registerServiceWorker from 'registerServiceWorker';
 import GA from 'utils/GA';
 import IC from 'utils/IC';
 import log from 'utils/logging';
@@ -38,8 +38,10 @@ import Account from 'scenes/Account';
 import Payments from 'scenes/Payments';
 import Send from 'scenes/Send';
 import Receive from 'scenes/Receive';
+import AccountSummary from 'components/SendPayment';
+import BalanceSummary from 'components/SendPayment';
 
-import { Global, Root, Header, Footer, Nav, Main, Aside } from './styles';
+import { Global as GlobalStyles, Root, Header, Footer, Nav, Main, Aside } from './styles';
 
 import { ReactComponent as ProductLogo } from 'assets/img/logo/main.svg';
 
@@ -57,10 +59,11 @@ configure({
 const App = inject('accounts')(
   observer(({ accounts }) => (
     <Root>
-      <Global />
+      <GlobalStyles />
       <Header>Heading and logo here</Header>
       <Aside>
-        <Nav>
+        <AccountSummary />
+        <Nav column>
           {accounts.authenticate.isAuthenticated
             ? [
                 <NavLink key="/payments" to="/payments">
@@ -90,23 +93,27 @@ const App = inject('accounts')(
             <Redirect to="/auth" />
           </Switch>
         ) : (
-          <Switch>
-            <Route exact path="/" component={Payments} />
-            <Route path="/payments" component={Payments} />
-            <Route path="/account" component={Account} />
-            <Route path="/send" component={Send} />
-            <Route path="/receive" component={Receive} />
-            <Route
-              path="/signout"
-              render={() => {
-                accounts.authenticate.signout();
-                return null;
-              }}
-            />
-            <Redirect to="/" />
-          </Switch>
+          [
+            <BalanceSummary />,
+            <Switch>
+              <Route exact path="/" component={Payments} />
+              <Route path="/payments" component={Payments} />
+              <Route path="/account" component={Account} />
+              <Route path="/send" component={Send} />
+              <Route path="/receive" component={Receive} />
+              <Route
+                path="/signout"
+                render={() => {
+                  accounts.authenticate.signout();
+                  return null;
+                }}
+              />
+              <Redirect to="/" />
+            </Switch>,
+          ]
         )}
       </Main>
+      <Footer />
     </Root>
   )),
 );

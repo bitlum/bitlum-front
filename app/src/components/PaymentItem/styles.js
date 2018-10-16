@@ -23,8 +23,8 @@ export const Root = styled.div`
 `;
 
 export const Submit = styled(Button)`
-color:red;
-line-height: 2em;
+  color: red;
+  line-height: 2em;
 `;
 
 export default Root;

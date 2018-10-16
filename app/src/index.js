@@ -38,8 +38,8 @@ import Account from 'scenes/Account';
 import Payments from 'scenes/Payments';
 import Send from 'scenes/Send';
 import Receive from 'scenes/Receive';
-import AccountSummary from 'components/SendPayment';
-import BalanceSummary from 'components/SendPayment';
+import AccountSummary from 'components/AccountSummary';
+import BalanceSummary from 'components/BalanceSummary';
 
 import { Global as GlobalStyles, Root, Header, Footer, Nav, Main, Aside } from './styles';
 

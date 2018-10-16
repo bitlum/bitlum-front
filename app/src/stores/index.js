@@ -87,7 +87,10 @@ const GenericApiStore = {
 };
 
 function createNewStore(store) {
-  const newStore = Object.assign({}, GenericApiStore, store);
+  const newStore = Object.defineProperties(
+    { ...GenericApiStore },
+    Object.getOwnPropertyDescriptors(store),
+  );
   decorate(newStore, {
     loading: observable,
     error: observable,
@@ -131,8 +134,8 @@ export const accounts = {
     async run(email, password) {
       this.startFetching({ body: { email, password } });
     },
-    get isAuthorized() {
-      return this.data && this.data.token;
+    get isAuthenticated() {
+      return !!(this.data && this.data.token);
     },
   }),
   get: createNewStore({
@@ -157,10 +160,6 @@ export const accounts = {
     },
   }),
 };
-
-decorate(accounts.authenticate, {
-  isAuthorized: observable,
-});
 
 const payments = {
   get: createNewStore({

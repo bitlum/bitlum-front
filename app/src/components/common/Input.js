@@ -1,5 +1,5 @@
 /**
- * Styled component for input
+ * Styled component for Input
  *
  */
 

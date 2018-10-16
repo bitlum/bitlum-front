@@ -1,5 +1,5 @@
 /**
- * Proxy setup for creat ereact app webpack dev server
+ * Data fetching and final component export
  *
  */
 
@@ -7,19 +7,10 @@
 // Dependencies
 // -----------------------------------------------------------------------------
 
-const proxy = require('http-proxy-middleware');
+import view from './view';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
-module.exports = app => {
-  app.use(
-    proxy('/api', {
-      target: 'http://host.docker.internal:3004',
-      pathRewrite: {
-        '^/api': '',
-      },
-    }),
-  );
-};
+export default view;

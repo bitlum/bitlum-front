@@ -20,7 +20,7 @@ import { Root, Input, Button } from './styles';
 // -----------------------------------------------------------------------------
 
 const AccountInfo = ({ accounts }) => {
-  if (accounts.get.error) {
+  if (accounts.get.error || !accounts.get.data) {
     return <Root>Error loading account data</Root>;
   }
   return (

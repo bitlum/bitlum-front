@@ -1,6 +1,19 @@
-import { decorate, computed, action, observable } from 'mobx';
+/**
+ * Generic store for creation of API calls stores with loading states
+ *
+ */
+
+// -----------------------------------------------------------------------------
+// Dependencies
+// -----------------------------------------------------------------------------
+
+import { decorate, action, observable } from 'mobx';
 
 import log from 'utils/logging';
+
+// -----------------------------------------------------------------------------
+// Code
+// -----------------------------------------------------------------------------
 
 const fetchData = (url, options) =>
   fetch(url, options)
@@ -12,7 +25,7 @@ const fetchData = (url, options) =>
       };
     });
 
-const GenericApiCallStore = {
+const GenericApiStore = {
   fetchOptions: { url: '/api' },
 
   fetch: fetchData,
@@ -53,10 +66,14 @@ const GenericApiCallStore = {
     }
   },
 
-  async load(options = {}) {
+  async run() {
+    return this.startFetching();
+  },
+
+  async startFetching(options = {}) {
     if (this.loading) {
-      log.debug(`${this.fetchOptions.url} is already loading`);
-      return;
+      log.debug(`${this.name} is already loading`);
+      return { loading: true };
     }
     const parsedOptions = {
       ...this.fetchOptions,
@@ -69,7 +86,7 @@ const GenericApiCallStore = {
         log.error(err);
         const error = { message: `Failed to stringify request body, ${options.body}`, code: 500 };
         this.updateError(error);
-        return;
+        return error;
       }
       if (!parsedOptions.headers) parsedOptions.headers = {};
       parsedOptions.headers['Content-Type'] = 'application/json; charset=utf-8';
@@ -79,11 +96,15 @@ const GenericApiCallStore = {
     this.updateData(response.data);
     this.updateError(response.error);
     this.loadingFinish();
+    return response;
   },
 };
 
-function createNewStore(store) {
-  const newStore = Object.assign({}, GenericApiCallStore, store);
+export function createNewStore(store) {
+  const newStore = Object.defineProperties(
+    { ...GenericApiStore },
+    Object.getOwnPropertyDescriptors(store),
+  );
   decorate(newStore, {
     loading: observable,
     error: observable,
@@ -96,27 +117,4 @@ function createNewStore(store) {
   return newStore;
 }
 
-export const Authorize = createNewStore({
-  name: 'Authorize',
-  fetchOptions: {
-    url: '/api/accounts/auth',
-    method: 'POST',
-  },
-});
-
-export const Payments = createNewStore({
-  name: 'Payments',
-  fetchOptions: {
-    url: '/api/payments',
-  },
-});
-
-export const sendPayment = createNewStore({
-  name: 'SendPayment',
-  fetchOptions: {
-    url: '/api/payments/send',
-    method: 'POST',
-  },
-});
-
-export default { Payments, Authorize, sendPayment };
+export default createNewStore;

@@ -1,5 +1,5 @@
 /**
- * Styled component for icon
+ * Styled component for Icon
  *
  */
 

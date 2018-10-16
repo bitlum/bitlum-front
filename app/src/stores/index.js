@@ -1,107 +1,19 @@
-import { decorate, computed, action, observable } from 'mobx';
+/**
+ * Entrypoint of all app stores
+ *
+ */
+
+// -----------------------------------------------------------------------------
+// Dependencies
+// -----------------------------------------------------------------------------
 
 import log from 'utils/logging';
 
-const fetchData = (url, options) =>
-  fetch(url, options)
-    .then(res => res.json())
-    .catch(error => {
-      log.error(error);
-      return {
-        error: { message: 'Error occuried during data fetching', code: error.code || 500 },
-      };
-    });
+import { createNewStore } from './generic';
 
-const GenericApiStore = {
-  fetchOptions: { url: '/api' },
-
-  fetch: fetchData,
-
-  loading: undefined,
-
-  startedAt: undefined,
-
-  finishedAt: undefined,
-
-  data: undefined,
-
-  error: undefined,
-
-  loadingStart() {
-    this.loading = true;
-    this.startedAt = new Date().getTime();
-  },
-
-  loadingFinish() {
-    this.loading = false;
-    this.finishedAt = new Date().getTime();
-  },
-
-  updateData(data) {
-    if (!this.data || !data) {
-      this.data = data;
-    } else {
-      Object.assign(this.data, data);
-    }
-  },
-
-  updateError(error) {
-    if (!this.error || !error) {
-      this.error = error;
-    } else {
-      Object.assign(this.error, error);
-    }
-  },
-
-  async run() {
-    return this.startFetching();
-  },
-
-  async startFetching(options = {}) {
-    if (this.loading) {
-      log.debug(`${this.name} is already loading`);
-      return;
-    }
-    const parsedOptions = {
-      ...this.fetchOptions,
-      ...options,
-    };
-    if (parsedOptions.body && typeof options.body !== 'string') {
-      try {
-        parsedOptions.body = JSON.stringify(parsedOptions.body);
-      } catch (err) {
-        log.error(err);
-        const error = { message: `Failed to stringify request body, ${options.body}`, code: 500 };
-        this.updateError(error);
-        return;
-      }
-      if (!parsedOptions.headers) parsedOptions.headers = {};
-      parsedOptions.headers['Content-Type'] = 'application/json; charset=utf-8';
-    }
-    this.loadingStart();
-    const response = await this.fetch(parsedOptions.url, parsedOptions);
-    this.updateData(response.data);
-    this.updateError(response.error);
-    this.loadingFinish();
-  },
-};
-
-function createNewStore(store) {
-  const newStore = Object.defineProperties(
-    { ...GenericApiStore },
-    Object.getOwnPropertyDescriptors(store),
-  );
-  decorate(newStore, {
-    loading: observable,
-    error: observable,
-    data: observable,
-    loadingStart: action(`Loading started (${newStore.name})`),
-    loadingFinish: action(`Loading finished (${newStore.name})`),
-    updateError: action(`Error updated (${newStore.name})`),
-    updateData: action(`Data updated (${newStore.name})`),
-  });
-  return newStore;
-}
+// -----------------------------------------------------------------------------
+// Code
+// -----------------------------------------------------------------------------
 
 export const accounts = {
   authenticate: createNewStore({
@@ -134,6 +46,9 @@ export const accounts = {
     async run(email, password) {
       this.startFetching({ body: { email, password } });
     },
+    signout() {
+      this.updateData(undefined);
+    },
     get isAuthenticated() {
       return !!(this.data && this.data.token);
     },
@@ -151,12 +66,15 @@ export const accounts = {
     fetchOptions: {
       url: '/api/accounts',
     },
-    run() {
-      this.startFetching({
+    async run() {
+      const result = await this.startFetching({
         headers: {
           Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
         },
       });
+      if (result.error && result.error.code.match('^401.*$')) {
+        accounts.authenticate.signout();
+      }
     },
   }),
 };
@@ -164,12 +82,15 @@ export const accounts = {
 const payments = {
   get: createNewStore({
     name: 'PaymentsGet',
-    run() {
-      this.startFetching({
+    async run() {
+      const result = await this.startFetching({
         headers: {
           Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
         },
       });
+      if (result.error && result.error.code.match('^401.*$')) {
+        accounts.authenticate.signout();
+      }
     },
     fetchOptions: {
       url: '/api/payments',
@@ -177,13 +98,16 @@ const payments = {
   }),
   send: createNewStore({
     name: 'PaymentsSend',
-    run(to, amount, asset) {
-      this.startFetching({
+    async run(to, amount, asset) {
+      const result = await this.startFetching({
         headers: {
           Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
         },
         body: { to, amount, asset },
       });
+      if (result.error && result.error.code.match('^401.*$')) {
+        accounts.authenticate.signout();
+      }
     },
     fetchOptions: {
       url: '/api/payments/send',
@@ -192,13 +116,16 @@ const payments = {
   }),
   receive: createNewStore({
     name: 'PaymentsReceive',
-    run(type, amount, asset) {
-      this.startFetching({
+    async run(type, amount, asset) {
+      const result = await this.startFetching({
         headers: {
           Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
         },
         body: { type, amount, asset },
       });
+      if (result.error && result.error.code.match('^401.*$')) {
+        accounts.authenticate.signout();
+      }
     },
     fetchOptions: {
       url: '/api/payments/receive',

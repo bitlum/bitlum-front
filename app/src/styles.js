@@ -1,5 +1,5 @@
 /**
- * Default theme and styles
+ * CSS variables, default global styles and App entrypoint styles
  *
  */
 

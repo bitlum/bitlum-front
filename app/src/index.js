@@ -10,9 +10,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { configure } from 'mobx';
-import { Provider } from 'mobx-react';
+import { Provider, observer, inject } from 'mobx-react';
 import MobxDevTools from 'mobx-react-devtools';
-import { HashRouter as Router, Route, NavLink, withRouter } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  NavLink,
+  withRouter,
+  Redirect,
+  Switch,
+} from 'react-router-dom';
 import { t } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 
@@ -25,7 +32,12 @@ import i18nConfig from 'locales';
 
 import stores from 'stores';
 
-import Home from 'scenes/Home';
+import Auth from 'scenes/Auth';
+import Landing from 'scenes/Landing';
+import Account from 'scenes/Account';
+import Payments from 'scenes/Payments';
+import Send from 'scenes/Send';
+import Receive from 'scenes/Receive';
 
 import { Global, Root, Header, Footer, Nav, Main, Aside } from './styles';
 
@@ -42,30 +54,39 @@ configure({
 });
 // IC.boot();
 
-const App = () => (
-  <Root>
-    <Global />
-    <Header>Heading and logo here</Header>
-    <Aside>
-      <Nav>
-        <NavLink to="/" data-net={getNet() !== 'mainnet' ? getNet().toUpperCase() : ''}>
-          {/* <ProductLogo className="logo" /> */}
-        </NavLink>
-        <NavLink to="/" data-net={getNet() !== 'mainnet' ? getNet().toUpperCase() : ''}>
-          Link
-        </NavLink>
-        <NavLink to="/" data-net={getNet() !== 'mainnet' ? getNet().toUpperCase() : ''}>
-          Link
-        </NavLink>
-        <NavLink to="/" data-net={getNet() !== 'mainnet' ? getNet().toUpperCase() : ''}>
-          Link
-        </NavLink>
-      </Nav>
-    </Aside>
-    <Main>
-      <Route exact path="/" component={Home} />
-    </Main>
-  </Root>
+const App = inject('accounts')(
+  observer(({ accounts }) => (
+    <Root>
+      <Global />
+      <Header>Heading and logo here</Header>
+      <Aside>
+        <Nav>
+          <NavLink to="/payments">Payments</NavLink>
+          <NavLink to="/account">Account</NavLink>
+          <NavLink to="/send">Send</NavLink>
+          <NavLink to="/receive">Receive</NavLink>
+        </Nav>
+      </Aside>
+      <Main>
+        {!accounts.authenticate.isAuthenticated ? (
+          <Switch>
+            <Route exact path="/" component={Landing} />
+            <Route path="/auth" component={Auth} />
+            <Redirect to="/auth" />
+          </Switch>
+        ) : (
+          <Switch>
+            <Route exact path="/" component={Payments} />
+            <Route path="/payments" component={Payments} />
+            <Route path="/account" component={Account} />
+            <Route path="/send" component={Send} />
+            <Route path="/receive" component={Receive} />
+            <Redirect to="/" />
+          </Switch>
+        )}
+      </Main>
+    </Root>
+  )),
 );
 
 const AppWrap = withRouter(App);

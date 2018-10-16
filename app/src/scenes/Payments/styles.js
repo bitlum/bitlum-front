@@ -1,5 +1,5 @@
 /**
- * Component to display name and button for name generation
+ * Payments scene styles
  *
  */
 
@@ -7,10 +7,7 @@
 // Dependencies
 // -----------------------------------------------------------------------------
 
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
-import { Input, Button } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -18,13 +15,6 @@ import { Input, Button } from 'components/common';
 
 export * from 'components/common';
 
-export const Root = styled.div`
-  padding: 4em;
-`;
-
-export const Submit = styled(Button)`
-color:red;
-line-height: 2em;
-`;
+export const Root = styled.div``;
 
 export default Root;

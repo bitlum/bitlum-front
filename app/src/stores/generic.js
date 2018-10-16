@@ -21,7 +21,7 @@ const fetchData = (url, options) =>
     .catch(error => {
       log.error(error);
       return {
-        error: { message: 'Error occuried during data fetching', code: error.code || 500 },
+        error: { message: 'Error occuried during data fetching', code: error.code || '500000000' },
       };
     });
 

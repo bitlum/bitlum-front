@@ -61,10 +61,25 @@ const App = inject('accounts')(
       <Header>Heading and logo here</Header>
       <Aside>
         <Nav>
-          <NavLink to="/payments">Payments</NavLink>
-          <NavLink to="/account">Account</NavLink>
-          <NavLink to="/send">Send</NavLink>
-          <NavLink to="/receive">Receive</NavLink>
+          {accounts.authenticate.isAuthenticated
+            ? [
+                <NavLink key="/payments" to="/payments">
+                  Payments
+                </NavLink>,
+                <NavLink key="/account" to="/account">
+                  Account
+                </NavLink>,
+                <NavLink key="/send" to="/send">
+                  Send
+                </NavLink>,
+                <NavLink key="/receive" to="/receive">
+                  Receive
+                </NavLink>,
+                <NavLink key="/signout" to="/signout">
+                  Signout
+                </NavLink>,
+              ]
+            : null}
         </Nav>
       </Aside>
       <Main>
@@ -81,6 +96,13 @@ const App = inject('accounts')(
             <Route path="/account" component={Account} />
             <Route path="/send" component={Send} />
             <Route path="/receive" component={Receive} />
+            <Route
+              path="/signout"
+              render={() => {
+                accounts.authenticate.signout();
+                return null;
+              }}
+            />
             <Redirect to="/" />
           </Switch>
         )}

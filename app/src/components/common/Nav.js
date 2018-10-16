@@ -15,33 +15,21 @@ import styled from 'styled-components';
 
 export const Nav = styled.div`
   display: flex;
-  position: relative;
+  flex-direction: ${({ column }) => (column ? 'column' : 'row')};
 
-  & ul {
-    display: flex;
-    align-items: center;
-    font-size: 1.2rem;
+  & > * {
+    padding: 0.5em 1em;
+    cursor: pointer;
   }
 
-  & ul {
-    display: flex;
-    overflow: hidden;
-    justify-content: center;
-    list-style-type: none;
-  }
-
-  & ul li {
-    margin-left: 50px;
-  }
-
-  & ul li a {
-    color: var(--main-color);
+  & > *{
     text-decoration: none;
   }
 
-  & ul li a:hover,
-  & ul li a.selected {
+  & > :hover,
+  & > .active {
     color: var(--accent-color);
+    font-weight: 500;
   }
 `;
 

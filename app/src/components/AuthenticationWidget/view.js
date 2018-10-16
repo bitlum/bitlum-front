@@ -13,7 +13,7 @@ import { t } from 'i18next';
 
 import log from 'utils/logging';
 
-import { Root, Input, Button } from './styles';
+import { Root, Input, Button, Message } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -49,6 +49,12 @@ const AuthenticationWidget = ({ accounts }) => {
         required
       />
       <Button primary type="submit">Login</Button>
+      {accounts.authenticate.error && (
+        <Message type="error">{accounts.authenticate.error.message}</Message>
+      )}
+      {accounts.authenticate.data && Object.keys(accounts.authenticate.data).length === 0 && (
+        <Message type="error">No account was found with such email</Message>
+      )}
     </Root>
   );
 };

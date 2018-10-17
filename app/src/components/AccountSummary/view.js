@@ -10,6 +10,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { t } from 'i18next';
+import { NavLink } from 'react-router-dom';
 
 import log from 'utils/logging';
 
@@ -26,6 +27,9 @@ const AccountInfo = ({ accounts }) => {
   return (
     <Root loading={accounts.get.loading}>
       <p>Email: {accounts.get.data.email}</p>
+      <NavLink key="/signout" to="/signout">
+        Signout
+      </NavLink>
     </Root>
   );
 };

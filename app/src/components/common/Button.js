@@ -16,7 +16,6 @@ import styled from 'styled-components';
 export const Button = styled.button`
   word-break: break-word;
   font-size: 1em;
-  margin: 1em;
   padding: 0.45em 1.3em;
   border-radius: 0.2em;
   color: ${({ primary }) => (primary ? '#fff' : 'var(--colors-text-accent)')};

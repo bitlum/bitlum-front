@@ -25,9 +25,6 @@ const AccountInfo = ({ accounts }) => {
   }
   return (
     <Root loading={accounts.get.loading}>
-      <p>Account {accounts.get.data.auid} info: </p>
-      <p>Email: {accounts.get.data.email}</p>
-      <p>Restrictions: {JSON.stringify(accounts.get.data.restrictions || {}, null, 2)}</p>
       <p>Balances: {JSON.stringify(accounts.get.data.balances || {}, null, 2)}</p>
     </Root>
   );

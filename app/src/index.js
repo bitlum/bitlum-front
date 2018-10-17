@@ -62,28 +62,17 @@ const App = inject('accounts')(
       <GlobalStyles />
       <Header>Heading and logo here</Header>
       <Aside>
-        <AccountSummary />
-        <Nav column>
-          {accounts.authenticate.isAuthenticated
-            ? [
-                <NavLink key="/payments" to="/payments">
-                  Payments
-                </NavLink>,
-                <NavLink key="/account" to="/account">
-                  Account
-                </NavLink>,
-                <NavLink key="/send" to="/send">
-                  Send
-                </NavLink>,
-                <NavLink key="/receive" to="/receive">
-                  Receive
-                </NavLink>,
-                <NavLink key="/signout" to="/signout">
-                  Signout
-                </NavLink>,
-              ]
-            : null}
-        </Nav>
+        {accounts.authenticate.isAuthenticated
+          ? [
+              <AccountSummary key="AccountSummary" />,
+              <Nav key="Nav" column>
+                <NavLink to="/payments">Payments</NavLink>
+                <NavLink to="/account">Account</NavLink>
+                <NavLink to="/send">Send</NavLink>
+                <NavLink to="/receive">Receive</NavLink>
+              </Nav>,
+            ]
+          : null}
       </Aside>
       <Main>
         {!accounts.authenticate.isAuthenticated ? (
@@ -94,9 +83,8 @@ const App = inject('accounts')(
           </Switch>
         ) : (
           [
-            <BalanceSummary />,
-            <Switch>
-              <Route exact path="/" component={Payments} />
+            <BalanceSummary key="BalanceSummary" />,
+            <Switch key="Switch">
               <Route path="/payments" component={Payments} />
               <Route path="/account" component={Account} />
               <Route path="/send" component={Send} />
@@ -108,7 +96,7 @@ const App = inject('accounts')(
                   return null;
                 }}
               />
-              <Redirect to="/" />
+              <Redirect to="/payments" />
             </Switch>,
           ]
         )}

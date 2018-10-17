@@ -53,6 +53,30 @@ export const accounts = {
       return !!(this.data && this.data.token);
     },
   }),
+  signup: createNewStore({
+    name: 'AccountsSignup',
+    fetchOptions: {
+      url: '/api/accounts',
+      method: 'POST',
+    },
+    updateData(data) {
+      try {
+        localStorage.setItem('authData', JSON.stringify(data));
+      } catch (error) {
+        log.error(`Unable to save auth data to local storage (${error.message})`);
+      }
+      if (!this.data || !data) {
+        this.data = data;
+      } else {
+        Object.assign(this.data, data);
+      }
+      accounts.authenticate.updateData(data);
+      accounts.get.updateData(data);
+    },
+    async run(email, password) {
+      this.startFetching({ body: { email, password } });
+    },
+  }),
   get: createNewStore({
     name: 'AccountsAuthenticate',
     data: (() => {

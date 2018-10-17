@@ -22,7 +22,14 @@ import { Root, Input, Button } from './styles';
 
 const AccountInfo = ({ accounts }) => {
   if (accounts.get.error || !accounts.get.data) {
-    return <Root>Error loading account data</Root>;
+    return (
+      <Root>
+        Error loading account data
+        <NavLink key="/signout" to="/signout">
+          Signout
+        </NavLink>
+      </Root>
+    );
   }
   return (
     <Root loading={accounts.get.loading}>

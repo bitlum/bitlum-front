@@ -28,9 +28,9 @@ const SignupForm = ({ accounts }) => {
         const email = emailElement && emailElement.value;
         const passwordElement = e.target.querySelector('#authPassword');
         const password = passwordElement && passwordElement.value;
-        accounts.authenticate.run(email, password);
+        accounts.signup.run(email, password);
       }}
-      loading={accounts.authenticate.loading}
+      loading={accounts.signup.loading}
     >
       <Input
         id="authEmail"
@@ -48,12 +48,9 @@ const SignupForm = ({ accounts }) => {
         labelInvalid="Password invalid"
         required
       />
-      <Button primary type="submit">Login</Button>
-      {accounts.authenticate.error && (
-        <Message type="error">{accounts.authenticate.error.message}</Message>
-      )}
-      {accounts.authenticate.data && Object.keys(accounts.authenticate.data).length === 0 && (
-        <Message type="error">No account was found with such email</Message>
+      <Button primary type="submit">Sign Up</Button>
+      {accounts.signup.error && (
+        <Message type="error">{accounts.signup.error.message}</Message>
       )}
     </Root>
   );

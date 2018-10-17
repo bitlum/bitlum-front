@@ -33,6 +33,7 @@ import i18nConfig from 'locales';
 import stores from 'stores';
 
 import Auth from 'scenes/Auth';
+import Signup from 'scenes/Signup';
 import Landing from 'scenes/Landing';
 import Account from 'scenes/Account';
 import Payments from 'scenes/Payments';
@@ -60,7 +61,15 @@ const App = inject('accounts')(
   observer(({ accounts }) => (
     <Root>
       <GlobalStyles />
-      <Header>Heading and logo here</Header>
+      <Header>
+        Heading and logo here{' '}
+        {!accounts.authenticate.isAuthenticated ? (
+          <Nav key="Nav">
+            <NavLink to="/auth">Login</NavLink>
+            <NavLink to="/signup">Signup</NavLink>
+          </Nav>
+        ) : null}
+      </Header>
       <Aside>
         {accounts.authenticate.isAuthenticated
           ? [
@@ -79,6 +88,7 @@ const App = inject('accounts')(
           <Switch>
             <Route exact path="/" component={Landing} />
             <Route path="/auth" component={Auth} />
+            <Route path="/signup" component={Signup} />
             <Redirect to="/auth" />
           </Switch>
         ) : (

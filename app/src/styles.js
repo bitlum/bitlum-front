@@ -9,7 +9,7 @@
 
 import styled, { createGlobalStyle } from 'styled-components';
 
-import { Header, Footer, Main, Aside } from 'components/common';
+import { Header, Footer, Main, Aside, media } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -19,8 +19,8 @@ export * from 'components/common';
 
 export const Root = styled.div`
   display: grid;
-  grid-template-columns: 25vw 75vw; 
-  grid-template-rows: 4em 1fr 4em;
+  grid-template-columns: auto minmax(75vw, 4fr); 
+  grid-template-rows: 4em auto 4em;
   grid-template-areas:  "header header"
                         "aside main"
                         "footer footer";
@@ -51,8 +51,26 @@ export const Root = styled.div`
   }
   & > ${Main} > :first-child,
   & > ${Aside} > :first-child {
-    height: 15em;
+    height: 12em;
   }
+
+  ${media.tablet`
+    grid-template-areas: "header header"
+                         "main main"
+                         "footer footer";
+  
+    & > ${Aside} {
+      grid-area: main;
+      position: relative;
+      left: -100%;
+      
+    }
+    
+    & > ${Aside}.opened {
+      left: 0;
+    }
+  `}
+}
 `;
 
 export const Global = createGlobalStyle`

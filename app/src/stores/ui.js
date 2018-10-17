@@ -7,14 +7,24 @@
 // Dependencies
 // -----------------------------------------------------------------------------
 
-import * as dataStores from './data';
-import * as uiStores from './ui';
+import { decorate, action, observable } from 'mobx';
+
+import log from 'utils/logging';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
-export * from './data';
-export * from './ui';
+export const ui = observable(
+  {
+    isAsideShown: false,
+    toggleAside() {
+      this.isAsideShown = !this.isAsideShown;
+    },
+  },
+  {
+    toggleAside: action('Toggle aside (uiStore)'),
+  },
+);
 
-export default { ...dataStores, ...uiStores };
+export default { ui };

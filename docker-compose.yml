@@ -40,8 +40,9 @@ services:
       - NODE_ENV=production
     labels:
       - "traefik.enable=true"
+      - "traefik.backend=ui"
       - "traefik.port=80"
-      - "traefik.frontend.rule=Host:testnet.bitlum.io"
+      - "traefik.frontend.rule=Host:testnet.bitlum.io,mainnet.bitlum.io"
 
 volumes:
   ssl:

@@ -26,3 +26,24 @@ acmeLogging = true
 entryPoint = "https"
   [acme.httpChallenge]
   entryPoint = "http"
+
+[file]
+[backends.testnet_api]
+  [backends.testnet_api.servers.server]
+    url = "https://testnet.api.bitlum.io"
+
+[backends.mainnet_api]
+  [backends.mainnet_api.servers.server]
+    url = "https://api.bitlum.io"
+
+[frontends.testnet_api_passthrough]
+  backend = "testnet_api"
+  priority = 11
+  [frontends.testnet_api_passthrough.routes.main]
+    rule = "Host:testnet.bitlum.io;PathPrefixStrip:/api/"
+
+[frontends.mainnet_api_passthrough]
+  backend = "mainnet_api"
+  priority = 11
+  [frontends.mainnet_api_passthrough.routes.main]
+    rule = "Host:mainnet.bitlum.io;PathPrefixStrip:/api/"

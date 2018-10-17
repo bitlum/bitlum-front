@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import GA from 'utils/GA';
 import IC from 'utils/IC';
 
-import AuthenticationWidget from 'components/AuthenticationWidget';
+import AuthForm from 'components/AuthForm';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -32,7 +32,7 @@ const Auth = () => {
   // }
 
   return (
-    <AuthenticationWidget />
+    <AuthForm />
   );
 };
 

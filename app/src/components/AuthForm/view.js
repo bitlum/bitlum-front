@@ -19,7 +19,7 @@ import { Root, Input, Button, Message } from './styles';
 // Code
 // -----------------------------------------------------------------------------
 
-const AuthenticationWidget = ({ accounts }) => {
+const AuthForm = ({ accounts }) => {
   return (
     <Root
       onSubmit={e => {
@@ -59,8 +59,8 @@ const AuthenticationWidget = ({ accounts }) => {
   );
 };
 
-AuthenticationWidget.propTypes = {};
+AuthForm.propTypes = {};
 
-AuthenticationWidget.defaultProps = {};
+AuthForm.defaultProps = {};
 
-export default AuthenticationWidget;
+export default AuthForm;

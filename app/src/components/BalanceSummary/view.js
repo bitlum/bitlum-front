@@ -24,14 +24,17 @@ export const AccountInfo = ({ accounts, className, t }) => {
   }
   return (
     <Root className={className} loading={accounts.get.loading}>
-      {Object.keys(accounts.get.data.balances).map(asset => [
-        <Available key={`${asset}Available`}>
-          {Math.floor(accounts.get.data.balances[asset].available * 10 ** 8) / 10 ** 8} {asset}
-        </Available>,
-        <Pending key={`${asset}Pending`}>
-          Pending {Math.floor(accounts.get.data.balances[asset].pending * 10 ** 8) / 10 ** 8} {asset}
-        </Pending>,
-      ])}
+      {Object.keys(accounts.get.data.balances).map(
+        asset => [
+          <Available key={`${asset}Available`}>
+            {Math.floor(accounts.get.data.balances[asset].available * 10 ** 8) / 10 ** 8} {asset}
+          </Available>,
+          <Pending key={`${asset}Pending`}>
+            Pending {Math.floor(accounts.get.data.balances[asset].pending * 10 ** 8) / 10 ** 8}{' '}
+            {asset}
+          </Pending>,
+        ],
+      )}
     </Root>
   );
 };

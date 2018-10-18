@@ -20,6 +20,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "10.135.15.180:8080:8080"
     restart: on-failure:3
     logging: *default-logging
     volumes:
@@ -41,6 +42,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.backend=ui"
+      - "traefik.frontend.priority=10"
       - "traefik.port=80"
       - "traefik.frontend.rule=Host:testnet.bitlum.io,mainnet.bitlum.io"
 

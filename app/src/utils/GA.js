@@ -16,8 +16,8 @@ import log from 'utils/logging';
 
 const trackingId =
   process.env.NODE_ENV !== 'production'
-    ? 'UA-84668833-14'
-      : getNet() === 'testnet' ? 'UA-84668833-12' : 'UA-84668833-16';
+    ? 'UA-84668833-16'
+      : getNet() === 'testnet' ? 'UA-84668833-17' : 'UA-84668833-18';
 
 const analytics = (function GAinitializer() {
   window.ga =

@@ -1,5 +1,5 @@
 /**
- * Receive scene
+ * Login scene styles
  *
  */
 
@@ -7,14 +7,23 @@
 // Dependencies
 // -----------------------------------------------------------------------------
 
-import React from 'react';
+import styled from 'styled-components';
 
-import { ReceivePayment } from './styles';
+import LoginFormCommon from 'components/LoginForm';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
-const Receive = () => <ReceivePayment />;
+export * from 'components/common';
 
-export default Receive;
+export const Root = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+
+export const LoginForm = styled(LoginFormCommon)`
+  width: 400px;
+`;

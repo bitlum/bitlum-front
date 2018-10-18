@@ -1,5 +1,5 @@
 /**
- * Receive scene
+ * Styled component for Form
  *
  */
 
@@ -7,14 +7,19 @@
 // Dependencies
 // -----------------------------------------------------------------------------
 
-import React from 'react';
-
-import { ReceivePayment } from './styles';
+import styled from 'styled-components';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
-const Receive = () => <ReceivePayment />;
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
 
-export default Receive;
+  & > * {
+    margin-bottom: 1em
+  }
+`;
+
+export default Form;

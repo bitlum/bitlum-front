@@ -18,7 +18,7 @@ import { Root, Input, Button, Message } from './styles';
 // Code
 // -----------------------------------------------------------------------------
 
-export const SignupForm = ({ accounts, className, t }) => (
+export const LoginForm = ({ accounts, className, t }) => (
   <Root
     className={className}
     onSubmit={e => {
@@ -27,35 +27,41 @@ export const SignupForm = ({ accounts, className, t }) => (
       const email = emailElement && emailElement.value;
       const passwordElement = e.target.querySelector('#authPassword');
       const password = passwordElement && passwordElement.value;
-      accounts.signup.run(email, password);
+      accounts.authenticate.run(email, password);
     }}
-    loading={accounts.signup.loading}
+    loading={accounts.authenticate.loading}
   >
     <Input
       id="authEmail"
       type="email"
-      placeholder={t('auth.email')}
-      labelValid={t('auth.email')}
-      labelInvalid={t('auth.emailInvalid')}
+      placeholder="Your email"
+      labelValid="Email"
+      labelInvalid="Invalid email"
       required
     />
     <Input
       id="authPassword"
       type="password"
-      placeholder={t('auth.password')}
-      labelValid={t('auth.password')}
-      labelInvalid={t('auth.passwordInvalid')}
+      placeholder="Your password"
+      labelValid="Password"
+      labelInvalid="Password invalid"
       required
     />
     <Button primary type="submit">
-      {t('nav.signup')}
+      Login
     </Button>
-    {accounts.signup.error && <Message type="error">{accounts.signup.error.message}</Message>}
+    {accounts.authenticate.error && (
+      <Message type="error">{accounts.authenticate.error.message}</Message>
+    )}
+    {accounts.authenticate.data &&
+      Object.keys(accounts.authenticate.data).length === 0 && (
+        <Message type="error">No account was found with such email</Message>
+      )}
   </Root>
 );
 
-SignupForm.propTypes = {};
+LoginForm.propTypes = {};
 
-SignupForm.defaultProps = {};
+LoginForm.defaultProps = {};
 
-export default SignupForm;
+export default LoginForm;

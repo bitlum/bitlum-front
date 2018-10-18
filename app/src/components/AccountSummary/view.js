@@ -9,21 +9,20 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { t } from 'i18next';
 import { NavLink } from 'react-router-dom';
 
 import log from 'utils/logging';
 
-import { Root, Input, Button } from './styles';
+import { Root, Input, Button, P } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
-const AccountInfo = ({ accounts }) => {
+export const AccountInfo = ({ accounts, className, t }) => {
   if (accounts.get.error || !accounts.get.data) {
     return (
-      <Root>
+      <Root className={className}>
         Error loading account data
         <NavLink key="/signout" to="/signout">
           Signout
@@ -32,10 +31,10 @@ const AccountInfo = ({ accounts }) => {
     );
   }
   return (
-    <Root loading={accounts.get.loading}>
-      <p>Email: {accounts.get.data.email}</p>
+    <Root className={className} loading={accounts.get.loading}>
+      <P>{accounts.get.data.email}</P>
       <NavLink key="/signout" to="/signout">
-        Signout
+        <Button primary>Signout</Button>
       </NavLink>
     </Root>
   );

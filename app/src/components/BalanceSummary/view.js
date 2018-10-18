@@ -9,23 +9,29 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { t } from 'i18next';
 
 import log from 'utils/logging';
 
-import { Root, Input, Button } from './styles';
+import { Root, Pending, Available, Div } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
-const AccountInfo = ({ accounts }) => {
+export const AccountInfo = ({ accounts, className, t }) => {
   if (accounts.get.error || !accounts.get.data) {
-    return <Root>Error loading account data</Root>;
+    return <Root className={className}>Error loading account data</Root>;
   }
   return (
-    <Root loading={accounts.get.loading}>
-      <p>Balances: {JSON.stringify(accounts.get.data.balances || {}, null, 2)}</p>
+    <Root className={className} loading={accounts.get.loading}>
+      {Object.keys(accounts.get.data.balances).map(asset => [
+        <Available key={`${asset}Available`}>
+          {Math.floor(accounts.get.data.balances[asset].available * 10 ** 8) / 10 ** 8} {asset}
+        </Available>,
+        <Pending key={`${asset}Pending`}>
+          Pending {Math.floor(accounts.get.data.balances[asset].pending * 10 ** 8) / 10 ** 8} {asset}
+        </Pending>,
+      ])}
     </Root>
   );
 };

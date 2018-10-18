@@ -29,7 +29,7 @@ export const Nav = styled.div`
   & > :hover,
   & > .active {
     color: var(--accent-color);
-    font-weight: 500;
+    font-weight: 600;
   }
 `;
 

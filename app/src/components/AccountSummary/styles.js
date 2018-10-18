@@ -8,7 +8,8 @@
 // -----------------------------------------------------------------------------
 
 import styled from 'styled-components';
-import { withLoader } from 'components/common';
+
+import { Button } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -16,12 +17,13 @@ import { withLoader } from 'components/common';
 
 export * from 'components/common';
 
-export const Root = withLoader(styled.div`
-  padding: 2em;
-  position: relative;
+export const Root = styled.div`
   display: flex;
+  justify-content: space-around;
   flex-direction: column;
-  width: 400px;
-`);
+  padding: 1em;
+  background-color: var(--colors-bg-accent-dark);
+  color: var(--colors-text-accent-dark);
+`;
 
 export default Root;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
+import { withNamespaces } from 'react-i18next';
 
 import view from './view';
 
@@ -21,4 +22,4 @@ class Wrapper extends React.Component {
   }
 }
 
-export default inject('accounts')(observer(Wrapper));
+export default withNamespaces()(inject('accounts')(observer(Wrapper)));

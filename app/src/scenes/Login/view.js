@@ -1,5 +1,5 @@
 /**
- * Component to display name and button for name generation
+ * Authentication scene
  *
  */
 
@@ -7,18 +7,18 @@
 // Dependencies
 // -----------------------------------------------------------------------------
 
-import styled from 'styled-components';
-import { withLoader } from 'components/common';
+import React from 'react';
+
+import { Root, LoginForm } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
-export * from 'components/common';
+const Login = () => (
+  <Root>
+    <LoginForm />
+  </Root>
+);
 
-export const Root = withLoader(styled.form`
-  padding: 2em;
-  position: relative;
-`);
-
-export default Root;
+export default Login;

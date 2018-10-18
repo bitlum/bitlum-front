@@ -7,7 +7,7 @@
 // Dependencies
 // -----------------------------------------------------------------------------
 
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { configure } from 'mobx';
 import { Provider, observer, inject } from 'mobx-react';
@@ -20,8 +20,7 @@ import {
   Redirect,
   Switch,
 } from 'react-router-dom';
-import { t } from 'i18next';
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider, withNamespaces } from 'react-i18next';
 
 // import registerServiceWorker from 'registerServiceWorker';
 import GA from 'utils/GA';
@@ -32,19 +31,27 @@ import i18nConfig from 'locales';
 
 import stores from 'stores';
 
-import Auth from 'scenes/Auth';
+import Login from 'scenes/Login';
 import Signup from 'scenes/Signup';
 import Landing from 'scenes/Landing';
 import Account from 'scenes/Account';
 import Payments from 'scenes/Payments';
 import Send from 'scenes/Send';
 import Receive from 'scenes/Receive';
-import AccountSummary from 'components/AccountSummary';
-import BalanceSummary from 'components/BalanceSummary';
 
-import { Global as GlobalStyles, Root, Header, Footer, Nav, Main, Aside } from './styles';
-
-import { ReactComponent as ProductLogo } from 'assets/img/logo/main.svg';
+import {
+  Global as GlobalStyles,
+  Root,
+  Header,
+  Footer,
+  Nav,
+  Main,
+  Aside,
+  AsideToggle,
+  Logo,
+  AccountSummary,
+  BalanceSummary,
+} from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -57,66 +64,119 @@ configure({
 });
 // IC.boot();
 
-const App = inject('accounts')(
-  observer(({ accounts }) => (
-    <Root>
-      <GlobalStyles />
-      <Header>
-        Heading and logo here{' '}
-        {!accounts.authenticate.isAuthenticated ? (
-          <Nav key="Nav">
-            <NavLink to="/auth">Login</NavLink>
-            <NavLink to="/signup">Signup</NavLink>
-          </Nav>
-        ) : null}
-      </Header>
-      <Aside>
-        {accounts.authenticate.isAuthenticated
-          ? [
-              <AccountSummary key="AccountSummary" />,
-              <Nav key="Nav" column>
-                <NavLink to="/payments">Payments</NavLink>
-                <NavLink to="/account">Account</NavLink>
-                <NavLink to="/send">Send</NavLink>
-                <NavLink to="/receive">Receive</NavLink>
-              </Nav>,
-            ]
-          : null}
-      </Aside>
-      <Main>
-        {!accounts.authenticate.isAuthenticated ? (
-          <Switch>
-            <Route exact path="/" component={Landing} />
-            <Route path="/auth" component={Auth} />
-            <Route path="/signup" component={Signup} />
-            <Redirect to="/auth" />
-          </Switch>
-        ) : (
-          [
-            <BalanceSummary key="BalanceSummary" />,
-            <Switch key="Switch">
-              <Route path="/payments" component={Payments} />
-              <Route path="/account" component={Account} />
-              <Route path="/send" component={Send} />
-              <Route path="/receive" component={Receive} />
-              <Route
-                path="/signout"
-                render={() => {
-                  accounts.authenticate.signout();
-                  return null;
-                }}
-              />
-              <Redirect to="/payments" />
-            </Switch>,
-          ]
-        )}
-      </Main>
-      <Footer />
-    </Root>
-  )),
-);
+class App extends Component {
+  componentWillMount() {
+    // eslint-disable-next-line
+    const { history } = this.props;
+    GA({ type: 'pageview', page: window.location.pathname });
+    this.unlisten = history.listen(location => {
+      GA({ type: 'pageview', page: location.pathname });
+    });
+  }
 
-const AppWrap = withRouter(App);
+  componentWillUnmount() {
+    this.unlisten();
+  }
+
+  render() {
+    // eslint-disable-next-line
+    const { accounts, ui, t } = this.props;
+
+    return (
+      <Root>
+        <GlobalStyles />
+        <Header>
+          <AsideToggle
+            onClick={() => {
+              ui.toggleAside();
+            }}
+          >
+            MENU
+          </AsideToggle>
+          <Logo />
+          {!accounts.authenticate.isAuthenticated ? (
+            <Nav key="Nav">
+              <NavLink to="/login">Login</NavLink>
+              <NavLink to="/signup">Signup</NavLink>
+            </Nav>
+          ) : null}
+        </Header>
+        <Aside shown={ui.isAsideShown}>
+          {accounts.authenticate.isAuthenticated
+            ? [
+                <AccountSummary key="AccountSummary" />,
+                <Nav key="Nav" column>
+                  <NavLink
+                    to="/payments"
+                    onClick={() => {
+                      ui.toggleAside(false);
+                    }}
+                  >
+                    Payments
+                  </NavLink>
+                  <NavLink
+                    to="/account"
+                    onClick={() => {
+                      ui.toggleAside(false);
+                    }}
+                  >
+                    Account
+                  </NavLink>
+                  <NavLink
+                    to="/send"
+                    onClick={() => {
+                      ui.toggleAside(false);
+                    }}
+                  >
+                    Send
+                  </NavLink>
+                  <NavLink
+                    to="/receive"
+                    onClick={() => {
+                      ui.toggleAside(false);
+                    }}
+                  >
+                    Receive
+                  </NavLink>
+                </Nav>,
+              ]
+            : null}
+        </Aside>
+        <Main>
+          {!accounts.authenticate.isAuthenticated ? (
+            <Switch>
+              <Route exact path="/" component={Landing} />
+              <Route path="/login" component={Login} />
+              <Route path="/signup" component={Signup} />
+              <Redirect to="/login" />
+            </Switch>
+          ) : (
+            [
+              <BalanceSummary key="BalanceSummary" />,
+              <Switch key="Switch">
+                <Route path="/payments" component={Payments} />
+                <Route path="/account" component={Account} />
+                <Route path="/send" component={Send} />
+                <Route path="/receive" component={Receive} />
+                <Route
+                  path="/signout"
+                  render={() => {
+                    accounts.authenticate.signout();
+                    return null;
+                  }}
+                />
+                <Redirect to="/payments" />
+              </Switch>,
+            ]
+          )}
+        </Main>
+        <Footer />
+      </Root>
+    );
+  }
+}
+
+const AppWrap = withRouter(withNamespaces()(inject('accounts', 'ui')(observer(App))));
 
 ReactDOM.render(
   <Provider {...stores}>
@@ -131,16 +191,7 @@ ReactDOM.render(
 
 if (process.env.NODE_ENV === 'development') {
   window.stores = stores;
-  ReactDOM.render(
-    <Provider {...stores}>
-      <I18nextProvider i18n={i18nConfig}>
-        <Router>
-          <MobxDevTools />
-        </Router>
-      </I18nextProvider>
-    </Provider>,
-    document.getElementById('dev'),
-  );
+  ReactDOM.render(<MobxDevTools />, document.getElementById('dev'));
 }
 
 // registerServiceWorker();

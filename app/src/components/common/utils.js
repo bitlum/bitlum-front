@@ -28,9 +28,7 @@ export const withLoader = styledComponent => styled(styledComponent)`
     animation: sk-scaleout 1s infinite ease-in-out;
     display: ${({ loading }) => (loading ? 'block' : 'none')};
   }
-  & > p {
-    padding: 1em;
-  }
+
   @keyframes sk-scaleout {
     0% {
       transform: scale(0);

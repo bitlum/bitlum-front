@@ -18,8 +18,12 @@ import log from 'utils/logging';
 export const ui = observable(
   {
     isAsideShown: false,
-    toggleAside() {
-      this.isAsideShown = !this.isAsideShown;
+    toggleAside(value) {
+      if (value !== undefined) {
+        this.isAsideShown = value;
+      } else {
+        this.isAsideShown = !this.isAsideShown;
+      }
     },
   },
   {

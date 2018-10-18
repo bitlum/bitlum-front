@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import styled from 'styled-components';
-import { withLoader } from 'components/common';
+import { withLoader, Form } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -16,11 +16,7 @@ import { withLoader } from 'components/common';
 
 export * from 'components/common';
 
-export const Root = withLoader(styled.form`
-  width: 400px;
-  padding: 2em;
-  position: relative;
+export const Root = withLoader(styled(Form)`
 `);
-
 
 export default Root;

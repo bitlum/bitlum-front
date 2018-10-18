@@ -58,8 +58,8 @@ const StyledLabel = styled.label`
 const Container = styled.div`
   font-size: 1em;
   position: relative;
-  border: 0.3rem solid var(--colors-bg-main);
-  border-radius: 0.5em;
+  border: 0.2rem solid var(--colors-bg-main);
+  border-radius: 0.2em;
   overflow: hidden;
 `;
 

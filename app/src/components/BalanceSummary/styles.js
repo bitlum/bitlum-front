@@ -8,7 +8,8 @@
 // -----------------------------------------------------------------------------
 
 import styled from 'styled-components';
-import { withLoader } from 'components/common';
+
+import { P } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -16,12 +17,22 @@ import { withLoader } from 'components/common';
 
 export * from 'components/common';
 
-export const Root = withLoader(styled.div`
-  padding: 2em;
-  position: relative;
+export const Root = styled.div`
   display: flex;
   flex-direction: column;
-  width: 400px;
-`);
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  background-color: var(--colors-bg-accent-bright);
+  color: var(--colors-text-accent-bright);
+`;
+
+export const Available = styled(P)`
+  font-size: 2.5em;
+`;
+
+export const Pending = styled(P)`
+  font-size: 0.8em;
+`;
 
 export default Root;

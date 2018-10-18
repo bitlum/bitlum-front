@@ -9,6 +9,7 @@
 
 import React from 'react';
 import { observer, inject, PropTypes } from 'mobx-react';
+import { withNamespaces } from 'react-i18next';
 
 import view from './view';
 
@@ -38,4 +39,4 @@ Wrapper.propTypes = {
   // payments: PropTypes.observableObject.isRequired,
 };
 
-export default inject('payments')(Wrapper);
+export default withNamespaces()(inject('payments')(Wrapper));

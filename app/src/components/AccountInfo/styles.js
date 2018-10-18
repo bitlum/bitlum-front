@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import styled from 'styled-components';
-import { withLoader } from 'components/common';
+import { Span, P } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -16,12 +16,15 @@ import { withLoader } from 'components/common';
 
 export * from 'components/common';
 
-export const Root = withLoader(styled.div`
-  padding: 2em;
-  position: relative;
+export const Root = styled.div`
   display: flex;
   flex-direction: column;
-  width: 400px;
-`);
+  & > * {
+    padding: 1em;
+  }
+  & > div > ${Span} {
+    font-weight: 600;
+  }
+`;
 
 export default Root;

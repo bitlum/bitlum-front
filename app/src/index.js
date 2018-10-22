@@ -93,7 +93,9 @@ class App extends Component {
           >
             MENU
           </AsideToggle>
-          <Logo />
+          <NavLink to="/">
+            <Logo />
+          </NavLink>
           {!accounts.authenticate.isAuthenticated ? (
             <Nav key="Nav">
               <NavLink to="/login">Login</NavLink>

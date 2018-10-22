@@ -69,6 +69,7 @@ class App extends Component {
     // eslint-disable-next-line
     const { history } = this.props;
     GA({ type: 'pageview', page: window.location.pathname });
+    window.localStorage.setItem('referral', new URLSearchParams(window.location.search).get('referral'));
     this.unlisten = history.listen(location => {
       GA({ type: 'pageview', page: location.pathname });
     });

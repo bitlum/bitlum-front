@@ -66,6 +66,11 @@ const GenericApiStore = {
     }
   },
 
+  cleanup() {
+    this.updateData(undefined);
+    this.updateError(undefined);
+  },
+
   async run() {
     return this.startFetching();
   },

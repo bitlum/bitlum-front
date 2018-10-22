@@ -132,10 +132,6 @@ export const payments = {
       if (result.error && result.error.code.match('^401.*$')) {
         accounts.authenticate.signout();
       }
-      setTimeout(() => {
-        this.updateData(undefined);
-        this.updateError(undefined);
-      }, 10 * 1000);
     },
     fetchOptions: {
       url: '/api/payments/send',
@@ -154,10 +150,6 @@ export const payments = {
       if (result.error && result.error.code.match('^401.*$')) {
         accounts.authenticate.signout();
       }
-      setTimeout(() => {
-        this.updateData(undefined);
-        this.updateError(undefined);
-      }, 10 * 1000);
     },
     fetchOptions: {
       url: '/api/payments/receive',

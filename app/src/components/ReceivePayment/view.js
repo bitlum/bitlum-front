@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 
 import log from 'utils/logging';
 
-import { Root, Input, Button, Message, P, Select } from './styles';
+import { Root, Input, Button, Message, P, Select, QRcode } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -24,6 +24,11 @@ export class ReceivePayment extends Component {
     this.state = {
       type: 'lightning',
     };
+  }
+
+  componentWillUnmount() {
+    const { payments } = this.props;
+    payments.receive.cleanup();
   }
 
   render() {
@@ -68,9 +73,10 @@ export class ReceivePayment extends Component {
         <Button primary type="submit">
           Get {type === 'lightning' ? 'invoice' : 'address'}
         </Button>
-        {payments.receive.data && (
-          <Message type="info">Send here {payments.receive.data.wuid}</Message>
-        )}
+        {payments.receive.data && [
+          <QRcode value={payments.receive.data.wuid || ''} />,
+          <Message type="info">Send here {payments.receive.data.wuid}</Message>,
+        ]}
         {payments.receive.error && <Message type="error">{payments.receive.error.message}</Message>}
       </Root>
     );

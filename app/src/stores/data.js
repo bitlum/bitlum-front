@@ -48,6 +48,9 @@ export const accounts = {
     },
     signout() {
       this.updateData(undefined);
+      Object.keys(payments).forEach(method => {
+        payments[method].cleanup();
+      });
     },
     get isAuthenticated() {
       return !!(this.data && this.data.token);

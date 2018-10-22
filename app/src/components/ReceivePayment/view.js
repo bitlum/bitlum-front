@@ -26,6 +26,17 @@ export class ReceivePayment extends Component {
     };
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { payments } = this.props;
+    const { type } = this.state;
+    if (prevState.type !== type) {
+      payments.receive.cleanup();
+    }
+    if (prevState.type !== type && type === 'blockchain') {
+      payments.receive.run('blockchain', null, 'BTC');
+    }
+  }
+
   componentWillUnmount() {
     const { payments } = this.props;
     payments.receive.cleanup();
@@ -74,8 +85,10 @@ export class ReceivePayment extends Component {
           Get {type === 'lightning' ? 'invoice' : 'address'}
         </Button>
         {payments.receive.data && [
-          <QRcode value={payments.receive.data.wuid || ''} />,
-          <Message type="info">Send here {payments.receive.data.wuid}</Message>,
+          <QRcode key="recaiveQR" value={payments.receive.data.wuid || ''} />,
+          <Message type="info" key="receiveText">
+            Send here {payments.receive.data.wuid}
+          </Message>,
         ]}
         {payments.receive.error && <Message type="error">{payments.receive.error.message}</Message>}
       </Root>

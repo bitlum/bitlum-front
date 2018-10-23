@@ -22,7 +22,7 @@ export const Root = styled.div`
   & > * {
     padding: 1em;
   }
-  & > div > ${Span} {
+  & ${P} > ${Span}:first-child {
     font-weight: 600;
   }
 `;

@@ -117,14 +117,14 @@ class App extends Component {
                   >
                     Payments
                   </NavLink>
-                  <NavLink
+                  {/* <NavLink
                     to="/account"
                     onClick={() => {
                       ui.toggleAside(false);
                     }}
                   >
                     Account
-                  </NavLink>
+                  </NavLink> */}
                   <NavLink
                     to="/send"
                     onClick={() => {
@@ -158,7 +158,7 @@ class App extends Component {
               <BalanceSummary key="BalanceSummary" />,
               <Switch key="Switch">
                 <Route path="/payments" component={Payments} />
-                <Route path="/account" component={Account} />
+                {/* <Route path="/account" component={Account} /> */}
                 <Route path="/send" component={Send} />
                 <Route path="/receive" component={Receive} />
                 <Route

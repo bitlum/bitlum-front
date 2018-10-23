@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 
 import log from 'utils/logging';
 
-import { Root, Input, Button, Div, Span, Pre } from './styles';
+import { Root, Input, Button, P, Span } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -24,21 +24,23 @@ export const AccountInfo = ({ accounts, className, t }) => {
   }
   return (
     <Root className={className} loading={accounts.get.loading}>
-      <Div>
-        <Span>Account ID: </Span>
+      <P>
+        <Span>Your email: </Span> {accounts.get.data.email}
+      </P>
+      <P>
+        <Span>Your ID: </Span>
         {accounts.get.data.auid}
-      </Div>
-      <Div>
-        <Span>Email: </Span> {accounts.get.data.email}
-      </Div>
-      <Div>
-        <Span>Restrictions: </Span>{' '}
-        <Pre>{JSON.stringify(accounts.get.data.restrictions || {}, null, 2)}</Pre>
-      </Div>
-      <Div>
-        <Span>Balances: </Span>{' '}
-        <Pre>{JSON.stringify(accounts.get.data.balances || {}, null, 2)}</Pre>
-      </Div>
+      </P>
+      {accounts.get.data.restrictions
+        ? [
+            <P>
+              <Span>Maxium balance allowed: </Span> 12<Span>Your email: </Span>
+            </P>,
+            <P>
+              <Span>Restrictions: </Span> {}
+            </P>,
+          ]
+        : null}
     </Root>
   );
 };

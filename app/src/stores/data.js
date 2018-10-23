@@ -77,7 +77,7 @@ export const accounts = {
       accounts.get.updateData(data);
     },
     async run(email, password) {
-      const referral = localStorage.getItem('referral');
+      const referral = localStorage.getItem('referral') || email;
       this.startFetching({ body: { email, password, referral } });
     },
   }),

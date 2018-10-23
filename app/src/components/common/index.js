@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export * from './Input';
 export * from './Button';
+export * from './CopyButton';
 export * from './Icon';
 export * from './Message';
 export * from './Header';

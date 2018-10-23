@@ -34,7 +34,7 @@ export const AccountInfo = ({ accounts, className, t }) => {
     <Root className={className} loading={accounts.get.loading}>
       <P>{accounts.get.data.email}</P>
       <NavLink key="/signout" to="/signout">
-        <Button primary>{t('nav.signout')}</Button>
+        <Button link>{t('nav.signout')}</Button>
       </NavLink>
     </Root>
   );

@@ -10,7 +10,7 @@
 import styled from 'styled-components';
 import QRcodeCommon from 'qrcode.react';
 
-import { withLoader, Form } from 'components/common';
+import { withLoader, Form, CopyButton } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -18,7 +18,11 @@ import { withLoader, Form } from 'components/common';
 
 export * from 'components/common';
 
-export const Root = withLoader(styled(Form)``);
+export const Root = withLoader(styled(Form)`
+  & ${CopyButton} {
+    margin-left: 1em;
+  }
+`);
 
 export const QRcode = styled(QRcodeCommon)`
   align-self: center;

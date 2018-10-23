@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 
 import log from 'utils/logging';
 
-import { Root, Input, Button, Message, P, Select, QRcode } from './styles';
+import { Root, Input, Button, Message, P, Select, QRcode, CopyButton } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -88,6 +88,7 @@ export class ReceivePayment extends Component {
           <QRcode key="recaiveQR" value={payments.receive.data.wuid || ''} />,
           <Message type="info" key="receiveText">
             Send here {payments.receive.data.wuid}
+            <CopyButton copyData={payments.receive.data.wuid} />
           </Message>,
         ]}
         {payments.receive.error && <Message type="error">{payments.receive.error.message}</Message>}

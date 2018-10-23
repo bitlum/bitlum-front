@@ -9,7 +9,7 @@
 
 import React from 'react';
 
-import { Root } from './styles';
+import { Root, CopyButton } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code

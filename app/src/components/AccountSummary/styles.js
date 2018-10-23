@@ -9,7 +9,7 @@
 
 import styled from 'styled-components';
 
-import { Button } from 'components/common';
+import { Button as ButtonCommon } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -24,6 +24,10 @@ export const Root = styled.div`
   padding: 1em;
   background-color: var(--colors-bg-accent-dark);
   color: var(--colors-text-accent-dark);
+`;
+
+export const Button = styled(ButtonCommon)`
+  color: #fff;
 `;
 
 export default Root;

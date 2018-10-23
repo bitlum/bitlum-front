@@ -22,8 +22,8 @@ export default {
   nav: {
     home: 'Home',
     login: 'Login',
-    signup: 'Signup',
-    signout: 'Signout',
+    signup: 'Sign Up',
+    signout: 'Sign Out',
     payments: 'Payments',
     account: 'Account',
     send: 'Send',

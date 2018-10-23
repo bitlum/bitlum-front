@@ -25,7 +25,7 @@ export const AccountInfo = ({ accounts, className, t }) => {
       <Root className={className}>
         Error loading account data
         <NavLink key="/signout" to="/signout">
-          Signout
+          {t('nav.signout')}
         </NavLink>
       </Root>
     );
@@ -34,7 +34,7 @@ export const AccountInfo = ({ accounts, className, t }) => {
     <Root className={className} loading={accounts.get.loading}>
       <P>{accounts.get.data.email}</P>
       <NavLink key="/signout" to="/signout">
-        <Button primary>Signout</Button>
+        <Button primary>{t('nav.signout')}</Button>
       </NavLink>
     </Root>
   );

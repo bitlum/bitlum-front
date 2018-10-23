@@ -100,7 +100,7 @@ class App extends Component {
           {!accounts.authenticate.isAuthenticated ? (
             <Nav key="Nav">
               <NavLink to="/login">Login</NavLink>
-              <NavLink to="/signup">Signup</NavLink>
+              <NavLink to="/signup">{t('nav.signup')}</NavLink>
             </Nav>
           ) : null}
         </Header>

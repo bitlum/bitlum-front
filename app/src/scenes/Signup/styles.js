@@ -17,6 +17,7 @@ import SignupFormCommon from 'components/SignupForm';
 export * from 'components/common';
 
 export const Root = styled.div`
+  background-color: var(--colors-bg-main);
   display: flex;
   justify-content: center;
   align-items: center;

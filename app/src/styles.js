@@ -23,6 +23,7 @@ import BalanceSummaryCommon from 'components/BalanceSummary';
 
 import LogoFull from 'assets/img/logo/full.png';
 import LogoCompact from 'assets/img/logo/compact.png';
+import { ReactComponent as HamburgerIconRaw } from 'assets/icons/hamburger.svg';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -37,9 +38,12 @@ export const BalanceSummary = styled(BalanceSummaryCommon)`
   height: 12em;
 `;
 
+export const HamburgerIcon = styled(HamburgerIconRaw)``;
+
 export const Logo = styled(Img).attrs({
   src: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
 })`
+  position: relative;
   content: url(${LogoFull});
   height: 2em;
   width: 9em;
@@ -50,9 +54,16 @@ export const Logo = styled(Img).attrs({
 `;
 
 export const Header = styled(HeaderCommon)`
-  & > ${Logo} {
+  & ${Logo} {
     margin: 1em;
   }
+  & svg {
+    height: 2em;
+    margin-left: 1em;
+  }
+  ${media.tablet`
+    justify-content: space-between;
+  `};
 `;
 
 export const AsideToggle = styled.button``;
@@ -66,7 +77,15 @@ export const Aside = styled(AsideCommon)`
     grid-area: main;
     position: relative;
     width: 80vw;
-    box-shadow: 20vw 0px 0px 0px rgba(0,0,0,0.3);
+    :after {
+      content: '';
+      width: 20vw;
+      position: absolute;
+      height: 100%;
+      background-color: rgba(0,0,0,0.4);
+      right: 0;
+      margin-right: -20vw;
+    }
   `};
 `;
 
@@ -123,11 +142,13 @@ export const Root = styled.div`
 
 export const Global = createGlobalStyle`
 
-@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600;Opensans');
 
 :root{
   --colors-bg-main: #f3f5f9;
   --colors-text-main: #5c6d82;
+
+  --colors-bg-main-dark: #C1C3C6;
 
   --colors-bg-accent: #0f7aff;
   --colors-text-accent: #fff;

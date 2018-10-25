@@ -13,7 +13,9 @@ import distanceInWordsStrict from 'date-fns/distance_in_words_strict';
 
 import log from 'utils/logging';
 
-import { Root, Span, Amount, Time, Info, Status, Address } from './styles';
+import AssetChip from 'components/AssetChip';
+
+import { Root, Span, Amount, Info, Status, Address, Button } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -34,28 +36,62 @@ export const Payment = ({
 }) => (
   <Root>
     <Info>
-      <Time>
-        {distanceInWordsStrict(new Date(), new Date(Number(createdAt)), {
-          addSuffix: true,
-          includeSeconds: true,
-        })}
-      </Time>
-      <Status status={status}>{status}</Status>
+      <AssetChip asset="BTC" type={type} onlyIcon />
     </Info>
+    {direction === 'outgoing' ? (
+      <Info>
+        <Span>Sent</Span>
+        <Span>
+          {distanceInWordsStrict(new Date(), new Date(Number(createdAt)), {
+            addSuffix: true,
+            includeSeconds: true,
+          })}
+        </Span>
+      </Info>
+    ) : (
+      <Info>
+        <Span>Received</Span>
+        <Span>
+          {distanceInWordsStrict(new Date(), new Date(Number(createdAt)), {
+            addSuffix: true,
+            includeSeconds: true,
+          })}
+        </Span>
+      </Info>
+    )}
     <Info>
       <Amount direction={direction}>
         {Math.floor(amount * 10 ** 8) / 10 ** 8} {asset}
       </Amount>
-      <Span>{type}</Span>
-      <Span>
-        Fee: {Math.floor(fee * 10 ** 8) / 10 ** 8} {asset}
-      </Span>
+
+      {status !== 'completed' ? <Status status={status}>{status}</Status> : null}
+      {fee !== 0 ? (
+        <Span>
+          Fee: {Math.floor(fee * 10 ** 8) / 10 ** 8} {asset}
+        </Span>
+      ) : null}
     </Info>
     <Info>
-      <Address>{direction === 'outgoing' ? `To: ${to}` : `From:${from}`}</Address>
-      <Span>
-        {type === 'lightning' ? 'Payment hash' : 'TXID'}: {txid}
-      </Span>
+      <Span>{direction === 'outgoing' ? `To` : `From`}</Span>
+      {type === 'blockchain' ? (
+        <Span>
+          <Button
+            as="a"
+            href={`https://chain.so/tx/BTC${
+              window.location.hostname.includes('testnet') ? 'TEST' : ''
+            }/${txid}`}
+            target="_blank"
+            link
+            external
+          >
+            {direction === 'outgoing' ? to : from}
+          </Button>
+        </Span>
+      ) : direction === 'outgoing' ? (
+        <Address>{to}</Address>
+      ) : (
+        <Address>{from}</Address>
+      )}
     </Info>
   </Root>
 );

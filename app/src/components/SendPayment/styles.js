@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import styled from 'styled-components';
-import { withLoader, Form } from 'components/common';
+import { withLoader, Form, Span, P } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -17,6 +17,15 @@ import { withLoader, Form } from 'components/common';
 export * from 'components/common';
 
 export const Root = withLoader(styled(Form)`
+   & > ${P} {
+    font-weight: 600;
+  }
+
+  & > ${Span} {
+    word-break: initial;
+    font-size: 0.8em;
+    opacity: 0.8;
+  }
 `);
 
 export default Root;

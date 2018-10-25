@@ -44,34 +44,11 @@ const icons = {
   },
 };
 
-const AssetChip = ({
-  asset, type, onlyIcon, option, onSelect, onFocus, isFocused, className,
-}) => {
-
+const AssetChip = ({ asset, type, onlyIcon, option, onSelect, onFocus, isFocused, className }) => {
   const currentAsset = option ? JSON.parse(option.value).asset : asset;
   const currentType = option ? JSON.parse(option.value).type : type;
   return (
-    <div
-      className={`${styles.root} ${className}`}
-      onMouseDown={event => {
-        if (typeof onSelect === 'function') {
-          event.preventDefault();
-          event.stopPropagation();
-          onSelect(option, event);
-        }
-      }}
-      onMouseEnter={event => {
-        if (typeof onFocus === 'function') {
-          onFocus(option, event);
-        }
-      }}
-      onMouseMove={event => {
-        if (isFocused) return;
-        if (typeof onFocus === 'function') {
-          onFocus(option, event);
-        }
-      }}
-    >
+    <div className={`${styles.root} ${className}`}>
       {currentAsset && currentType && icons[currentAsset][currentType]}
       {onlyIcon ? null : <span className={styles.name}>{currentAsset}</span>}
     </div>
@@ -80,6 +57,7 @@ const AssetChip = ({
 
 AssetChip.propTypes = {
   asset: PropTypes.oneOf(Object.keys(icons)),
+  type: PropTypes.string,
   option: PropTypes.shape({
     value: PropTypes.string,
   }),
@@ -91,6 +69,7 @@ AssetChip.propTypes = {
 
 AssetChip.defaultProps = {
   asset: 'BTC',
+  type: 'lightning',
   option: null,
   onSelect: null,
   onFocus: null,

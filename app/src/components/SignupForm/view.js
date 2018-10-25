@@ -48,7 +48,7 @@ export const SignupForm = ({ accounts, className, t }) => (
       required
     />
     <Button primary type="submit">
-      {t('nav.signup')}
+      {t('nav.signup')} now and get 1$ bonus
     </Button>
     {accounts.signup.error && <Message type="error">{accounts.signup.error.message}</Message>}
   </Root>

@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 
 import log from 'utils/logging';
 
-import { Root, Input, Button, Message, P, Select, QRcode, CopyButton } from './styles';
+import { Root, Input, Button, Message, P, Span, Select, QRcode, CopyButton } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -59,7 +59,15 @@ export class ReceivePayment extends Component {
         }}
         loading={payments.receive.loading}
       >
-        <P>Receive payment </P>
+        <P>Receive payment</P>
+        <Span>You can receive both lightning and blockchain payments</Span>
+        <Span>
+          To receive in lightning you need to specify exact amount that you want to receive
+        </Span>
+        <Span>
+          To receive in blockchain just send whatever amount you want to showed blockchain address
+          (if you do not see the address just select "Blockchain" in the dropdown below)
+        </Span>
         {type === 'lightning' ? (
           <Input
             id="receiveAmount"
@@ -82,10 +90,10 @@ export class ReceivePayment extends Component {
           <option value="blockchain">Blockchain</option>
         </Select>
         <Button primary type="submit">
-          Get {type === 'lightning' ? 'invoice' : 'address'}
+          Receive
         </Button>
         {payments.receive.data && [
-          <QRcode key="recaiveQR" value={payments.receive.data.wuid || ''} />,
+          <QRcode key="recaiveQR" value={payments.receive.data.wuid || ''} size="256" />,
           <Message type="info" key="receiveText">
             Send here {payments.receive.data.wuid}
             <CopyButton copyData={payments.receive.data.wuid} />

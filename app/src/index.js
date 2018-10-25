@@ -39,6 +39,8 @@ import Payments from 'scenes/Payments';
 import Send from 'scenes/Send';
 import Receive from 'scenes/Receive';
 
+import { ReactComponent as CloseIcon } from 'assets/icons/back.svg';
+
 import {
   Global as GlobalStyles,
   Root,
@@ -51,6 +53,7 @@ import {
   Logo,
   AccountSummary,
   BalanceSummary,
+  HamburgerIcon,
 } from './styles';
 
 // -----------------------------------------------------------------------------
@@ -69,7 +72,10 @@ class App extends Component {
     // eslint-disable-next-line
     const { history } = this.props;
     GA({ type: 'pageview', page: window.location.pathname });
-    window.localStorage.setItem('referral', new URLSearchParams(window.location.search).get('referral'));
+    window.localStorage.setItem(
+      'referral',
+      new URLSearchParams(window.location.search).get('referral'),
+    );
     this.unlisten = history.listen(location => {
       GA({ type: 'pageview', page: location.pathname });
     });
@@ -92,17 +98,24 @@ class App extends Component {
               ui.toggleAside();
             }}
           >
-            MENU
+            {accounts.authenticate.isAuthenticated &&
+              (ui.isAsideShown ? <CloseIcon /> : <HamburgerIcon />)}
           </AsideToggle>
-          <NavLink to="/">
-            <Logo />
-          </NavLink>
+
           {!accounts.authenticate.isAuthenticated ? (
             <Nav key="Nav">
               <NavLink to="/login">Login</NavLink>
-              <NavLink to="/signup">{t('nav.signup')}</NavLink>
+              <NavLink exact to="/">
+                {t('nav.signup')}
+              </NavLink>
             </Nav>
-          ) : null}
+          ) : (
+            <Nav key="Nav">
+              <NavLink to="/">
+                <Logo />
+              </NavLink>
+            </Nav>
+          )}
         </Header>
         <Aside shown={ui.isAsideShown}>
           {accounts.authenticate.isAuthenticated

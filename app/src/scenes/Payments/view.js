@@ -24,14 +24,14 @@ const Payments = ({ payments, t }) => {
     return <Root>{t('components.Payment.error')}</Root>;
   }
 
-  if (!payments.get.data || payments.get.data.length === 0) {
+  if ((!payments.get.data || payments.get.data.length === 0) && !payments.get.loading) {
     return (
       <Root empty>
         <EmptyIcon />
         <P>No payments here yet</P>
 
         <P>
-          Go {' '}
+          Go{' '}
           <NavLink to="/send">
             <Button link>send</Button>
           </NavLink>{' '}
@@ -46,7 +46,7 @@ const Payments = ({ payments, t }) => {
   }
   return (
     <Root>
-      {payments.get.data.map(payment => (
+      {payments.get.data && payments.get.data.map(payment => (
         <PaymentItem key={payment.puid} {...payment} fee={payment.fees.total} />
       ))}
     </Root>

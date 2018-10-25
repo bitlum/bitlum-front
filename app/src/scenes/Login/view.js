@@ -9,7 +9,7 @@
 
 import React from 'react';
 
-import { Root, LoginForm } from './styles';
+import { Root, LoginForm, Logo } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -17,6 +17,7 @@ import { Root, LoginForm } from './styles';
 
 const Login = () => (
   <Root>
+    <Logo />
     <LoginForm />
   </Root>
 );

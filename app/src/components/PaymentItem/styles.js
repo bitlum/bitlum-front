@@ -9,7 +9,7 @@
 
 import styled from 'styled-components';
 
-import { Input, Button, Span } from 'components/common';
+import { Button, Span } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -18,8 +18,6 @@ import { Input, Button, Span } from 'components/common';
 export * from 'components/common';
 
 export const Amount = styled.span`
-  width: 9em;
-  text-align: right;
   color: ${({ direction }) =>
     direction === 'incoming' ? 'var(--colors-text-ok)' : 'var(--colors-text-error)'};
 
@@ -28,30 +26,24 @@ export const Amount = styled.span`
   }
 `;
 
-export const Time = styled.span`
-  width: 8em;
-`;
-
 export const Status = styled.span`
   color: ${({ status }) => (status === 'pending' ? 'var(--colors-text-warn)' : null)};
   font-weight: ${({ status }) => (status === 'pending' ? '600' : null)};
 `;
 
 export const Address = styled.span`
-  max-width: 40em;
+  max-width: 100em;
 `;
 
 export const Info = styled.div`
   display: flex;
   flex-direction: column;
 
-  & > ${Span},
-  & > ${Status},
-  & > ${Address} {
-    font-size: 0.6em;
+  & > ${Span}, & > ${Status}, & > ${Address} {
+    font-size: 0.8em;
+    opacity: 0.8;
   }
 `;
-
 
 export const Root = styled.div`
   padding: 0.5em 1.2em;
@@ -61,16 +53,44 @@ export const Root = styled.div`
     margin-right: 1em;
   }
 
-  &:nth-child(2n){
+  &:nth-child(2n) {
     background-color: var(--colors-bg-accent-tint);
   }
 
-  & > ${Info}:nth-child(2) {
-    align-items: flex-end;
+  & > ${Info}:nth-child(1) {
+    justify-content: center;
+    margin-right: 0;
   }
 
-  & > ${Info}:nth-child(3) > * {
-    margin-bottom: 1em;
+  & > ${Info}:nth-child(1) svg {
+    height: 0.8em;
+    width: 0.8em;
+  }
+
+  & > ${Info}:nth-child(2) {
+    justify-content: center;
+    font-weight: 600;
+    opacity: 0.6;
+    font-size: 0.9em;
+    min-width: 6em;
+    align-items: flex-start;
+  }
+
+  & > ${Info}:nth-child(3) {
+    min-width: 9em;
+    align-items: flex-end;
+  }
+  & > ${Info}:nth-child(3) > ${Span} {
+    font-size: 0.7em;
+  }
+
+  & > ${Info}:nth-child(4) {
+    align-items: flex-start;
+  }
+
+  & > ${Info}:nth-child(4) > ${Span}:first-child {
+    font-weight: 600;
+    opacity: 0.6;
   }
 `;
 

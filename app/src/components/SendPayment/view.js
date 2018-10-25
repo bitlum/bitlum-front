@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 
 import log from 'utils/logging';
 
-import { Root, Input, Button, Message, P } from './styles';
+import { Root, Input, Button, Message, P, Span } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -40,7 +40,16 @@ export class SendPayment extends Component {
         }}
         loading={payments.send.loading}
       >
-        <P> Send payment </P>
+        <P> Send payment</P>
+        <Span>You can send both lightning and blockchain payments</Span>
+        <Span>
+          To pay with lightning just insert lightning invoice in "Destination" field and we will
+          show payment details like amount, to whom you sending e.t.c.
+        </Span>
+        <Span>
+          To pay with blockchain you need to specify exact amount that you want to send and specify
+          blockchain address in "Destination" field
+        </Span>
         <Input
           id="sendAmount"
           type="number"
@@ -53,9 +62,9 @@ export class SendPayment extends Component {
         <Input
           id="sendAddress"
           type="text"
-          placeholder="Address"
-          labelValid="Address"
-          labelInvalid="Address invalid"
+          placeholder="Destination"
+          labelValid="Destination"
+          labelInvalid="Destination invalid"
           required
         />
         <Button primary type="submit">

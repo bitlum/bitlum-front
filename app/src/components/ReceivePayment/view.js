@@ -93,7 +93,7 @@ export class ReceivePayment extends Component {
           Receive
         </Button>
         {payments.receive.data && [
-          <QRcode key="recaiveQR" value={payments.receive.data.wuid || ''} size="256" />,
+          <QRcode key="recaiveQR" value={payments.receive.data.wuid || ''} size="180" />,
           <Message type="info" key="receiveText">
             Send here {payments.receive.data.wuid}
             <CopyButton copyData={payments.receive.data.wuid} />

@@ -36,6 +36,7 @@ export const Root = withLoader(styled(Form)`
 
 export const QRcode = styled(QRcodeCommon)`
   align-self: center;
+  max-width: 90vw;
 `;
 
 export default Root;

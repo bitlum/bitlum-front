@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import styled from 'styled-components';
-import { withLoader, Form, Span, P } from 'components/common';
+import { withLoader, Form, Span, P, Input } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -25,6 +25,10 @@ export const DestinationInfo = styled.div`
   & ${Span} {
     font-weight: 600;
   }
+`;
+
+export const AmountInput = styled(Input)`
+  display: ${({ hidden }) => (hidden ? 'none' : 'initial')};
 `;
 
 export const Root = withLoader(styled(Form)`

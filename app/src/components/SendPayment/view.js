@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 
 import log from 'utils/logging';
 
-import { Root, Input, Button, Message, P, Span, DestinationInfo } from './styles';
+import { Root, Input, Button, Message, P, Span, DestinationInfo, AmountInput } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -54,25 +54,23 @@ export class SendPayment extends Component {
           To pay with blockchain you will need to specify exact amount that you want to send after
           inserting blockchain address in "Destination" field
         </Span>
-        {wallets.getDetails.data &&
-          (wallets.getDetails.data.type === 'blockchain' ||
-            wallets.getDetails.data.value === '0') && (
-            <Input
-              id="sendAmount"
-              type="number"
-              placeholder={t('payments.amount')}
-              step="any"
-              labelValid={t('payments.amount')}
-              labelInvalid={t('payments.amountInvalid')}
-              value={
-                this.state.amount || (wallets.getDetails.data && wallets.getDetails.data.value)
-              }
-              onChange={e => {
-                this.setState({ amount: e.target.value });
-              }}
-              required
-            />
-          )}
+        <AmountInput
+          id="sendAmount"
+          hidden={
+            !wallets.getDetails.data ||
+            (wallets.getDetails.data.type === 'lightning' && wallets.getDetails.data.value !== '0')
+          }
+          type="number"
+          placeholder={t('payments.amount')}
+          step="any"
+          labelValid={t('payments.amount')}
+          labelInvalid={t('payments.amountInvalid')}
+          value={this.state.amount || (wallets.getDetails.data && wallets.getDetails.data.value)}
+          onChange={e => {
+            this.setState({ amount: e.target.value });
+          }}
+          required
+        />
         <Input
           id="sendAddress"
           type="text"

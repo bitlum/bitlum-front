@@ -16,8 +16,19 @@ import { withLoader, Form, Span, P } from 'components/common';
 
 export * from 'components/common';
 
+export const DestinationInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  & ${P} {
+    margin-bottom: 0.5em;
+  }
+  & ${Span} {
+    font-weight: 600;
+  }
+`;
+
 export const Root = withLoader(styled(Form)`
-   & > ${P} {
+  & > ${P} {
     font-weight: 600;
   }
 

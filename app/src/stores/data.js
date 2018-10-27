@@ -162,4 +162,21 @@ export const payments = {
   }),
 };
 
-export default { payments, accounts };
+export const wallets = {
+  getDetails: createNewStore({
+    name: 'WalletsGetDetails',
+    async run(wuid, asset) {
+      this.startFetching({
+        url: `${this.fetchOptions.url}?asset=${asset}&wuid=${wuid}`,
+        headers: {
+          Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
+        },
+      });
+    },
+    fetchOptions: {
+      url: '/api/wallets/details',
+    },
+  }),
+};
+
+export default { payments, accounts, wallets };

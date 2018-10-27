@@ -12,20 +12,24 @@ import PropTypes from 'prop-types';
 
 import log from 'utils/logging';
 
-import { Root, Input, Button, Message, P, Span } from './styles';
+import { Root, Input, Button, Message, P, Span, DestinationInfo } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
 export class SendPayment extends Component {
+  state = { amount: undefined };
+
   componentWillUnmount() {
     const { payments } = this.props;
     payments.send.cleanup();
   }
 
+  getDerivedStateFromProps(props, state) {}
+
   render() {
-    const { payments, className, t } = this.props;
+    const { payments, wallets, className, t } = this.props;
 
     return (
       <Root
@@ -40,36 +44,73 @@ export class SendPayment extends Component {
         }}
         loading={payments.send.loading}
       >
-        <P> Send payment</P>
+        <P>Send payment</P>
         <Span>You can send both lightning and blockchain payments</Span>
         <Span>
           To pay with lightning just insert lightning invoice in "Destination" field and we will
           show payment details like amount, to whom you sending e.t.c.
         </Span>
         <Span>
-          To pay with blockchain you need to specify exact amount that you want to send and specify
-          blockchain address in "Destination" field
+          To pay with blockchain you will need to specify exact amount that you want to send after
+          inserting blockchain address in "Destination" field
         </Span>
-        <Input
-          id="sendAmount"
-          type="number"
-          placeholder={t('payments.amount')}
-          step="any"
-          labelValid={t('payments.amount')}
-          labelInvalid={t('payments.amountInvalid')}
-          required
-        />
+        {wallets.getDetails.data &&
+          (wallets.getDetails.data.type === 'blockchain' ||
+            wallets.getDetails.data.value === '0') && (
+            <Input
+              id="sendAmount"
+              type="number"
+              placeholder={t('payments.amount')}
+              step="any"
+              labelValid={t('payments.amount')}
+              labelInvalid={t('payments.amountInvalid')}
+              value={
+                this.state.amount || (wallets.getDetails.data && wallets.getDetails.data.value)
+              }
+              onChange={e => {
+                this.setState({ amount: e.target.value });
+              }}
+              required
+            />
+          )}
         <Input
           id="sendAddress"
           type="text"
           placeholder="Destination"
           labelValid="Destination"
           labelInvalid="Destination invalid"
+          onChange={e => {
+            this.setState({ amount: undefined });
+            wallets.getDetails.run(e.target.value, 'BTC');
+          }}
           required
         />
+
+        {wallets.getDetails.data &&
+          wallets.getDetails.data.type !== 'blockchain' && (
+            <DestinationInfo>
+              <P>
+                <Span>Amount: </Span>
+                {wallets.getDetails.data.value}
+              </P>
+              <P>
+                <Span>Destination: </Span>
+                {wallets.getDetails.data.destination}
+              </P>
+              {wallets.getDetails.data.memo && (
+                <P>
+                  <Span>Notes: </Span>
+                  {wallets.getDetails.data.memo}
+                </P>
+              )}
+            </DestinationInfo>
+          )}
         <Button primary type="submit">
           Send
         </Button>
+        {wallets.getDetails.error && (
+          <Message type="error"> {wallets.getDetails.error.message} </Message>
+        )}
         {payments.send.error && <Message type="error"> {payments.send.error.message} </Message>}
         {payments.send.data && <Message type="info"> Sent: {payments.send.data.txid} </Message>}
       </Root>

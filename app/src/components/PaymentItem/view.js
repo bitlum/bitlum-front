@@ -72,7 +72,7 @@ export const Payment = ({
       ) : null}
     </Info>
     <Info>
-      <Span>{direction === 'outgoing' ? `To` : `From`}</Span>
+    {/* {direction === 'incoming' ? <Span>To</Span> : null} */}
       {type === 'blockchain' ? (
         <Span>
           <Button
@@ -84,7 +84,7 @@ export const Payment = ({
             link
             external
           >
-            {direction === 'outgoing' ? to : from}
+            Open transaction in explorer
           </Button>
         </Span>
       ) : direction === 'outgoing' ? (

@@ -24,7 +24,7 @@ import { I18nextProvider, withNamespaces } from 'react-i18next';
 
 // import registerServiceWorker from 'registerServiceWorker';
 import GA from 'utils/GA';
-import IC from 'utils/IC';
+import LiveChat from 'utils/LiveChat';
 import log from 'utils/logging';
 import getNet from 'utils/cryptonetChecker';
 import i18nConfig from 'locales';
@@ -65,7 +65,8 @@ log.debug('MobX is in strict mode');
 configure({
   enforceActions: 'observed',
 });
-// IC.boot();
+
+LiveChat.boot();
 
 class App extends Component {
   componentWillMount() {

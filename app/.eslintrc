@@ -1,7 +1,8 @@
 {
   "parser": "babel-eslint",
   "env": {
-    "browser": true
+    "browser": true,
+    "webextensions": true
   },
   "rules": {
     "linebreak-style": "off",

@@ -13,7 +13,7 @@ import { configure } from 'mobx';
 import { Provider, observer, inject } from 'mobx-react';
 import MobxDevTools from 'mobx-react-devtools';
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Route,
   NavLink,
   withRouter,

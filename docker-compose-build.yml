@@ -1,0 +1,12 @@
+# Here changes of docker-compose for build prod app
+version: '3.4'
+
+services:
+  ui:
+    build:
+      context: ./app
+      target: builder
+    volumes:
+      - ./build:/opt/app/build-prod:delegated
+    environment:
+      - NODE_ENV=production

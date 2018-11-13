@@ -13,6 +13,7 @@
   "scripts": {
     "root": "docker-compose --project-name %npm_package_name% -f ./docker-compose.yml",
     "deploy": "npm run root -- up --build -d",
+    "build": "npm run root -- -f ./docker-compose-build.yml up --build",
     "up": "npm run root -- -f ./docker-compose-dev.yml up --build"
   }
 }

@@ -231,6 +231,12 @@ a,
 button {
   cursor: pointer;
 }
+
+/* Extension popup specific sizes*/
+html {
+  min-width: 450px;
+}
+
 `;
 
 export default Global;

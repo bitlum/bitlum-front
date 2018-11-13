@@ -7,6 +7,7 @@ services:
       context: ./app
       target: development
     volumes:
+      - ./build-watch:/opt/app/build-watch:delegated
       - ./app/src:/opt/app/src:delegated
       - ./app/public:/opt/app/public:delegated
       - ./app/package.json:/opt/app/package.json

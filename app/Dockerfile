@@ -45,6 +45,8 @@ FROM base as builder
 
 RUN npm run build
 
+CMD ["cp","-r", "/opt/app/build/.", "/opt/app/build-prod/"]
+
 ###############################################################################
 # Stage #2: Bundled build with server image
 ###############################################################################

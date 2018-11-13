@@ -15,6 +15,14 @@ import { createNewStore } from './dataGeneric';
 // Code
 // -----------------------------------------------------------------------------
 
+export const getApiUrl = strings => {
+  const urlsWithoutApi = strings.map(string => string.replace(/^\/api/, ''));
+  if (process.env.NODE_ENV === 'development') {
+    return `http://lvh.me:3004${urlsWithoutApi}`;
+  }
+  return `https://api.bitlum.io${urlsWithoutApi}`;
+};
+
 export const accounts = {
   authenticate: createNewStore({
     name: 'AccountsAuthenticate',
@@ -27,7 +35,7 @@ export const accounts = {
       }
     })(),
     fetchOptions: {
-      url: '/api/accounts/auth',
+      url: getApiUrl`/api/accounts/auth`,
       method: 'POST',
     },
     updateData(data) {
@@ -59,7 +67,7 @@ export const accounts = {
   signup: createNewStore({
     name: 'AccountsSignup',
     fetchOptions: {
-      url: '/api/accounts',
+      url: getApiUrl`/api/accounts`,
       method: 'POST',
     },
     updateData(data) {
@@ -92,7 +100,7 @@ export const accounts = {
       }
     })(),
     fetchOptions: {
-      url: '/api/accounts',
+      url: getApiUrl`/api/accounts`,
     },
     async run() {
       const result = await this.startFetching({
@@ -121,7 +129,7 @@ export const payments = {
       }
     },
     fetchOptions: {
-      url: '/api/payments',
+      url: getApiUrl`/api/payments`,
     },
   }),
   send: createNewStore({
@@ -138,7 +146,7 @@ export const payments = {
       }
     },
     fetchOptions: {
-      url: '/api/payments/send',
+      url: getApiUrl`/api/payments/send`,
       method: 'POST',
     },
   }),
@@ -156,7 +164,7 @@ export const payments = {
       }
     },
     fetchOptions: {
-      url: '/api/payments/receive',
+      url: getApiUrl`/api/payments/receive`,
       method: 'POST',
     },
   }),
@@ -174,7 +182,7 @@ export const wallets = {
       });
     },
     fetchOptions: {
-      url: '/api/wallets/details',
+      url: getApiUrl`/api/wallets/details`,
     },
   }),
 };

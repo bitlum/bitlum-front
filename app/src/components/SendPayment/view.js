@@ -19,17 +19,30 @@ import { Root, Input, Button, Message, P, Span, DestinationInfo, AmountInput } f
 // -----------------------------------------------------------------------------
 
 export class SendPayment extends Component {
-  state = { amount: undefined };
+  state = { amount: undefined, destination: this.props.prefill && this.props.prefill.invoice };
 
   componentWillUnmount() {
     const { payments } = this.props;
     payments.send.cleanup();
   }
 
-  getDerivedStateFromProps(props, state) {}
+  componentDidMount() {
+    const { prefill, wallets } = this.props;
+    if (prefill && prefill.invoice) {
+      wallets.getDetails.run(prefill.invoice, 'BTC');
+    }
+  }
+  // static getDerivedStateFromProps(props, state) {
+  //   const { prefill, wallets } = props;
+  //   if (prefill && prefill.invoice) {
+  //     this.setState({ amount: undefined, destination: prefill.invoice });
+  //     // wallets.getDetails.run(prefill.invoice, 'BTC');
+  //   }
+  //   return state;
+  // }
 
   render() {
-    const { payments, wallets, className, t } = this.props;
+    const { prefill, payments, wallets, className, t } = this.props;
 
     return (
       <Root
@@ -77,8 +90,9 @@ export class SendPayment extends Component {
           placeholder="Destination"
           labelValid="Destination"
           labelInvalid="Destination invalid"
+          value={this.state.destination}
           onChange={e => {
-            this.setState({ amount: undefined });
+            this.setState({ amount: undefined, destination: e.target.value });
             wallets.getDetails.run(e.target.value, 'BTC');
           }}
           required

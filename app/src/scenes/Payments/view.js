@@ -84,7 +84,7 @@ const Payments = ({ payments, t }) => {
   const paymentsGrouped = {};
   payments.get.data.forEach(payment => {
     const dayOfPayment = new Date(
-      payment.status === 'pending' ? 10 ** 15 : payment.updatedAt,
+      payment.status === 'pending' ? '01-01-9999' : payment.updatedAt,
     ).setHours(0, 0, 0, 0);
     if (!paymentsGrouped[`${dayOfPayment}_${payment.vuid}_${payment.status}`]) {
       paymentsGrouped[`${dayOfPayment}_${payment.vuid}_${payment.status}`] = [payment];
@@ -123,6 +123,13 @@ const Payments = ({ payments, t }) => {
             />,
           ];
           const currentGroupDate = new Date(Number(paymentsGroup[0].split('_')[0]));
+
+          if (index === 0 && currentGroupDate.getFullYear() !== 9999) {
+            result.unshift(
+              <Separator key={currentGroupDate}>{getSeparatorText(currentGroupDate)}</Separator>,
+            );
+          }
+
           const nextGroupDate =
             self[index + 1] && new Date(Number(self[index + 1][0].split('_')[0]));
 

@@ -11,6 +11,8 @@ import styled from 'styled-components';
 
 import { P, Span, Img } from 'components/common';
 
+import PaymentItemRaw from './PaymentItem';
+
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
@@ -96,7 +98,7 @@ export const Amount = styled.div`
   margin-left: auto;
 `;
 
-export const Root = styled.div`
+export const GroupHeader = styled.div`
   display: flex;
   align-items: center;
   font-size: 0.8em;
@@ -106,5 +108,23 @@ export const Root = styled.div`
   }
   background-color: var(--colors__bg_bright);
 `;
+
+export const PaymentItem = styled(PaymentItemRaw)``;
+
+export const GroupedItems = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 21.5em;
+  margin-left: auto;
+  ${({ folded }) => folded && 'overflow: hidden; max-height:0;'}
+`;
+
+/* transform: scaleY(1);   
+  transform-origin: top;
+  transition: max-height 0.15s, transform 0.15s;
+  max-height:1000px;
+  transform: scaleY(0); */
+
+export const Root = styled.div``;
 
 export default Root;

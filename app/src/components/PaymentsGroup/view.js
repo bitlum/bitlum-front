@@ -7,12 +7,10 @@
 // Dependencies
 // -----------------------------------------------------------------------------
 
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import log from 'utils/logging';
-
-import AssetChip from 'components/AssetChip';
 
 import {
   Root,
@@ -26,11 +24,16 @@ import {
   Button,
   Img,
   VendorIcon,
+  GroupHeader,
+  GroupedItems,
+  PaymentItem,
 } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
+
+const round = (number, roundGrade) => Math.floor(number * 10 ** roundGrade) / 10 ** roundGrade;
 
 export const PaymentsGroup = ({
   className,
@@ -46,6 +49,8 @@ export const PaymentsGroup = ({
   additionalDenominationPrice,
   t,
 }) => {
+  const [folded, toggleFold] = useState(true);
+
   const groupedAmount = payments.reduce(
     (p, c) =>
       p +
@@ -53,38 +58,58 @@ export const PaymentsGroup = ({
     0,
   );
   return (
-    <Root
-      className={className}
-      onClick={() => {
-        console.log(payments);
-      }}
-    >
-      <Status status={status} />
-      <Vendor>
-        <VendorIcon counter={payments.length}>
-          <Img src={vendorIcon || 'https://static.thenounproject.com/png/404950-200.png'} />
-        </VendorIcon>
-        <P>
-          <Span>
-            {vendorName || 'Unknown'}({payments.length})
-          </Span>
-          <Span>{payments[0].description || payments[0].receipt}</Span>
-        </P>
-      </Vendor>
-      <Amount>
-        <AmountMain amount={groupedAmount}>
-          {Math.floor(groupedAmount * mainDenominationPrice * 10 ** mainDenominationRound) /
-            10 ** mainDenominationRound}{' '}
-          {mainDenominationSign}
-        </AmountMain>
-        <AmountAdditional>
-          {Math.floor(
-            groupedAmount * additionalDenominationPrice * 10 ** additionalDenominationRound,
-          ) /
-            10 ** additionalDenominationRound}{' '}
-          {additionalDenominationSign}
-        </AmountAdditional>
-      </Amount>
+    <Root className={className}>
+      <GroupHeader
+        onClick={e => {
+          if (payments.length > 1) {
+            toggleFold(!folded);
+          }
+        }}
+      >
+        <Status status={status} />
+        <Vendor>
+          <VendorIcon counter={payments.length}>
+            <Img src={vendorIcon || 'https://static.thenounproject.com/png/404950-200.png'} />
+          </VendorIcon>
+          <P>
+            <Span>{vendorName || 'Unknown'}</Span>
+            <Span>{payments[0].description || payments[0].receipt}</Span>
+          </P>
+        </Vendor>
+        <Amount>
+          <AmountMain amount={groupedAmount}>
+            {round(groupedAmount * mainDenominationPrice, mainDenominationRound)}{' '}
+            {mainDenominationSign}
+          </AmountMain>
+          <AmountAdditional>
+            {round(groupedAmount * additionalDenominationPrice, additionalDenominationRound)}{' '}
+            {additionalDenominationSign}
+          </AmountAdditional>
+        </Amount>
+      </GroupHeader>
+      <GroupedItems folded={folded}>
+        {payments.map(payment => (
+          <PaymentItem
+            updatedAt={payment.updatedAt}
+            isDescriptionReadable={payment.description}
+            description={payment.description || payment.receipt}
+            direction={payment.direction}
+            mainDenominationString={`${round(
+              (payment.direction === 'incoming'
+                ? Number(payment.amount)
+                : -Number(payment.amount) - Number(payment.fees.total)) * mainDenominationPrice,
+              mainDenominationRound,
+            )} ${mainDenominationSign}`}
+            additionalDenominationString={`${round(
+              (payment.direction === 'incoming'
+                ? Number(payment.amount)
+                : -Number(payment.amount) - Number(payment.fees.total)) *
+                additionalDenominationPrice,
+              additionalDenominationRound,
+            )} ${additionalDenominationSign}`}
+          />
+        ))}
+      </GroupedItems>
     </Root>
   );
 };

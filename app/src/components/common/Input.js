@@ -26,7 +26,7 @@ const StyledInput = styled.input`
   }
 
   :invalid:not(:placeholder-shown) {
-    background-color: var(--colors-bg-error);
+    background-color: var(--colors__bg_error);
   }
 `;
 
@@ -47,7 +47,7 @@ const StyledLabel = styled.label`
   }
 
   ${StyledInput}:invalid:not(:placeholder-shown) + & {
-    color: var(--colors-text-error);
+    color: var(--colors__text_error);
   }
 
   ${StyledInput}:invalid:not(:placeholder-shown) + &:before {
@@ -58,7 +58,7 @@ const StyledLabel = styled.label`
 const Container = styled.div`
   font-size: 1em;
   position: relative;
-  border: 0.2rem solid var(--colors-bg-main);
+  border: 0.2rem solid var(--colors__bg);
   border-radius: 0.2em;
   overflow: hidden;
 `;

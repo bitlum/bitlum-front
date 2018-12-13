@@ -28,7 +28,7 @@ export const Nav = styled.div`
 
   & > :hover,
   & > .active {
-    color: var(--accent-color);
+    color: var(--colors__text_accent);
     font-weight: 600;
   }
 `;

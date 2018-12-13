@@ -20,7 +20,7 @@ import LogoFull from 'assets/img/logo/full.png';
 export * from 'components/common';
 
 export const Root = styled.div`
-  background-color: var(--colors-bg-main);
+  background-color: var(--colors__bg);
   display: flex;
   flex-direction: column;
   justify-content: center;

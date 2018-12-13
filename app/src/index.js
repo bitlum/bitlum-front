@@ -34,27 +34,13 @@ import stores from 'stores';
 import Login from 'scenes/Login';
 import Signup from 'scenes/Signup';
 import Landing from 'scenes/Landing';
-import Account from 'scenes/Account';
 import Payments from 'scenes/Payments';
 import Send from 'scenes/Send';
 import Receive from 'scenes/Receive';
 
 import { ReactComponent as CloseIcon } from 'assets/icons/back.svg';
 
-import {
-  Global as GlobalStyles,
-  Root,
-  Header,
-  Footer,
-  Nav,
-  Main,
-  Aside,
-  AsideToggle,
-  Logo,
-  AccountSummary,
-  BalanceSummary,
-  HamburgerIcon,
-} from './styles';
+import { Global as GlobalStyles, Root, Header, Footer, Nav, Main, Logo } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -94,15 +80,6 @@ class App extends Component {
       <Root>
         <GlobalStyles />
         <Header>
-          <AsideToggle
-            onClick={() => {
-              ui.toggleAside();
-            }}
-          >
-            {accounts.authenticate.isAuthenticated &&
-              (ui.isAsideShown ? <CloseIcon /> : <HamburgerIcon />)}
-          </AsideToggle>
-
           {!accounts.authenticate.isAuthenticated ? (
             <Nav key="Nav">
               <NavLink to="/login">Login</NavLink>
@@ -118,47 +95,6 @@ class App extends Component {
             </Nav>
           )}
         </Header>
-        <Aside shown={ui.isAsideShown}>
-          {accounts.authenticate.isAuthenticated
-            ? [
-                <AccountSummary key="AccountSummary" />,
-                <Nav key="Nav" column>
-                  <NavLink
-                    to="/payments"
-                    onClick={() => {
-                      ui.toggleAside(false);
-                    }}
-                  >
-                    Payments
-                  </NavLink>
-                  {/* <NavLink
-                    to="/account"
-                    onClick={() => {
-                      ui.toggleAside(false);
-                    }}
-                  >
-                    Account
-                  </NavLink> */}
-                  <NavLink
-                    to="/send"
-                    onClick={() => {
-                      ui.toggleAside(false);
-                    }}
-                  >
-                    Send
-                  </NavLink>
-                  <NavLink
-                    to="/receive"
-                    onClick={() => {
-                      ui.toggleAside(false);
-                    }}
-                  >
-                    Receive
-                  </NavLink>
-                </Nav>,
-              ]
-            : null}
-        </Aside>
         <Main>
           {!accounts.authenticate.isAuthenticated ? (
             <Switch>
@@ -169,7 +105,6 @@ class App extends Component {
             </Switch>
           ) : (
             [
-              <BalanceSummary key="BalanceSummary" />,
               <Switch key="Switch">
                 <Route path="/payments" component={Payments} />
                 {/* <Route path="/account" component={Account} /> */}

@@ -21,8 +21,8 @@ export const Message = styled.div`
   align-items: center;
   padding: 0.85em 1.3em;
   font-size: 1em;
-  color: ${({ type }) => `var(--colors-text-${type})`};
-  background-color: ${({ type }) => `var(--colors-bg-${type})`};
+  color: ${({ type }) => `var(--colors__text_${type})`};
+  background-color: ${({ type }) => `var(--colors__bg_${type})`};
 `;
 
 export default Message;

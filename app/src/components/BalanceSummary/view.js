@@ -9,38 +9,60 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
 
 import log from 'utils/logging';
 
-import { Root, Pending, Available, Div, Button } from './styles';
+import { Root, Main, Additional, Receive, Send } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
-export const AccountInfo = ({ accounts, className, t }) => {
+export const BalanceSummary = ({
+  accounts,
+  mainDenominationSign,
+  mainDenominationRound,
+  mainDenominationPrice,
+  additionalDenominationSign,
+  additionalDenominationRound,
+  additionalDenominationPrice,
+  className,
+  t,
+}) => {
   if (accounts.get.error || !accounts.get.data) {
     return <Root className={className}>Error loading account data</Root>;
   }
   return (
     <Root className={className} loading={accounts.get.loading}>
-      Available balance:
+      <Receive to="/receive">Receive</Receive>
+      BALANCE
       {Object.keys(accounts.get.data.balances).map(asset => [
-        <Available key={`${asset}Available`}>
-          {Math.floor(accounts.get.data.balances[asset].available * 10 ** 8) / 10 ** 8} {asset}
-        </Available>,
-        // <Pending key={`${asset}Pending`}>
-        //   Pending {Math.floor(accounts.get.data.balances[asset].pending * 10 ** 8) / 10 ** 8}{' '}
-        //   {asset}
-        // </Pending>,
+        <Main key={`${asset}Main`}>
+          {Math.floor(
+            accounts.get.data.balances[asset].available *
+              mainDenominationPrice *
+              10 ** mainDenominationRound,
+          ) /
+            10 ** mainDenominationRound}{' '}
+          {mainDenominationSign}
+        </Main>,
+        <Additional key={`${asset}Additional`}>
+          {Math.floor(
+            accounts.get.data.balances[asset].available *
+              additionalDenominationPrice *
+              10 ** additionalDenominationRound,
+          ) /
+            10 ** additionalDenominationRound}{' '}
+          {additionalDenominationSign}
+        </Additional>,
       ])}
+      <Send to="/send">Pay</Send>
     </Root>
   );
 };
 
-AccountInfo.propTypes = {};
+BalanceSummary.propTypes = {};
 
-AccountInfo.defaultProps = {};
+BalanceSummary.defaultProps = {};
 
-export default AccountInfo;
+export default BalanceSummary;

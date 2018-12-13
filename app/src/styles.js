@@ -9,36 +9,15 @@
 
 import styled, { createGlobalStyle } from 'styled-components';
 
-import {
-  Header as HeaderCommon,
-  Footer,
-  Main as MainCommon,
-  Aside as AsideCommon,
-  media,
-  Img,
-} from 'components/common';
-
-import AccountSummaryCommon from 'components/AccountSummary';
-import BalanceSummaryCommon from 'components/BalanceSummary';
+import { Header as HeaderCommon, Footer, Main as MainCommon, media, Img } from 'components/common';
 
 import LogoFull from 'assets/img/logo/full.png';
-import LogoCompact from 'assets/img/logo/compact.png';
-import { ReactComponent as HamburgerIconRaw } from 'assets/icons/hamburger.svg';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
 export * from 'components/common';
-
-export const AccountSummary = styled(AccountSummaryCommon)`
-  height: 12em;
-`;
-export const BalanceSummary = styled(BalanceSummaryCommon)`
-  height: 12em;
-`;
-
-export const HamburgerIcon = styled(HamburgerIconRaw)``;
 
 export const Logo = styled(Img).attrs({
   src: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
@@ -47,67 +26,30 @@ export const Logo = styled(Img).attrs({
   content: url(${LogoFull});
   height: 2em;
   width: 9em;
-  ${media.tablet`
-    content: url(${LogoCompact});
-    width: 1.9em;
-  `};
 `;
 
 export const Header = styled(HeaderCommon)`
+  background: var(--colors__bg_bright);
   & ${Logo} {
     margin: 1em;
   }
-  & svg {
-    height: 2em;
-    margin-left: 1em;
-  }
-  ${media.tablet`
-    justify-content: space-between;
-  `};
-`;
-
-export const AsideToggle = styled.button``;
-
-export const Aside = styled(AsideCommon)`
-  grid-area: aside;
-  z-index: 1;
-  background-color: var(--colors-bg-main);
-  left: ${({ shown }) => (shown ? '0' : '-100vw')};
-  ${media.tablet`
-    grid-area: main;
-    position: relative;
-    width: 80vw;
-    :after {
-      content: '';
-      width: 20vw;
-      position: absolute;
-      height: 100%;
-      background-color: rgba(0,0,0,0.4);
-      right: 0;
-      margin-right: -20vw;
-    }
-  `};
 `;
 
 export const Main = styled(MainCommon)`
-  background-color: #fff;
+  background: var(--colors__bg);
 `;
 
 export const Root = styled.div`
   display: grid;
-  grid-template-columns: auto minmax(75vw, 4fr); 
-  grid-template-rows: 4em auto 1em;
-  grid-template-areas:  "header header"
-                        "aside main"
-                        "footer footer";
-  color: var(--main-color);
-  font: var(--main-font);
+  grid-template-rows: var(--sizing__header_heigh) auto var(--sizing__footer_heigh);
+  grid-template-areas:  "header"
+                        "main"
+                        "footer";
+  color: var(--colors__text);
+  font: var(--fonts__text);
   min-height: 100vh;
-  background: var(--alt-bg-color);
-  /* & > ${Header},
-  & > ${Footer} {
-    grid-column: start / end;
-  } */
+  background: var(--colors__bg);
+
   & > ${Header} {
     grid-area: header;
   }
@@ -117,78 +59,66 @@ export const Root = styled.div`
   & > ${Main} {
     grid-area: main;
   }
-  & > ${Main},
-  & > ${Aside} {
+  & > ${Main} {
     display: flex;
     flex-direction: column;    
   }
-
-  ${AsideToggle} {
-    display: none;
-  }
-
-  ${media.tablet`
-    grid-template-areas: "header header"
-                         "main main"
-                         "footer footer";
-
-    ${AsideToggle} {
-      display: initial;
-    }
-
-  `}
 }
 `;
 
 export const Global = createGlobalStyle`
 
-@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600;Opensans');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:200,400,700;');
 
 :root{
-  --colors-bg-main: #f3f5f9;
-  --colors-text-main: #5c6d82;
+  --colors__bg: #F7F7F7;
+  --colors__text: #242323;
 
-  --colors-bg-main-dark: #C1C3C6;
+  --colors__bg_dark: #C1C3C6;
 
-  --colors-bg-accent: #0f7aff;
-  --colors-text-accent: #fff;
+  --colors__bg_bright: #FFF;
+  --colors__text_bright: #7B7A7C;
 
-  --colors-bg-accent-bright: #5BA4FF;
-  --colors-text-accent-bright: #fff;
+  --colors__bg_accent: #0f7aff;
+  --colors__text_accent: #fff;
 
-  --colors-bg-accent-tint: #f0f7ff;
+  --colors__bg_info: #bfdcff;
+  --colors__text_info: #0f7aff;
 
-  --colors-bg-accent-dark: #2E527F;
-  --colors-text-accent-dark: #fff;
+  --colors__bg_ok: #35bb78;
+  --colors__text_ok: #35bb78;
 
-  --colors-bg-info: #bfdcff;
-  --colors-text-info: #0f7aff;
+  --colors__bg_error: #ffb7a8;
+  --colors__text_error: red;
 
-  --colors-bg-ok: #35bb78;
-  --colors-text-ok: #35bb78;
+  --colors__bg_warn: #f8c57e;
+  --colors__text_warn: #ff9500;
 
-  --colors-bg-error: #ffb7a8;
-  --colors-text-error: red;
+  --colors__bg_pending: #F5A623;
+  --colors__bg_completed: #40D3CB;
+  --colors__bg_failed: #F40566;
 
-  --colors-bg-warn: #f8c57e;
-  --colors-text-warn: #ff9500;
+  --fonts__text: 400 1.6rem 'Montserrat', sans-serif;
+  --fonts__text_thin: 200 1.6rem 'Montserrat', sans-serif;
+  --fonts__text_bold: 700 1.6rem 'Montserrat', sans-serif;
 
-  --borders-main: 0.2em solid var(--colors-bg-accent);
+  --fonts__header: 400 2rem 'Montserrat', sans-serif;
+  --fonts__header_thin: 200 2rem 'Montserrat', sans-serif;
+  --fonts__header_bold: 700 2rem 'Montserrat', sans-serif;
 
-  --alt-bg-color: #f3f5f9;
-  --main-color: #0c1441;
-  --accent-color: #0f7aff;
-  --accent-second-color: #9c27b0;
-  --text-color: #5c6d82;
-
-  --main-font: 400 16px 'Montserrat', sans-serif;
-  --bold-font: 500 16px 'Montserrat', sans-serif;
-  --header-font: 400 25px 'Open Sans', sans-serif;
-  --text-font: 400 25px 'Open Sans', sans-serif;
+  --sizing__header_heigh: 9rem;
+  --sizing__footer_heigh: 2rem;
 }
 
+/* Extension popup specific sizes*/
+html {
+  min-width: 400px;
+  width: 400px;
+}
+
+
 /* CSS reset here */
-a,abbr,acronym,address,applet,area,article,aside,audio,b,base,basefont,bdi,bdo,big,blockquote,body,br,button,canvas,caption,center,cite,code,col,colgroup,data,datalist,dd,del,details,dfn,dialog,dir,div,dl,dt,em,embed,fieldset,figcaption,figure,font,footer,form,frame,frameset,h1,h2,h3,h4,h5,h6,head,header,hr,html,i,iframe,img,input,ins,kbd,label,legend,/*li,*/link,main,map,mark,menu,menuitem,meta,meter,nav,noframes,noscript,object,ol,optgroup,option,output,p,param,picture,pre,progress,q,rp,rt,ruby,s,samp,script,section,select,small,source,span,strike,strong,style,sub,summary,sup,svg,table,tbody,td,template,textarea,tfoot,th,thead,time,title,tr,track,tt,u,/*ul,*/var,video,wbr {
+a,abbr,acronym,address,applet,area,article,aside,audio,b,base,basefont,bdi,bdo,big,blockquote,body,br,button,canvas,caption,center,cite,code,col,colgroup,data,datalist,dd,del,details,dfn,dialog,dir,div,dl,dt,em,embed,fieldset,figcaption,figure,font,footer,form,frame,frameset,h1,h2,h3,h4,h5,h6,head,header,hr,/*html,*/i,iframe,img,input,ins,kbd,label,legend,/*li,*/link,main,map,mark,menu,menuitem,meta,meter,nav,noframes,noscript,object,ol,optgroup,option,output,p,param,picture,pre,progress,q,rp,rt,ruby,s,samp,script,section,select,small,source,span,strike,strong,style,sub,summary,sup,svg,table,tbody,td,template,textarea,tfoot,th,thead,time,title,tr,track,tt,u,/*ul,*/var,video,wbr {
   all: unset;
   box-sizing: border-box;
   word-break: break-all;
@@ -232,11 +162,14 @@ button {
   cursor: pointer;
 }
 
-/* Extension popup specific sizes*/
-html {
-  min-width: 450px;
+pre {
+  white-space: pre;
 }
 
+html,
+body {
+  font-size: 62.5%;
+}
 `;
 
 export default Global;

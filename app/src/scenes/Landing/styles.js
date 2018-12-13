@@ -68,7 +68,7 @@ export const Disclaimer = styled.div`
   display: flex;
   flex-direction: column;
   font-weight: 600;
-  color: var(--colors-text-error);
+  color: var(--colors__text_error);
   & ${Span} {
     margin-bottom: 0.3em;
   }
@@ -79,7 +79,7 @@ export const Disclaimer = styled.div`
 `;
 
 export const Root = styled.div`
-  background-color: var(--colors-bg-main);
+  background-color: var(--colors__bg);
   display: grid;
   grid-template-areas:
     'left right'

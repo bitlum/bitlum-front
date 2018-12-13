@@ -24,7 +24,7 @@ const StyledSelect = styled.select`
 const Container = styled.div`
   font-size: 1em;
   position: relative;
-  border: 0.2rem solid var(--colors-bg-main);
+  border: 0.2rem solid var(--colors__bg);
   border-radius: 0.2em;
   overflow: hidden;
   position: relative;
@@ -38,7 +38,7 @@ const Container = styled.div`
     height: 0;
     border-left: 0.5em solid transparent;
     border-right: 0.5em solid transparent;
-    border-top: 0.5em solid var(--colors-bg-main-dark);
+    border-top: 0.5em solid var(--colors__bg_dark);
     clear: both;
   }
 `;

@@ -83,7 +83,7 @@ class App extends Component {
         <Main>
           {!accounts.authenticate.isAuthenticated ? (
             <Switch>
-              <Route exact path="/" component={Landing} />
+              <Route exact path="/" component={Login} />
               <Route path="/login" component={Login} />
               <Route path="/signup" component={Signup} />
               <Redirect to="/login" />

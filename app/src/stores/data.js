@@ -58,75 +58,10 @@ const round = (number, roundGrade) => Math.floor(number * 10 ** roundGrade) / 10
 
 const accounts = {
   round,
-  authenticate: createNewStore({
-    name: 'AccountsAuthenticate',
-    data: (() => {
-      try {
-        return JSON.parse(localStorage.getItem('authData'));
-      } catch (error) {
-        log.error(`Unable to read auth data from local storage (${error.message})`);
-        return undefined;
-      }
-    })(),
-    fetchOptions: {
-      url: getApiUrl`/api/accounts/auth`,
-      method: 'POST',
-    },
-    updateData(data) {
-      try {
-        localStorage.setItem('authData', JSON.stringify(data));
-      } catch (error) {
-        log.error(`Unable to save auth data to local storage (${error.message})`);
-      }
-      if (!this.data || !data) {
-        this.data = data;
-      } else {
-        Object.assign(this.data, data);
-      }
-      accounts.get.updateData(data);
-    },
-    async run(email, password) {
-      this.startFetching({ body: { email, password } });
-    },
-    signout() {
-      this.updateData(undefined);
-      Object.keys(payments).forEach(method => {
-        payments[method].cleanup();
-      });
-    },
-    get isAuthenticated() {
-      return !!(this.data && this.data.token);
-    },
-  }),
-  signup: createNewStore({
-    name: 'AccountsSignup',
-    fetchOptions: {
-      url: getApiUrl`/api/accounts`,
-      method: 'POST',
-    },
-    updateData(data) {
-      try {
-        localStorage.setItem('authData', JSON.stringify(data));
-      } catch (error) {
-        log.error(`Unable to save auth data to local storage (${error.message})`);
-      }
-      if (!this.data || !data) {
-        this.data = data;
-      } else {
-        Object.assign(this.data, data);
-      }
-      accounts.authenticate.updateData(data);
-      accounts.get.updateData(data);
-    },
-    async run(email, password) {
-      const referral = localStorage.getItem('referral') || email;
-      this.startFetching({ body: { email, password, referral } });
-    },
-  }),
   calcDenominations(balances) {
-    const result = {};
+    const result = { ...balances };
     Object.keys(balances).forEach(balance => {
-      result[balance] = {};
+      result[balance] = { ...balances[balance] };
       result[balance].denominationsAvailable = {
         main: {
           ...settings.get.data.denominations[balance].main,
@@ -163,28 +98,91 @@ const accounts = {
     return result;
   },
 };
+accounts.parseData = data => ({
+  ...data,
+  balances: { ...accounts.calcDenominations(data.balances) },
+});
 
-accounts.get = createNewStore({
+accounts.authenticate = createNewStore({
   name: 'AccountsAuthenticate',
   data: (() => {
     try {
-      const savedData = JSON.parse(localStorage.getItem('authData'));
-      savedData.balances = {
-        ...savedData.balances,
-        ...accounts.calcDenominations(savedData.balances),
-      };
-      return savedData;
+      return JSON.parse(localStorage.getItem('authData'));
     } catch (error) {
       log.error(`Unable to read auth data from local storage (${error.message})`);
       return undefined;
     }
   })(),
-  parseData(data) {
-    return {
-      ...data,
-      balances: { ...data.balances, ...accounts.calcDenominations(data.balances) },
-    };
+  parseData: accounts.parseData,
+  fetchOptions: {
+    url: getApiUrl`/api/accounts/auth`,
+    method: 'POST',
   },
+  updateData(data) {
+    try {
+      localStorage.setItem('authData', JSON.stringify(data));
+    } catch (error) {
+      log.error(`Unable to save auth data to local storage (${error.message})`);
+    }
+    if (!this.data || !data) {
+      this.data = data;
+    } else {
+      Object.assign(this.data, data);
+    }
+    accounts.get.updateData(data);
+  },
+  async run(email, password) {
+    this.startFetching({ body: { email, password } });
+  },
+  signout() {
+    this.updateData(undefined);
+    Object.keys(payments).forEach(method => {
+      payments[method].cleanup();
+    });
+  },
+  get isAuthenticated() {
+    return !!(this.data && this.data.token);
+  },
+});
+
+accounts.signup = createNewStore({
+  name: 'AccountsSignup',
+  fetchOptions: {
+    url: getApiUrl`/api/accounts`,
+    method: 'POST',
+  },
+  parseData: accounts.parseData,
+  updateData(data) {
+    try {
+      localStorage.setItem('authData', JSON.stringify(data));
+    } catch (error) {
+      log.error(`Unable to save auth data to local storage (${error.message})`);
+    }
+    if (!this.data || !data) {
+      this.data = data;
+    } else {
+      Object.assign(this.data, data);
+    }
+    accounts.authenticate.updateData(data);
+    accounts.get.updateData(data);
+  },
+  async run(email, password) {
+    const referral = localStorage.getItem('referral') || email;
+    this.startFetching({ body: { email, password, referral } });
+  },
+});
+
+accounts.get = createNewStore({
+  name: 'AccountsAuthenticate',
+  data: (() => {
+    try {
+      return JSON.parse(localStorage.getItem('authData'));
+    } catch (error) {
+      log.error(`Unable to read auth data from local storage (${error.message})`);
+      return undefined;
+    }
+  })(),
+  parseData: accounts.parseData,
   fetchOptions: {
     url: getApiUrl`/api/accounts`,
   },

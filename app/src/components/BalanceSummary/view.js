@@ -22,6 +22,9 @@ export const BalanceSummary = ({ accounts, className, t }) => {
   if (accounts.get.error || !accounts.get.data) {
     return <Root className={className}>Error loading account data</Root>;
   }
+  const totalBalance = Object.keys(accounts.get.data.balances)
+    .map(asset => accounts.get.data.balances[asset].available)
+    .reduce((p, c) => p + Number(c), 0);
 
   return (
     <Root className={className} loading={accounts.get.loading}>
@@ -37,7 +40,9 @@ export const BalanceSummary = ({ accounts, className, t }) => {
           {accounts.get.data.balances[asset].denominationsAvailable.additional.sign}
         </Additional>,
       ])}
-      <Send to="/send">Pay</Send>
+      <Send to={totalBalance === 0 ? '/receive' : '/send'}>
+        {totalBalance === 0 ? 'Receive' : 'Pay'}
+      </Send>
     </Root>
   );
 };

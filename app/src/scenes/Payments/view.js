@@ -72,10 +72,6 @@ const Payments = ({ payments, accounts, t }) => {
           <P>No payments here yet</P>
           <P>
             Go{' '}
-            <NavLink to="/send">
-              <Button link>send</Button>
-            </NavLink>{' '}
-            or{' '}
             <NavLink to="/receive">
               <Button link>receive</Button>
             </NavLink>{' '}

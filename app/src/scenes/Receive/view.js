@@ -9,12 +9,20 @@
 
 import React from 'react';
 
-import { ReceivePayment } from './styles';
+import { Root, Header, ReceivePayment, P, BackButton } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
-const Receive = () => <ReceivePayment />;
+const Receive = () => (
+  <Root>
+    <Header>
+      <BackButton />
+      <P>Receive</P>
+    </Header>
+    <ReceivePayment />
+  </Root>
+);
 
 export default Receive;

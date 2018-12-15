@@ -24,7 +24,7 @@ import {
   Button,
   Img,
   VendorIcon,
-  GroupHeader,
+  GroupInfo,
   GroupedItems,
   PaymentItem,
 } from './styles';
@@ -33,36 +33,35 @@ import {
 // Code
 // -----------------------------------------------------------------------------
 
-const round = (number, roundGrade) => Math.floor(number * 10 ** roundGrade) / 10 ** roundGrade;
-
 export const PaymentsGroup = ({
   className,
+  history,
   payments,
+  round,
   status,
   vendorName,
   vendorIcon,
-  mainDenominationSign,
-  mainDenominationRound,
-  mainDenominationPrice,
-  additionalDenominationSign,
-  additionalDenominationRound,
-  additionalDenominationPrice,
   t,
 }) => {
   const [folded, toggleFold] = useState(true);
-
-  const groupedAmount = payments.reduce(
-    (p, c) =>
-      p +
-      (c.direction === 'incoming' ? Number(c.amount) : -Number(c.amount) - Number(c.fees.total)),
-    0,
+  const groupedAmountMain = round(
+    payments.reduce((p, c) => p + c.denominations.main.amount, 0),
+    payments[0].denominations.main.precision,
   );
+  const groupedAmountAdditional = round(
+    payments.reduce((p, c) => p + c.denominations.additional.amount, 0),
+    payments[0].denominations.additional.precision,
+  );
+
   return (
     <Root className={className}>
-      <GroupHeader
+      <GroupInfo
+        folded={folded}
         onClick={e => {
           if (payments.length > 1) {
             toggleFold(!folded);
+          } else {
+            history.push(`/payment/${payments[0].puid}`);
           }
         }}
       >
@@ -77,36 +76,29 @@ export const PaymentsGroup = ({
           </P>
         </Vendor>
         <Amount>
-          <AmountMain amount={groupedAmount}>
-            {round(groupedAmount * mainDenominationPrice, mainDenominationRound)}{' '}
-            {mainDenominationSign}
+          <AmountMain amount={groupedAmountMain}>
+            {groupedAmountMain} {payments[0].denominations.main.sign}
           </AmountMain>
           <AmountAdditional>
-            {round(groupedAmount * additionalDenominationPrice, additionalDenominationRound)}{' '}
-            {additionalDenominationSign}
+            {groupedAmountAdditional} {payments[0].denominations.additional.sign}
           </AmountAdditional>
         </Amount>
-      </GroupHeader>
+      </GroupInfo>
       <GroupedItems folded={folded}>
         {payments.map(payment => (
           <PaymentItem
+            key={payment.puid}
+            puid={payment.puid}
             updatedAt={payment.updatedAt}
             isDescriptionReadable={payment.description}
             description={payment.description || payment.receipt}
             direction={payment.direction}
-            mainDenominationString={`${round(
-              (payment.direction === 'incoming'
-                ? Number(payment.amount)
-                : -Number(payment.amount) - Number(payment.fees.total)) * mainDenominationPrice,
-              mainDenominationRound,
-            )} ${mainDenominationSign}`}
-            additionalDenominationString={`${round(
-              (payment.direction === 'incoming'
-                ? Number(payment.amount)
-                : -Number(payment.amount) - Number(payment.fees.total)) *
-                additionalDenominationPrice,
-              additionalDenominationRound,
-            )} ${additionalDenominationSign}`}
+            mainDenominationString={`${payment.denominations.main.amount} ${
+              payment.denominations.main.sign
+            }`}
+            additionalDenominationString={`${payment.denominations.additional.amount} ${
+              payment.denominations.additional.sign
+            }`}
           />
         ))}
       </GroupedItems>

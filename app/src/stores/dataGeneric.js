@@ -30,6 +30,8 @@ const GenericApiStore = {
 
   fetch: fetchData,
 
+  parseData: data => data,
+
   loading: undefined,
 
   startedAt: undefined,
@@ -98,7 +100,11 @@ const GenericApiStore = {
     }
     this.loadingStart();
     const response = await this.fetch(parsedOptions.url, parsedOptions);
-    this.updateData(response.data);
+    let dataParsed = response.data;
+    if (dataParsed) {
+      dataParsed = await this.parseData(response.data);
+    }
+    this.updateData(dataParsed);
     this.updateError(response.error);
     this.loadingFinish();
     return response;

@@ -65,6 +65,7 @@ export const VendorIcon = styled.div`
 export const Status = styled.div`
   align-self: stretch;
   width: 0.25em;
+  margin-right: 0.25em;
   background-color: ${({ status }) => `var(--colors__bg_${status})`};
 `;
 
@@ -98,18 +99,34 @@ export const Amount = styled.div`
   margin-left: auto;
 `;
 
-export const GroupHeader = styled.div`
+export const GroupInfo = styled.div`
   display: flex;
   align-items: center;
   font-size: 0.8em;
+  cursor: pointer;
   & ${Vendor}, & ${Amount} {
     margin-top: 1.6em;
     margin-bottom: 1.6em;
   }
+
+  &:hover ${Status} {
+    margin-right: 0;
+    width: 0.5em;
+  }
+
+  ${({ folded }) =>
+    !folded &&
+    `& ${Status} {
+     margin-right: 0;
+     width: 0.5em;
+  }`}
+
   background-color: var(--colors__bg_bright);
 `;
 
-export const PaymentItem = styled(PaymentItemRaw)``;
+export const PaymentItem = styled(PaymentItemRaw)`
+  cursor: pointer;
+`;
 
 export const GroupedItems = styled.div`
   display: flex;

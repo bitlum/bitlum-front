@@ -11,6 +11,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import formatDate from 'date-fns/format';
 
+import NavLink from 'react-router-dom';
+
 import log from 'utils/logging';
 
 import { Root, P, AmountAdditional, AmountMain, Description, Amount, Time, Info } from './styles';
@@ -21,6 +23,8 @@ import { Root, P, AmountAdditional, AmountMain, Description, Amount, Time, Info 
 
 export const PaymentItem = ({
   className,
+  history,
+  puid,
   updatedAt,
   description,
   isDescriptionReadable,
@@ -32,16 +36,16 @@ export const PaymentItem = ({
   return (
     <Root
       className={className}
+      onClick={() => {
+        history.push(`/payment/${puid}`);
+      }}
     >
-      {' '}
       <Info>
-        <Time>{formatDate(new Date(updatedAt),'HH:mm')}</Time>
+        <Time>{formatDate(new Date(updatedAt), 'HH:mm')}</Time>
         <Description wrap={isDescriptionReadable}>{description}</Description>
       </Info>
       <Amount>
-        <AmountMain direction={direction}>
-          {mainDenominationString}
-        </AmountMain>
+        <AmountMain direction={direction}>{mainDenominationString}</AmountMain>
         <AmountAdditional direction={direction}>{additionalDenominationString}</AmountAdditional>
       </Amount>
     </Root>

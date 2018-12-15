@@ -11,6 +11,8 @@ import styled from 'styled-components';
 
 import { P, Span, Img } from 'components/common';
 
+import infoIcon from 'assets/icons/info.svg';
+
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
@@ -60,8 +62,9 @@ export const Root = styled.div`
   display: flex;
   align-items: flex-start;
   font-size: 0.8em;
-  margin-left: 1.5em;
+  margin-left: 4em;
   margin-right: 1em;
+  position: relative;
   &:not(:last-child) {
     border-bottom: 0.1em solid var(--colors__bg_dark);
   }
@@ -69,6 +72,21 @@ export const Root = styled.div`
     margin-top: 1.6em;
     margin-bottom: 1.6em;
   }
+  &:before {
+    position: absolute;
+    top: calc(50% - 0.65em);
+    left: -2.2em;
+    opacity: 0.4;
+    color: transparent;
+    background: url(${infoIcon});
+    height: 1.3em;
+    width: 1.3em;
+    background-size: contain;
+  }
+  &:hover:before {
+    content: '.';
+  }
+
   background-color: var(--colors__bg);
 `;
 

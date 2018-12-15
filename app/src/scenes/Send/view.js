@@ -11,7 +11,7 @@ import React from 'react';
 
 import log from 'utils/logging';
 
-import { SendPayment } from './styles';
+import { Root, Header, BackButton, P, SendPayment } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -25,7 +25,15 @@ const Send = () => {
     log.error(error);
     prefill = undefined;
   }
-  return <SendPayment prefill={prefill} />;
+  return (
+    <Root>
+      <Header>
+        <BackButton />
+        <P>Pay</P>
+      </Header>
+      <SendPayment prefill={prefill} />
+    </Root>
+  );
 };
 
 export default Send;

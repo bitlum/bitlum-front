@@ -18,9 +18,8 @@ import { Button as ButtonCommon } from './Button';
 
 const CopyText = styled.p``;
 export const CopyButton = styled(
-  ({ copyData, copyText = 'Copy', copiedText = 'Copied!', ...rest }) => (
+  ({ copyData, copyText = 'Copy', copiedText = 'Copied!', children,  ...rest }) => (
     <div
-      link
       onClick={e => {
         const copyContainer = document.createElement('input');
         copyContainer.value = copyData;
@@ -36,6 +35,7 @@ export const CopyButton = styled(
       }}
       {...rest}
     >
+      {children}
       <CopyText>{copyText}</CopyText>
       <CopyText>{copiedText}</CopyText>
     </div>
@@ -45,11 +45,11 @@ export const CopyButton = styled(
   border-radius: 0.2em;
   font-weight: 600;
   text-align: center;
-  display: grid;
+  display: flex;
+  align-items:center;
   cursor:pointer;
   grid-template-columns: 1fr;
   & > ${CopyText} {
-    grid-area: 1 / 1;
     word-break: initial;
     width: max-content;
     transition: opacity 0.3s ease-in-out;

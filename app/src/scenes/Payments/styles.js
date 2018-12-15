@@ -13,11 +13,12 @@ import formatDate from 'date-fns/format';
 import isToday from 'date-fns/is_today';
 import isYesteray from 'date-fns/is_yesterday';
 
-import { P, Header as HeaderRaw } from 'components/common';
+import { Img, P, Header as HeaderRaw } from 'components/common';
 
 import BalanceSummaryRaw from 'components/BalanceSummary';
 import PaymentsGroupRaw from 'components/PaymentsGroup';
 
+import LogoFull from 'assets/img/logo/full.png';
 import { ReactComponent as EmptyIconRaw } from 'assets/icons/paper.svg';
 
 // -----------------------------------------------------------------------------
@@ -25,6 +26,15 @@ import { ReactComponent as EmptyIconRaw } from 'assets/icons/paper.svg';
 // -----------------------------------------------------------------------------
 
 export * from 'components/common';
+
+export const Logo = styled(Img).attrs({
+  src: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
+})`
+  position: relative;
+  content: url(${LogoFull});
+  height: 2em;
+  width: 9em;
+`;
 
 export const Separator = styled(P)`
   font-size: 0.8em;
@@ -44,20 +54,43 @@ export const EmptyIcon = styled(EmptyIconRaw)`
 `;
 
 export const Header = styled(HeaderRaw)`
+  background: var(--colors__bg_bright);
+  height: var(--sizing__header_heigh);
+  & ${Logo} {
+    margin: 1em;
+  }
+`;
+
+export const HeaderSecondary = styled(HeaderRaw)`
   height: var(--sizing__header_heigh);
   font: var(--fonts__header_thin);
 `;
 
+export const BalanceSummary = styled(BalanceSummaryRaw)`
+  margin: 10rem 0;
+  height: 21.5rem;
+`;
+
+export const EmptyWrapper = styled.div``;
+
 export const Root = styled.div`
   display: flex;
-  margin: 0 1rem;
-  width: calc(100vw - 2rem);
   flex-direction: column;
   justify-content: center;
+  margin-bottom: 5em;
+
+  & ${PaymentsGroup},
+  & ${BalanceSummary},
+  & ${Separator},
+  & ${HeaderSecondary} {
+    margin-left: 2rem;
+    margin-right: 2rem;
+    width: calc(100vw - 4rem);
+  }
 
   ${({ empty }) =>
     empty &&
-    `& > ${P} {
+    `& > ${EmptyWrapper} {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -68,12 +101,6 @@ export const Root = styled.div`
       margin-top: 2em;
     }
   `};
-`;
-
-export const BalanceSummary = styled(BalanceSummaryRaw)`
-  margin: 10rem 0;
-  height: 21.5rem;
-  width: 95vw;
 `;
 
 export default Root;

@@ -35,12 +35,13 @@ import Login from 'scenes/Login';
 import Signup from 'scenes/Signup';
 import Landing from 'scenes/Landing';
 import Payments from 'scenes/Payments';
+import Payment from 'scenes/Payment';
 import Send from 'scenes/Send';
 import Receive from 'scenes/Receive';
 
 import { ReactComponent as CloseIcon } from 'assets/icons/back.svg';
 
-import { Global as GlobalStyles, Root, Header, Footer, Nav, Main, Logo } from './styles';
+import { Global as GlobalStyles, Root, Footer, Main } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -79,22 +80,6 @@ class App extends Component {
     return (
       <Root>
         <GlobalStyles />
-        <Header>
-          {!accounts.authenticate.isAuthenticated ? (
-            <Nav key="Nav">
-              <NavLink to="/login">Login</NavLink>
-              <NavLink exact to="/">
-                {t('nav.signup')}
-              </NavLink>
-            </Nav>
-          ) : (
-            <Nav key="Nav">
-              <NavLink to="/">
-                <Logo />
-              </NavLink>
-            </Nav>
-          )}
-        </Header>
         <Main>
           {!accounts.authenticate.isAuthenticated ? (
             <Switch>
@@ -107,7 +92,7 @@ class App extends Component {
             [
               <Switch key="Switch">
                 <Route path="/payments" component={Payments} />
-                {/* <Route path="/account" component={Account} /> */}
+                <Route path="/payment/:puid" component={Payment} />
                 <Route path="/send" component={Send} />
                 <Route path="/receive" component={Receive} />
                 <Route

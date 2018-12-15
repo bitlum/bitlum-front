@@ -17,12 +17,15 @@ import isYesteray from 'date-fns/is_yesterday';
 import {
   Root,
   EmptyIcon,
+  EmptyWrapper,
   P,
   Header,
   Button,
   BalanceSummary,
   PaymentsGroup,
   Separator,
+  HeaderSecondary,
+  Logo,
 } from './styles';
 
 // -----------------------------------------------------------------------------
@@ -54,15 +57,14 @@ const Payments = ({ payments, t }) => {
   if ((!payments.get.data || payments.get.data.length === 0) && !payments.get.loading) {
     return (
       <Root empty>
-        <BalanceSummary
-          key="BalanceSummary"
-          mainDenominationPrice="4000"
-          mainDenominationSign="$"
-          additionalDenominationPrice="1"
-          additionalDenominationSign="BTC"
-        />
-        <Header>Payments</Header>
-        <P>
+        <Header>
+          <NavLink to="/">
+            <Logo />
+          </NavLink>
+        </Header>
+        <BalanceSummary key="BalanceSummary" />
+        <HeaderSecondary>Payments</HeaderSecondary>
+        <EmptyWrapper>
           <EmptyIcon />
           <P>No payments here yet</P>
           <P>
@@ -76,7 +78,7 @@ const Payments = ({ payments, t }) => {
             </NavLink>{' '}
             one! :)
           </P>
-        </P>
+        </EmptyWrapper>
       </Root>
     );
   }
@@ -95,16 +97,13 @@ const Payments = ({ payments, t }) => {
 
   return (
     <Root>
-      <BalanceSummary
-        key="BalanceSummary"
-        mainDenominationPrice="4000"
-        mainDenominationSign="USD"
-        mainDenominationRound="2"
-        additionalDenominationPrice="1"
-        additionalDenominationSign="BTC"
-        additionalDenominationRound="8"
-      />
-      <Header>Payments</Header>
+      <Header>
+        <NavLink to="/">
+          <Logo />
+        </NavLink>
+      </Header>
+      <BalanceSummary key="BalanceSummary" />
+      <HeaderSecondary>Payments</HeaderSecondary>
       {Object.entries(paymentsGrouped)
         .map((paymentsGroup, index, self) => {
           const result = [
@@ -114,12 +113,7 @@ const Payments = ({ payments, t }) => {
               vendorName={paymentsGroup[1][0].vendorName}
               vendorIcon={paymentsGroup[1][0].vendorIcon}
               payments={paymentsGroup[1]}
-              mainDenominationPrice="4000"
-              mainDenominationSign="USD"
-              mainDenominationRound="2"
-              additionalDenominationPrice="1"
-              additionalDenominationSign="BTC"
-              additionalDenominationRound="8"
+              round={payments.round}
             />,
           ];
           const currentGroupDate = new Date(Number(paymentsGroup[0].split('_')[0]));

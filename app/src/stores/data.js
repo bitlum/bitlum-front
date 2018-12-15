@@ -15,7 +15,7 @@ import { createNewStore } from './dataGeneric';
 // Code
 // -----------------------------------------------------------------------------
 
-export const getApiUrl = strings => {
+const getApiUrl = strings => {
   const urlsWithoutApi = strings.map(string => string.replace(/^\/api/, ''));
   if (process.env.NODE_ENV === 'development') {
     return `http://lvh.me:3004${urlsWithoutApi}`;
@@ -23,7 +23,41 @@ export const getApiUrl = strings => {
   return `https://api.bitlum.io${urlsWithoutApi}`;
 };
 
-export const accounts = {
+const settings = {
+  default: {
+    denominations: {
+      BTC: {
+        main: {
+          price: 4000,
+          sign: '$',
+          precision: 2,
+        },
+        additional: {
+          price: 1,
+          sign: 'BTC',
+          precision: 8,
+        },
+      },
+    },
+  },
+};
+
+settings.get = createNewStore({
+  name: 'SettingsGet',
+  data: (() => {
+    try {
+      return JSON.parse(localStorage.getItem('settings')) || settings.default;
+    } catch (error) {
+      log.error(`Unable to read settings from local storage (${error.message})`);
+      return undefined;
+    }
+  })(),
+});
+
+const round = (number, roundGrade) => Math.floor(number * 10 ** roundGrade) / 10 ** roundGrade;
+
+const accounts = {
+  round,
   authenticate: createNewStore({
     name: 'AccountsAuthenticate',
     data: (() => {
@@ -89,49 +123,119 @@ export const accounts = {
       this.startFetching({ body: { email, password, referral } });
     },
   }),
-  get: createNewStore({
-    name: 'AccountsAuthenticate',
-    data: (() => {
-      try {
-        return JSON.parse(localStorage.getItem('authData'));
-      } catch (error) {
-        log.error(`Unable to read auth data from local storage (${error.message})`);
-        return undefined;
-      }
-    })(),
-    fetchOptions: {
-      url: getApiUrl`/api/accounts`,
-    },
-    async run() {
-      const result = await this.startFetching({
-        headers: {
-          Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
+  calcDenominations(balances) {
+    const result = {};
+    Object.keys(balances).forEach(balance => {
+      result[balance] = {};
+      result[balance].denominationsAvailable = {
+        main: {
+          ...settings.get.data.denominations[balance].main,
+          amount: round(
+            balances[balance].available * settings.get.data.denominations[balance].main.price,
+            settings.get.data.denominations[balance].main.precision,
+          ),
         },
-      });
-      if (result.error && result.error.code.match('^401.*$')) {
-        accounts.authenticate.signout();
-      }
-    },
-  }),
+        additional: {
+          ...settings.get.data.denominations[balance].additional,
+          amount: round(
+            balances[balance].available * settings.get.data.denominations[balance].additional.price,
+            settings.get.data.denominations[balance].additional.precision,
+          ),
+        },
+      };
+      result[balance].denominationsPending = {
+        main: {
+          ...settings.get.data.denominations[balance].main,
+          amount: round(
+            balances[balance].pending * settings.get.data.denominations[balance].main.price,
+            settings.get.data.denominations[balance].main.precision,
+          ),
+        },
+        additional: {
+          ...settings.get.data.denominations[balance].additional,
+          amount: round(
+            balances[balance].pending * settings.get.data.denominations[balance].additional.price,
+            settings.get.data.denominations[balance].additional.precision,
+          ),
+        },
+      };
+    });
+    return result;
+  },
 };
 
-export const payments = {
-  get: createNewStore({
-    name: 'PaymentsGet',
-    async run() {
-      const result = await this.startFetching({
-        headers: {
-          Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
+accounts.get = createNewStore({
+  name: 'AccountsAuthenticate',
+  data: (() => {
+    try {
+      const savedData = JSON.parse(localStorage.getItem('authData'));
+      savedData.balances = {
+        ...savedData.balances,
+        ...accounts.calcDenominations(savedData.balances),
+      };
+      return savedData;
+    } catch (error) {
+      log.error(`Unable to read auth data from local storage (${error.message})`);
+      return undefined;
+    }
+  })(),
+  parseData(data) {
+    return {
+      ...data,
+      balances: { ...data.balances, ...accounts.calcDenominations(data.balances) },
+    };
+  },
+  fetchOptions: {
+    url: getApiUrl`/api/accounts`,
+  },
+  async run() {
+    const result = await this.startFetching({
+      headers: {
+        Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
+      },
+    });
+    if (result.error && result.error.code.match('^401.*$')) {
+      accounts.authenticate.signout();
+    }
+  },
+});
+
+const payments = {
+  round,
+  getTotal(payment) {
+    return payment.direction === 'incoming'
+      ? Number(payment.amount)
+      : -1 * Number(payment.amount) - Number(payment.fees.total);
+  },
+  calcDenominations(payment) {
+    return {
+      denominations: {
+        main: {
+          ...settings.get.data.denominations[payment.asset].main,
+          amount: round(
+            payments.getTotal(payment) * settings.get.data.denominations[payment.asset].main.price,
+            settings.get.data.denominations[payment.asset].main.precision,
+          ),
+          totalFee: round(
+            payment.fees.total * settings.get.data.denominations[payment.asset].main.price,
+            settings.get.data.denominations[payment.asset].main.precision,
+          ),
         },
-      });
-      if (result.error && result.error.code.match('^401.*$')) {
-        accounts.authenticate.signout();
-      }
-    },
-    fetchOptions: {
-      url: getApiUrl`/api/payments`,
-    },
-  }),
+        additional: {
+          ...settings.get.data.denominations[payment.asset].additional,
+          amount: round(
+            payments.getTotal(payment) *
+              settings.get.data.denominations[payment.asset].additional.price,
+            settings.get.data.denominations[payment.asset].additional.precision,
+          ),
+          totalFee: round(
+            payment.fees.total * settings.get.data.denominations[payment.asset].additional.price,
+            settings.get.data.denominations[payment.asset].additional.precision,
+          ),
+        },
+      },
+    };
+  },
   send: createNewStore({
     name: 'PaymentsSend',
     async run(to, amount, asset) {
@@ -170,7 +274,68 @@ export const payments = {
   }),
 };
 
-export const wallets = {
+payments.get = createNewStore({
+  name: 'PaymentsGet',
+  parseData(data) {
+    return data.map(payment => {
+      return {
+        ...payment,
+        ...payments.calcDenominations(payment),
+      };
+    });
+  },
+  async run() {
+    const result = await this.startFetching({
+      headers: {
+        Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
+      },
+    });
+    if (result.error && result.error.code.match('^401.*$')) {
+      accounts.authenticate.signout();
+    }
+  },
+  fetchOptions: {
+    url: getApiUrl`/api/payments`,
+  },
+});
+payments.getById = createNewStore({
+  name: 'PaymentsGetById',
+  parseData(data) {
+    return data.map(payment => {
+      return {
+        ...payment,
+        ...payments.calcDenominations(payment),
+      };
+    });
+  },
+  async run(puid) {
+    if (payments.get.data) {
+      const paymentFound = payments.get.data.find(payment => payment.puid === puid);
+      if (paymentFound) {
+        this.loadingStart();
+        this.updateData([paymentFound]);
+        this.updateError(undefined);
+        this.loadingFinish();
+        return;
+      }
+    }
+    const result = await this.startFetching({
+      url: `${this.fetchOptions.url}/${puid}`,
+      headers: {
+        Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
+      },
+    });
+
+    if (result.error && result.error.code.match('^401.*$')) {
+      accounts.authenticate.signout();
+    }
+  },
+  fetchOptions: {
+    url: getApiUrl`/api/payments`,
+  },
+});
+
+const wallets = {
   getDetails: createNewStore({
     name: 'WalletsGetDetails',
     async run(wuid, asset) {
@@ -187,4 +352,6 @@ export const wallets = {
   }),
 };
 
-export default { payments, accounts, wallets };
+export { payments, accounts, wallets, settings };
+
+export default { payments, accounts, wallets, settings };

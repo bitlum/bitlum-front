@@ -11,29 +11,11 @@ import styled, { createGlobalStyle } from 'styled-components';
 
 import { Header as HeaderCommon, Footer, Main as MainCommon, media, Img } from 'components/common';
 
-import LogoFull from 'assets/img/logo/full.png';
-
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
 export * from 'components/common';
-
-export const Logo = styled(Img).attrs({
-  src: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
-})`
-  position: relative;
-  content: url(${LogoFull});
-  height: 2em;
-  width: 9em;
-`;
-
-export const Header = styled(HeaderCommon)`
-  background: var(--colors__bg_bright);
-  & ${Logo} {
-    margin: 1em;
-  }
-`;
 
 export const Main = styled(MainCommon)`
   background: var(--colors__bg);
@@ -41,18 +23,14 @@ export const Main = styled(MainCommon)`
 
 export const Root = styled.div`
   display: grid;
-  grid-template-rows: var(--sizing__header_heigh) auto var(--sizing__footer_heigh);
-  grid-template-areas:  "header"
-                        "main"
+  grid-template-rows: auto var(--sizing__footer_heigh);
+  grid-template-areas:  "main"
                         "footer";
   color: var(--colors__text);
   font: var(--fonts__text);
   min-height: 100vh;
   background: var(--colors__bg);
 
-  & > ${Header} {
-    grid-area: header;
-  }
   & > ${Footer} {
     grid-area: footer;
   }
@@ -100,14 +78,29 @@ export const Global = createGlobalStyle`
 
   --fonts__text: 400 1.6rem 'Montserrat', sans-serif;
   --fonts__text_thin: 200 1.6rem 'Montserrat', sans-serif;
-  --fonts__text_bold: 700 1.6rem 'Montserrat', sans-serif;
+  --fonts__text_bold: 600 1.6rem 'Montserrat', sans-serif;
 
-  --fonts__header: 400 2rem 'Montserrat', sans-serif;
-  --fonts__header_thin: 200 2rem 'Montserrat', sans-serif;
-  --fonts__header_bold: 700 2rem 'Montserrat', sans-serif;
+  --fonts__header: 400 2.4rem 'Montserrat', sans-serif;
+  --fonts__header_thin: 200 2.4rem 'Montserrat', sans-serif;
+  --fonts__header_bold: 600 2.4rem 'Montserrat', sans-serif;
 
   --sizing__header_heigh: 9rem;
   --sizing__footer_heigh: 2rem;
+}
+
+::-webkit-scrollbar-track
+{
+    background-color: transparent;
+}
+
+::-webkit-scrollbar
+{
+    width: 0.4rem;  
+}
+
+::-webkit-scrollbar-thumb
+{
+  background-color: var(--colors__bg_dark);
 }
 
 /* Extension popup specific sizes*/
@@ -118,7 +111,7 @@ html {
 
 
 /* CSS reset here */
-a,abbr,acronym,address,applet,area,article,aside,audio,b,base,basefont,bdi,bdo,big,blockquote,body,br,button,canvas,caption,center,cite,code,col,colgroup,data,datalist,dd,del,details,dfn,dialog,dir,div,dl,dt,em,embed,fieldset,figcaption,figure,font,footer,form,frame,frameset,h1,h2,h3,h4,h5,h6,head,header,hr,/*html,*/i,iframe,img,input,ins,kbd,label,legend,/*li,*/link,main,map,mark,menu,menuitem,meta,meter,nav,noframes,noscript,object,ol,optgroup,option,output,p,param,picture,pre,progress,q,rp,rt,ruby,s,samp,script,section,select,small,source,span,strike,strong,style,sub,summary,sup,svg,table,tbody,td,template,textarea,tfoot,th,thead,time,title,tr,track,tt,u,/*ul,*/var,video,wbr {
+a,abbr,acronym,address,applet,area,article,aside,audio,b,base,basefont,bdi,bdo,big,blockquote,body,br,button,canvas,caption,center,cite,code,col,colgroup,data,datalist,dd,del,details,dfn,dialog,dir,div,dl,dt,em,embed,fieldset,figcaption,figure,font,footer,form,frame,frameset,h1,h2,h3,h4,h5,h6,head,header,hr,/*html,*/i,iframe,img,input,ins,kbd,label,legend,/*li,*/link,main,map,mark,menu,menuitem,meta,meter,nav,noframes,noscript,object,ol,optgroup,option,output,p,param,picture,pre,progress,q,rp,rt,ruby,s,samp,script,section,select,small,source,span,strike,strong,style,sub,summary,sup,/*svg,*/table,tbody,td,template,textarea,tfoot,th,thead,time,title,tr,track,tt,u,/*ul,*/var,video,wbr {
   all: unset;
   box-sizing: border-box;
   word-break: break-all;

@@ -58,10 +58,10 @@
     "contextMenus",
     "clipboardRead"
   ],
-  "web_accessible_resources": ["inpage.js", "phishing.html", "index.html"],
+  "web_accessible_resources": ["inpage.js", "phishing.html", "index.html", "assets/*"],
   "externally_connectable": {
     "matches": ["https://*.bitlum.io/*"],
     "ids": ["*"]
   },
-  "content_security_policy": "script-src 'self' 'sha256-GgRxrVOKNdB4LrRsVPDSbzvfdV4UqglmviH9GoBJ5jk=' https://*.intercomcdn.com https://www.google-analytics.com/ https://mc.yandex.ru/ https://*.intercom.io; object-src 'self';img-src 'self' data:; style-src 'unsafe-inline';"
+  "content_security_policy": "script-src 'self' 'sha256-GgRxrVOKNdB4LrRsVPDSbzvfdV4UqglmviH9GoBJ5jk=' https://*.intercomcdn.com https://www.google-analytics.com/ https://mc.yandex.ru/ https://*.intercom.io; object-src 'self';img-src * 'self' data:; style-src * 'unsafe-inline';"
 }

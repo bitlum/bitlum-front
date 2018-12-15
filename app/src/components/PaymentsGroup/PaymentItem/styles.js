@@ -84,7 +84,8 @@ export const Root = styled.div`
     background-size: contain;
   }
   &:hover:before {
-    content: '.';
+    display: block;
+    content: '';
   }
 
   background-color: var(--colors__bg);

@@ -27,6 +27,8 @@ import {
   Separator,
   HeaderSecondary,
   Logo,
+  Legend,
+  LegendItem,
 } from './styles';
 
 // -----------------------------------------------------------------------------
@@ -105,6 +107,11 @@ const Payments = ({ payments, accounts, t }) => {
       </Header>
       <BalanceSummary key="BalanceSummary" accounts={accounts} />
       <HeaderSecondary>Payments</HeaderSecondary>
+      <Legend>
+        <LegendItem type="pending">Pending</LegendItem>
+        <LegendItem type="completed">Completed</LegendItem>
+        <LegendItem type="failed">Failed</LegendItem>
+      </Legend>
       {Object.entries(paymentsGrouped).map((paymentsGroup, index, self) => {
         const result = [
           <PaymentsGroup

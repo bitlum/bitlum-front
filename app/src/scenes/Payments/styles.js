@@ -71,6 +71,36 @@ export const BalanceSummary = styled(BalanceSummaryRaw)`
   height: 21.5rem;
 `;
 
+export const Legend = styled.div`
+  display: flex;
+  font-size: 0.8em;
+  margin-bottom: 1em;
+  & + ${Separator} {
+    margin-top: 1em;
+  }
+`;
+
+export const LegendItem = styled.p`
+  margin-left: 2em;
+
+  &:first-child {
+    margin-left: 1em;
+  }
+
+  position: relative;
+  &:before {
+    position: absolute;
+    left: -1em;
+    top: calc(50% - 0.22em);
+    display: block;
+    content: '';
+    color: transparent;
+    height: 0.5em;
+    width: 0.5em;
+    background-color: ${({ type }) => `var(--colors__bg_${type})`};
+  }
+`;
+
 export const EmptyWrapper = styled.div``;
 
 export const Root = styled.div`
@@ -79,10 +109,7 @@ export const Root = styled.div`
   justify-content: center;
   margin-bottom: 5em;
 
-  & ${PaymentsGroup},
-  & ${BalanceSummary},
-  & ${Separator},
-  & ${HeaderSecondary} {
+  & ${PaymentsGroup}, & ${BalanceSummary}, & ${Separator}, & ${HeaderSecondary}, & ${Legend} {
     margin-left: 2rem;
     margin-right: 2rem;
     width: calc(100vw - 4rem);

@@ -41,10 +41,10 @@ const getDate = date => {
   let distance;
   distance = formatDate(new Date(date), 'Do MMMM [at] HH:mm');
   if (isToday(date)) {
-    distance = 'Today';
+    distance = formatDate(new Date(date), '[Today at] HH:mm');
   }
   if (isYesteray(date)) {
-    distance = 'Yesterday';
+    distance = formatDate(new Date(date), '[Yesterday at] HH:mm');
   }
   return distance;
 };

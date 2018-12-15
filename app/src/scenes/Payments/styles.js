@@ -58,6 +58,7 @@ export const Header = styled(HeaderRaw)`
   height: var(--sizing__header_heigh);
   & ${Logo} {
     margin: 1em;
+    margin-left: 1.5em;
   }
 `;
 

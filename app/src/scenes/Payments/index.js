@@ -19,10 +19,19 @@ import view from './view';
 
 class Wrapper extends React.Component {
   componentDidMount() {
-    const { payments } = this.props;
-    payments.get.run();
+    const { payments, accounts } = this.props;
+
+    if (!accounts.get.data) {
+      accounts.get.run();
+    }
+    
+    if (!payments.get.data) {
+      payments.get.run();
+    }
+
     this.polling = setInterval(() => {
       payments.get.run();
+      accounts.get.run();
     }, 5000);
   }
 
@@ -39,4 +48,4 @@ Wrapper.propTypes = {
   // payments: PropTypes.observableObject.isRequired,
 };
 
-export default withNamespaces()(inject('payments')(Wrapper));
+export default withNamespaces()(inject('payments', 'accounts')(Wrapper));

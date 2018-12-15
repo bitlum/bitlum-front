@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import React from 'react';
+import { List } from 'react-virtualized';
 import { NavLink } from 'react-router-dom';
 import formatDate from 'date-fns/format';
 import isSameDay from 'date-fns/is_same_day';
@@ -45,7 +46,7 @@ const getSeparatorText = date => {
 };
 
 // eslint-disable-next-line
-const Payments = ({ payments, t }) => {
+const Payments = ({ payments, accounts, t }) => {
   if (payments.get.error) {
     return <Root>{t('components.Payment.error')}</Root>;
   }
@@ -62,7 +63,7 @@ const Payments = ({ payments, t }) => {
             <Logo />
           </NavLink>
         </Header>
-        <BalanceSummary key="BalanceSummary" />
+        <BalanceSummary key="BalanceSummary" accounts={accounts} />
         <HeaderSecondary>Payments</HeaderSecondary>
         <EmptyWrapper>
           <EmptyIcon />
@@ -102,40 +103,34 @@ const Payments = ({ payments, t }) => {
           <Logo />
         </NavLink>
       </Header>
-      <BalanceSummary key="BalanceSummary" />
+      <BalanceSummary key="BalanceSummary" accounts={accounts} />
       <HeaderSecondary>Payments</HeaderSecondary>
-      {Object.entries(paymentsGrouped)
-        .map((paymentsGroup, index, self) => {
-          const result = [
-            <PaymentsGroup
-              key={paymentsGroup[0]}
-              status={paymentsGroup[1][0].status}
-              vendorName={paymentsGroup[1][0].vendorName}
-              vendorIcon={paymentsGroup[1][0].vendorIcon}
-              payments={paymentsGroup[1]}
-              round={payments.round}
-            />,
-          ];
-          const currentGroupDate = new Date(Number(paymentsGroup[0].split('_')[0]));
+      {Object.entries(paymentsGrouped).map((paymentsGroup, index, self) => {
+        const result = [
+          <PaymentsGroup
+            key={paymentsGroup[0]}
+            status={paymentsGroup[1][0].status}
+            vendorName={paymentsGroup[1][0].vendorName}
+            vendorIcon={paymentsGroup[1][0].vendorIcon}
+            payments={paymentsGroup[1]}
+            round={payments.round}
+          />,
+        ];
+        const currentGroupDate = new Date(Number(paymentsGroup[0].split('_')[0]));
 
-          if (index === 0 && currentGroupDate.getFullYear() !== 9999) {
-            result.unshift(
-              <Separator key={currentGroupDate}>{getSeparatorText(currentGroupDate)}</Separator>,
-            );
-          }
+        if (index === 0 && currentGroupDate.getFullYear() !== 9999) {
+          result.unshift(
+            <Separator key={currentGroupDate}>{getSeparatorText(currentGroupDate)}</Separator>,
+          );
+        }
 
-          const nextGroupDate =
-            self[index + 1] && new Date(Number(self[index + 1][0].split('_')[0]));
+        const nextGroupDate = self[index + 1] && new Date(Number(self[index + 1][0].split('_')[0]));
 
-          if (nextGroupDate && !isSameDay(currentGroupDate, nextGroupDate)) {
-            result.push(
-              <Separator key={nextGroupDate}>{getSeparatorText(nextGroupDate)}</Separator>,
-            );
-          }
-
-          return result;
-        })
-        .flat()}
+        if (nextGroupDate && !isSameDay(currentGroupDate, nextGroupDate)) {
+          result.push(<Separator key={nextGroupDate}>{getSeparatorText(nextGroupDate)}</Separator>);
+        }
+        return result;
+      })}
     </Root>
   );
 };

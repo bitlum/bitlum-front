@@ -133,9 +133,8 @@ export const GroupedItems = styled.div`
   flex-direction: column;
   width: 21.5em;
   margin-left: auto;
-  ${({ folded }) => folded && 'overflow: hidden; max-height:0;'}
 `;
-
+  /* ${({ folded }) => folded && 'overflow: hidden; max-height:0;'} */
 /* transform: scaleY(1);   
   transform-origin: top;
   transition: max-height 0.15s, transform 0.15s;

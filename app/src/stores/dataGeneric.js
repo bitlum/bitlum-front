@@ -25,6 +25,24 @@ const fetchData = (url, options) =>
       };
     });
 
+const localstorageWrapper = {
+  get(name) {
+    try {
+      return JSON.parse(localStorage.getItem(name));
+    } catch (error) {
+      log.error(`Unable to read ${name} from local storage (${error.message})`);
+      return undefined;
+    }
+  },
+  set(name, data) {
+    try {
+      localStorage.setItem(name, JSON.stringify(data));
+    } catch (error) {
+      log.error(`Unable to save auth data to local storage (${error.message})`);
+    }
+  },
+};
+
 const GenericApiStore = {
   fetchOptions: { url: '/api' },
 
@@ -39,6 +57,8 @@ const GenericApiStore = {
   finishedAt: undefined,
 
   data: undefined,
+
+  dataCache: undefined,
 
   error: undefined,
 

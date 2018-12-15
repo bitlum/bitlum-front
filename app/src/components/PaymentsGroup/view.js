@@ -84,24 +84,26 @@ export const PaymentsGroup = ({
           </AmountAdditional>
         </Amount>
       </GroupInfo>
-      <GroupedItems folded={folded}>
-        {payments.map(payment => (
-          <PaymentItem
-            key={payment.puid}
-            puid={payment.puid}
-            updatedAt={payment.updatedAt}
-            isDescriptionReadable={payment.description}
-            description={payment.description || payment.receipt}
-            direction={payment.direction}
-            mainDenominationString={`${payment.denominations.main.amount} ${
-              payment.denominations.main.sign
-            }`}
-            additionalDenominationString={`${payment.denominations.additional.amount} ${
-              payment.denominations.additional.sign
-            }`}
-          />
-        ))}
-      </GroupedItems>
+      {folded ? null : (
+        <GroupedItems>
+          {payments.map(payment => (
+            <PaymentItem
+              key={payment.puid}
+              puid={payment.puid}
+              updatedAt={payment.updatedAt}
+              isDescriptionReadable={payment.description}
+              description={payment.description || payment.receipt}
+              direction={payment.direction}
+              mainDenominationString={`${payment.denominations.main.amount} ${
+                payment.denominations.main.sign
+              }`}
+              additionalDenominationString={`${payment.denominations.additional.amount} ${
+                payment.denominations.additional.sign
+              }`}
+            />
+          ))}
+        </GroupedItems>
+      )}
     </Root>
   );
 };

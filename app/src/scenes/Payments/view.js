@@ -57,7 +57,7 @@ const Payments = ({ payments, accounts, t }) => {
     return <Root>{t('components.Payment.loading')}</Root>;
   }
 
-  if ((!payments.get.data || payments.get.data.length === 0) && !payments.get.loading) {
+  if ((!payments.get.data && !payments.get.loading) || payments.get.data.length === 0) {
     return (
       <Root empty>
         <Header>
@@ -108,32 +108,37 @@ const Payments = ({ payments, accounts, t }) => {
         <LegendItem type="completed">Completed</LegendItem>
         <LegendItem type="failed">Failed</LegendItem>
       </Legend>
-      {Object.entries(paymentsGrouped).map((paymentsGroup, index, self) => {
-        const result = [
-          <PaymentsGroup
-            key={paymentsGroup[0]}
-            status={paymentsGroup[1][0].status}
-            vendorName={paymentsGroup[1][0].vendorName}
-            vendorIcon={paymentsGroup[1][0].vendorIcon}
-            payments={paymentsGroup[1]}
-            round={payments.round}
-          />,
-        ];
-        const currentGroupDate = new Date(Number(paymentsGroup[0].split('_')[0]));
+      {Object.entries(paymentsGrouped)
+        .sort((p, c) => c[0].split('_')[0] - p[0].split('_')[0])
+        .map((paymentsGroup, index, self) => {
+          const result = [
+            <PaymentsGroup
+              key={paymentsGroup[0]}
+              status={paymentsGroup[1][0].status}
+              vendorName={paymentsGroup[1][0].vendorName}
+              vendorIcon={paymentsGroup[1][0].vendorIcon}
+              payments={paymentsGroup[1]}
+              round={payments.round}
+            />,
+          ];
+          const currentGroupDate = new Date(Number(paymentsGroup[0].split('_')[0]));
 
-        if (index === 0 && currentGroupDate.getFullYear() !== 9999) {
-          result.unshift(
-            <Separator key={currentGroupDate}>{getSeparatorText(currentGroupDate)}</Separator>,
-          );
-        }
+          if (index === 0 && currentGroupDate.getFullYear() !== 9999) {
+            result.unshift(
+              <Separator key={currentGroupDate}>{getSeparatorText(currentGroupDate)}</Separator>,
+            );
+          }
 
-        const nextGroupDate = self[index + 1] && new Date(Number(self[index + 1][0].split('_')[0]));
+          const nextGroupDate =
+            self[index + 1] && new Date(Number(self[index + 1][0].split('_')[0]));
 
-        if (nextGroupDate && !isSameDay(currentGroupDate, nextGroupDate)) {
-          result.push(<Separator key={nextGroupDate}>{getSeparatorText(nextGroupDate)}</Separator>);
-        }
-        return result;
-      })}
+          if (nextGroupDate && !isSameDay(currentGroupDate, nextGroupDate)) {
+            result.push(
+              <Separator key={nextGroupDate}>{getSeparatorText(nextGroupDate)}</Separator>,
+            );
+          }
+          return result;
+        })}
     </Root>
   );
 };

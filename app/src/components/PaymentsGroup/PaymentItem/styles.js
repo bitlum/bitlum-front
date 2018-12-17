@@ -11,7 +11,7 @@ import styled from 'styled-components';
 
 import { P, Span, Img } from 'components/common';
 
-import infoIcon from 'assets/icons/info.svg';
+import goToDetailsIcon from 'assets/icons/chevron-right.svg';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -36,6 +36,9 @@ export const AmountAdditional = styled.span`
 
 export const Time = styled.span``;
 export const Description = styled.span`
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;  
   max-width: 15em;
   word-break: break-word;
   white-space: ${({ wrap }) => (wrap ? 'normal' : 'nowrap')};
@@ -62,8 +65,8 @@ export const Root = styled.div`
   display: flex;
   align-items: flex-start;
   font-size: 0.8em;
-  margin-left: 4em;
-  margin-right: 1em;
+  margin-left: 1.7em;
+  padding-right: 3.5em;
   position: relative;
   &:not(:last-child) {
     border-bottom: 0.1em solid var(--colors__bg_dark);
@@ -72,18 +75,17 @@ export const Root = styled.div`
     margin-top: 1.6em;
     margin-bottom: 1.6em;
   }
-  &:before {
+  &:after {
     position: absolute;
-    top: calc(50% - 0.65em);
-    left: -2.2em;
+    right: 1.4em;
     opacity: 0.4;
-    color: transparent;
-    background: url(${infoIcon});
-    height: 1.3em;
-    width: 1.3em;
+    background: no-repeat url(${goToDetailsIcon}) center;
+    background-color: var(--colors__bg_dark);
+    height: 100%;
+    width: 1em;
     background-size: contain;
   }
-  &:hover:before {
+  &:hover:after {
     display: block;
     content: '';
   }

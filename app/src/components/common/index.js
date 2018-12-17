@@ -16,6 +16,7 @@ export const Aside = styled.aside``;
 export const Footer = styled.footer``;
 export const Img = styled.img``;
 export const P = styled.p``;
+export const A = styled.a``;
 export const Span = styled.span``;
 export const Div = styled.div``;
 export const Pre = styled.pre``;

@@ -13,6 +13,9 @@ import { P, Span, Img } from 'components/common';
 
 import PaymentItemRaw from './PaymentItem';
 
+import goToDetailsIcon from 'assets/icons/chevron-right.svg';
+import unfoldGroupIcon from 'assets/icons/chevron-down.svg';
+
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
@@ -50,12 +53,14 @@ export const VendorIcon = styled.div`
     display: ${({ counter }) => (counter > 1 ? 'flex' : 'none')};
     justify-content: center;
     align-items: center;
-    background-color: var(--colors__bg);
+    background-color: var(--colors__bg_accent);
+    font: var(--fonts__text_bold);
+    color: var(--colors__bg_bright);
     font-size: 0.8em;
     top: -0.7em;
     right: -0.7em;
-    min-height:1.5em;
-    min-width: 1.5em;
+    min-height:1.7em;
+    min-width: 1.7em;
     border-radius: 50%;
     border: 0.25em solid var(--colors__bg_bright);
     position: absolute;
@@ -63,21 +68,31 @@ export const VendorIcon = styled.div`
 `;
 
 export const Status = styled.div`
+  position: relative;
   align-self: stretch;
-  width: 0.25em;
-  margin-right: 0.25em;
+  width: 0.4em;
+  margin-left: 0.6em;
   background-color: ${({ status }) => `var(--colors__bg_${status})`};
+  &:before {
+    background: no-repeat url(${({ counter }) => (counter > 1 ? unfoldGroupIcon : goToDetailsIcon)})
+      center;
+    background-size: contain;
+    height: 100%;
+    width: 1em;
+    color: var(--colors__bg_bright);
+    position: absolute;
+  }
 `;
 
 export const Vendor = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 0.5em;
+  margin-left: 1.5em;
   & > ${P} {
     margin-left: 1.5em;
     display: flex;
     flex-direction: column;
-    max-width: 12em;
+    max-width: 8em;
   }
   & ${Span} {
     overflow: hidden;
@@ -110,15 +125,21 @@ export const GroupInfo = styled.div`
   }
 
   &:hover ${Status} {
-    margin-right: 0;
-    width: 0.5em;
+    margin-left: 0;
+    width: 1em;
+    &:before {
+      content: '';
+    }
   }
 
   ${({ folded }) =>
     !folded &&
     `& ${Status} {
-     margin-right: 0;
-     width: 0.5em;
+     margin-left: 0;
+     width: 1em;
+     &:before {
+      content: '';
+    }
   }`}
 
   background-color: var(--colors__bg_bright);
@@ -134,13 +155,16 @@ export const GroupedItems = styled.div`
   width: 21.5em;
   margin-left: auto;
 `;
-  /* ${({ folded }) => folded && 'overflow: hidden; max-height:0;'} */
+/* ${({ folded }) => folded && 'overflow: hidden; max-height:0;'} */
 /* transform: scaleY(1);   
   transform-origin: top;
   transition: max-height 0.15s, transform 0.15s;
   max-height:1000px;
   transform: scaleY(0); */
 
-export const Root = styled.div``;
+export const Root = styled.div`
+  border-radius: 0.2em;
+  overflow: hidden;
+`;
 
 export default Root;

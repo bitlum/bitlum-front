@@ -45,11 +45,11 @@ export const PaymentsGroup = ({
 }) => {
   const [folded, toggleFold] = useState(true);
   const groupedAmountMain = round(
-    payments.reduce((p, c) => p + c.denominations.main.amount, 0),
+    payments.reduce((p, c) => p + c.denominations.main.total, 0),
     payments[0].denominations.main.precision,
   );
   const groupedAmountAdditional = round(
-    payments.reduce((p, c) => p + c.denominations.additional.amount, 0),
+    payments.reduce((p, c) => p + c.denominations.additional.total, 0),
     payments[0].denominations.additional.precision,
   );
 
@@ -65,7 +65,6 @@ export const PaymentsGroup = ({
           }
         }}
       >
-        <Status status={status} />
         <Vendor>
           <VendorIcon counter={payments.length}>
             <Img src={vendorIcon || 'https://static.thenounproject.com/png/404950-200.png'} />
@@ -77,12 +76,15 @@ export const PaymentsGroup = ({
         </Vendor>
         <Amount>
           <AmountMain amount={groupedAmountMain}>
-            {groupedAmountMain} {payments[0].denominations.main.sign}
+            {groupedAmountMain.toFixed(payments[0].denominations.main.precision)}{' '}
+            {payments[0].denominations.main.sign}
           </AmountMain>
           <AmountAdditional>
-            {groupedAmountAdditional} {payments[0].denominations.additional.sign}
+            {groupedAmountAdditional.toFixed(payments[0].denominations.additional.precision)}{' '}
+            {payments[0].denominations.additional.sign}
           </AmountAdditional>
         </Amount>
+        <Status status={status} counter={payments.length}/>
       </GroupInfo>
       {folded ? null : (
         <GroupedItems>
@@ -94,10 +96,10 @@ export const PaymentsGroup = ({
               isDescriptionReadable={payment.description}
               description={payment.description || payment.receipt}
               direction={payment.direction}
-              mainDenominationString={`${payment.denominations.main.amount} ${
+              mainDenominationString={`${payment.denominations.main.total} ${
                 payment.denominations.main.sign
               }`}
-              additionalDenominationString={`${payment.denominations.additional.amount} ${
+              additionalDenominationString={`${payment.denominations.additional.total} ${
                 payment.denominations.additional.sign
               }`}
             />

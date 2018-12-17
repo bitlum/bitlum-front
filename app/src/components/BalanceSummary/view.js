@@ -32,11 +32,15 @@ export const BalanceSummary = ({ accounts, className, t }) => {
       BALANCE
       {Object.keys(accounts.get.data.balances).map(asset => [
         <Main key={`${asset}Main`}>
-          {accounts.get.data.balances[asset].denominationsAvailable.main.amount}{' '}
+          {accounts.get.data.balances[asset].denominationsAvailable.main.amount.toFixed(
+            accounts.get.data.balances[asset].denominationsAvailable.main.precision,
+          )}{' '}
           {accounts.get.data.balances[asset].denominationsAvailable.main.sign}
         </Main>,
         <Additional key={`${asset}Additional`}>
-          {accounts.get.data.balances[asset].denominationsAvailable.additional.amount}{' '}
+          {accounts.get.data.balances[asset].denominationsAvailable.additional.amount.toFixed(
+            accounts.get.data.balances[asset].denominationsAvailable.additional.precision,
+          )}{' '}
           {accounts.get.data.balances[asset].denominationsAvailable.additional.sign}
         </Additional>,
       ])}

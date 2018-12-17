@@ -105,6 +105,7 @@ export const LegendItem = styled.p`
 export const EmptyWrapper = styled.div``;
 
 export const Root = styled.div`
+  font-size: 1.8rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

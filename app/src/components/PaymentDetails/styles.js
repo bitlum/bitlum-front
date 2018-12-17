@@ -10,7 +10,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { CopyButton as CopyButtonRaw, P, Span as SpanRaw, Img, Tip } from 'components/common';
+import { CopyButton as CopyButtonRaw, Button as ButtonRaw, P, Span as SpanRaw, Img, Tip } from 'components/common';
 
 import { ReactComponent as CopyIcon } from 'assets/icons/copy.svg';
 
@@ -21,12 +21,12 @@ import { ReactComponent as CopyIcon } from 'assets/icons/copy.svg';
 export * from 'components/common';
 
 export const CopyButton = styled(({ data, className }) => (
-  <CopyButtonRaw className={className} copyData={data} copyText="">
+  <CopyButtonRaw className={className} copyData={data} copyText="" copiedText="">
     <CopyIcon />
   </CopyButtonRaw>
 ))`
   position: absolute;
-  right: -6.7em;
+  right: -3em;
   top: -0.12em;
   font: var(--fonts__text);
   font-size: 0.7em;
@@ -36,7 +36,6 @@ export const CopyButton = styled(({ data, className }) => (
   & svg {
     height: 1.8em;
     width: 1.8em;
-    margin-right: 0.6em;
   }
 `;
 
@@ -71,7 +70,7 @@ export const Vendor = styled.div`
     margin-left: 1.5em;
     display: flex;
     flex-direction: column;
-    max-width: 18em;
+    max-width: 14em;
   }
   & ${Span} {
     overflow: hidden;
@@ -88,14 +87,15 @@ export const Vendor = styled.div`
 export const Status = styled.div`
   margin-left: auto;
   font-size: 0.8em;
-  min-width: 8em;
+  text-align: right;
+  padding-right: 4.6em;
   height: 1.8em;
   border-bottom: 0.15em solid ${({ status }) => `var(--colors__bg_${status})`};
 `;
 
 export const Details = styled.div`
   padding-left: 4.1em;
-  padding-right: 5.4em;
+  padding-right: 3em;
   width: 100%;
 `;
 
@@ -134,6 +134,15 @@ export const DetailsItem = styled.div`
     font-size: 1em;
     color: var(--colors__text_bright);
   }
+
+  & ${P}:last-child {
+    color: ${({ direction }) => direction === 'incoming' && 'var(--colors__text_ok)'};
+  }
+`;
+
+export const Button = styled(ButtonRaw)`
+  align-self: flex-start;
+  margin-top: 0.8em;
 `;
 
 export const MainInfo = styled.div`

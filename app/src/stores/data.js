@@ -210,23 +210,31 @@ const payments = {
       denominations: {
         main: {
           ...settings.get.data.denominations[payment.asset].main,
-          amount: round(
+          total: round(
             payments.getTotal(payment) * settings.get.data.denominations[payment.asset].main.price,
             settings.get.data.denominations[payment.asset].main.precision,
           ),
-          totalFee: round(
+          amount: round(
+            payment.amount * settings.get.data.denominations[payment.asset].main.price,
+            settings.get.data.denominations[payment.asset].main.precision,
+          ),
+          fees: round(
             payment.fees.total * settings.get.data.denominations[payment.asset].main.price,
             settings.get.data.denominations[payment.asset].main.precision,
           ),
         },
         additional: {
           ...settings.get.data.denominations[payment.asset].additional,
-          amount: round(
+          total: round(
             payments.getTotal(payment) *
               settings.get.data.denominations[payment.asset].additional.price,
             settings.get.data.denominations[payment.asset].additional.precision,
           ),
-          totalFee: round(
+          amount: round(
+            payment.amount * settings.get.data.denominations[payment.asset].additional.price,
+            settings.get.data.denominations[payment.asset].additional.precision,
+          ),
+          fees: round(
             payment.fees.total * settings.get.data.denominations[payment.asset].additional.price,
             settings.get.data.denominations[payment.asset].additional.precision,
           ),

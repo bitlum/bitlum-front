@@ -57,7 +57,7 @@ export const Global = createGlobalStyle`
   --colors__bg_bright: #FFF;
   --colors__text_bright: #7B7A7C;
 
-  --colors__bg_accent: #0f7aff;
+  --colors__bg_accent: #249ADE;
   --colors__text_accent: #fff;
 
   --colors__bg_info: #bfdcff;

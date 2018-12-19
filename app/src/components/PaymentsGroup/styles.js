@@ -23,16 +23,10 @@ import unfoldGroupIcon from 'assets/icons/chevron-down.svg';
 export * from 'components/common';
 
 export const AmountMain = styled.span`
-  color: ${({ amount }) => amount >= 0 && 'var(--colors__text_ok)'};
-  &:before {
-    content: '${({ amount }) => amount >= 0 && '+'}';
-  }
+  color: ${({ positive }) => positive && 'var(--colors__text_ok)'};
 `;
 
 export const AmountAdditional = styled.span`
-  &:before {
-    content: '${({ amount }) => amount >= 0 && '+'}';
-  }
   color: var(--colors__text_bright);
   margin-top: 0.4em;
 `;

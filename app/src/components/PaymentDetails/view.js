@@ -123,14 +123,12 @@ export const PaymentItem = ({
             <P>Total</P>
             <P>
               <Span>
-                {denominations.additional.total !== 0 && denominations.main.total === 0 && '~'}{' '}
-                {direction === 'incoming' && '+'}
+                {denominations.additional.total !== 0 && denominations.main.total === 0 ? '~' : direction === 'incoming' ? '+' : ''}{' '}
                 {denominations.main.total.toFixed(denominations.main.precision)}{' '}
                 {denominations.main.sign}
               </Span>
               <Span>
-                {denominations.additional.total === 0 && denominations.main.total !== 0 && '~'}{' '}
-                {direction === 'incoming' && '+'}
+                {denominations.additional.total === 0 && denominations.main.total !== 0 ? '~' : direction === 'incoming' ? '+' : ''}{' '}
                 {denominations.additional.total.toFixed(denominations.additional.precision)}{' '}
                 {denominations.additional.sign}
               </Span>

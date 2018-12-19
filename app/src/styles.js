@@ -30,7 +30,8 @@ export const Root = styled.div`
   font: var(--fonts__text);
   min-height: 100vh;
   background: var(--colors__bg);
-
+  width: 100vw;
+  font-size: 1.8rem;
   & > ${Footer} {
     grid-area: footer;
   }

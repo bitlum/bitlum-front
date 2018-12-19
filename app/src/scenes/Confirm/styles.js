@@ -9,7 +9,7 @@
 
 import styled from 'styled-components';
 
-import SendPaymentCommon from 'components/SendPayment';
+import PaymentConfirmationRaw from 'components/PaymentConfirmation';
 
 import { Header as HeaderRaw } from 'components/common';
 
@@ -26,11 +26,7 @@ export const Header = styled(HeaderRaw)`
   border-bottom: 0.05em solid var(--colors__bg_dark);
 `;
 
-
-export const SendPayment = styled(SendPaymentCommon)`
-  width: 400px;
-  padding: 2em;
-`;
+export const PaymentConfirmation = styled(PaymentConfirmationRaw)``;
 
 export const Root = styled.div`
   display: flex;

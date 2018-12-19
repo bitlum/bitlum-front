@@ -11,13 +11,12 @@ const newPayButton = payment => {
   payButton.setAttribute('data-payment', JSON.stringify(payment));
   payButton.onclick = e => {
     window.open(
-      `chrome-extension://${chrome.runtime.id}/index.html?payment=${e.target.getAttribute(
+      `chrome-extension://${chrome.runtime.id}/index.html#/payments/check?payment=${e.target.getAttribute(
         'data-payment',
-      )}#/send`,
+      )}`,
       'Bitlum - payment confirmation',
       'width=450,height=600,top=0,titlebar=0,menubar=0,location=0',
     );
-    console.log(JSON.parse(e.target.getAttribute('data-payment')));
   };
   return payButton;
 };
@@ -29,7 +28,7 @@ const observer = new MutationObserver((mutationsList, observer) => {
     const appendButtonsTo = [
       {
         node: lightningLinks[0].parentNode,
-        payment: { invoice: lightningLinks[0].href.replace('lightning:', '') },
+        payment: { wuid: lightningLinks[0].href.replace('lightning:', ''), asset: 'BTC'},
       },
     ];
     appendButtonsTo.forEach(item => {

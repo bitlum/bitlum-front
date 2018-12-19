@@ -36,10 +36,9 @@ import Signup from 'scenes/Signup';
 import Landing from 'scenes/Landing';
 import Payments from 'scenes/Payments';
 import Payment from 'scenes/Payment';
-import Send from 'scenes/Send';
+import Check from 'scenes/Check';
+import Confirm from 'scenes/Confirm';
 import Receive from 'scenes/Receive';
-
-import { ReactComponent as CloseIcon } from 'assets/icons/back.svg';
 
 import { Global as GlobalStyles, Root, Footer, Main } from './styles';
 
@@ -91,10 +90,11 @@ class App extends Component {
           ) : (
             [
               <Switch key="Switch">
+                <Route path="/payments/receive" component={Receive} />
+                <Route path="/payments/check" component={Check} />
+                <Route path="/payments/confirm" component={Confirm} />
+                <Route path="/payments/:puid" component={Payment} />
                 <Route path="/payments" component={Payments} />
-                <Route path="/payment/:puid" component={Payment} />
-                <Route path="/send" component={Send} />
-                <Route path="/receive" component={Receive} />
                 <Route
                   path="/signout"
                   render={() => {

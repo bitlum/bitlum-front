@@ -27,18 +27,17 @@ export const DestinationInfo = styled.div`
   }
 `;
 
-export const AmountInput = styled(Input)`
-  display: ${({ hidden }) => (hidden ? 'none' : 'initial')};
-`;
-
 export const Root = withLoader(styled(Form)`
+  font-size: 0.8em;
   & > ${P} {
-    font-weight: 600;
+    margin-bottom: 1em;
+    margin-left: 1.2em;
   }
-
+  & input::placeholder  {
+    font-size: 0.8em;
+  }
   & > ${Span} {
     word-break: initial;
-    font-size: 0.8em;
     opacity: 0.8;
   }
 `);

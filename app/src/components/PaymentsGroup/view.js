@@ -52,7 +52,7 @@ export const PaymentsGroup = ({
     payments.reduce((p, c) => p + c.denominations.additional.total, 0),
     payments[0].denominations.additional.precision,
   );
-
+  const positiveTotal = groupedAmountMain >= 0 && groupedAmountAdditional > 0;
   return (
     <Root className={className}>
       <GroupInfo
@@ -61,7 +61,7 @@ export const PaymentsGroup = ({
           if (payments.length > 1) {
             toggleFold(!folded);
           } else {
-            history.push(`/payment/${payments[0].puid}`);
+            history.push(`/payments/${payments[0].puid}`);
           }
         }}
       >
@@ -75,16 +75,22 @@ export const PaymentsGroup = ({
           </P>
         </Vendor>
         <Amount>
-          <AmountMain amount={groupedAmountMain}>
+          <AmountMain positive={positiveTotal}>
+            {groupedAmountAdditional !== 0 && groupedAmountMain === 0
+              ? '~ '
+              : positiveTotal
+              ? '+'
+              : ''}
             {groupedAmountMain.toFixed(payments[0].denominations.main.precision)}{' '}
             {payments[0].denominations.main.sign}
           </AmountMain>
           <AmountAdditional>
+            {groupedAmountMain !== 0 && groupedAmountAdditional === 0 ? '~ ' : ''}
             {groupedAmountAdditional.toFixed(payments[0].denominations.additional.precision)}{' '}
             {payments[0].denominations.additional.sign}
           </AmountAdditional>
         </Amount>
-        <Status status={status} counter={payments.length}/>
+        <Status status={status} counter={payments.length} />
       </GroupInfo>
       {folded ? null : (
         <GroupedItems>
@@ -96,12 +102,22 @@ export const PaymentsGroup = ({
               isDescriptionReadable={payment.description}
               description={payment.description || payment.receipt}
               direction={payment.direction}
-              mainDenominationString={`${payment.denominations.main.total} ${
+              mainDenominationString={`${
+                payment.denominations.additional.amount !== 0 &&
+                payment.denominations.main.amount === 0
+                  ? '~'
+                  : ''
+              } ${payment.denominations.main.total.toFixed(payment.denominations.main.precision)} ${
                 payment.denominations.main.sign
               }`}
-              additionalDenominationString={`${payment.denominations.additional.total} ${
-                payment.denominations.additional.sign
-              }`}
+              additionalDenominationString={`${
+                payment.denominations.main.amount !== 0 &&
+                payment.denominations.additional.amount === 0
+                  ? '~'
+                  : ''
+              } ${payment.denominations.additional.total.toFixed(
+                payment.denominations.additional.precision,
+              )} ${payment.denominations.additional.sign}`}
             />
           ))}
         </GroupedItems>

@@ -122,7 +122,7 @@ const GenericApiStore = {
     const response = await this.fetch(parsedOptions.url, parsedOptions);
     let dataParsed = response.data;
     if (dataParsed) {
-      dataParsed = await this.parseData(response.data);
+      dataParsed = await this.parseData(response.data, options);
     }
     this.updateData(dataParsed);
     this.updateError(response.error);

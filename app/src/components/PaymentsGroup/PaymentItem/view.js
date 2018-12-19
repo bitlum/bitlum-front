@@ -37,7 +37,7 @@ export const PaymentItem = ({
     <Root
       className={className}
       onClick={() => {
-        history.push(`/payment/${puid}`);
+        history.push(`/payments/${puid}`);
       }}
     >
       <Info>

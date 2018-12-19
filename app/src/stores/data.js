@@ -54,7 +54,8 @@ settings.get = createNewStore({
   })(),
 });
 
-const round = (number, roundGrade) => Math.floor(number * 10 ** roundGrade) / 10 ** roundGrade;
+const round = (number, roundGrade) =>
+  (Math.sign(number) * Math.floor(Math.abs(number) * 10 ** roundGrade)) / 10 ** roundGrade;
 
 const accounts = {
   round,
@@ -176,12 +177,24 @@ accounts.get = createNewStore({
   name: 'AccountsAuthenticate',
   data: (() => {
     try {
-      return JSON.parse(localStorage.getItem('authData'));
+      return JSON.parse(localStorage.getItem('accountData'));
     } catch (error) {
       log.error(`Unable to read auth data from local storage (${error.message})`);
       return undefined;
     }
   })(),
+  updateData(data) {
+    try {
+      localStorage.setItem('accountData', JSON.stringify(data));
+    } catch (error) {
+      log.error(`Unable to save account data to local storage (${error.message})`);
+    }
+    if (!this.data || !data) {
+      this.data = data;
+    } else {
+      Object.assign(this.data, data);
+    }
+  },
   parseData: accounts.parseData,
   fetchOptions: {
     url: getApiUrl`/api/accounts`,
@@ -244,8 +257,9 @@ const payments = {
   },
   send: createNewStore({
     name: 'PaymentsSend',
-    async run(to, amount, asset) {
+    async run(to, amount, asset, { estimate } = {}) {
       const result = await this.startFetching({
+        url: `${this.fetchOptions.url}${estimate ? '?estimate=true' : ''}`,
         headers: {
           Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
         },
@@ -345,8 +359,9 @@ const wallets = {
   getDetails: createNewStore({
     name: 'WalletsGetDetails',
     async run(wuid, asset) {
-      this.startFetching({
+      return this.startFetching({
         url: `${this.fetchOptions.url}?asset=${asset}&wuid=${wuid}`,
+        wuid,
         headers: {
           Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
         },
@@ -358,6 +373,20 @@ const wallets = {
   }),
 };
 
-export { payments, accounts, wallets, settings };
+const vendors = {
+  get: createNewStore({
+    name: 'VendorsGet',
+    async run(vuid) {
+      this.startFetching({
+        url: `${this.fetchOptions.url}/${vuid}`,
+      });
+    },
+    fetchOptions: {
+      url: getApiUrl`/api/vendors`,
+    },
+  }),
+};
 
-export default { payments, accounts, wallets, settings };
+export { payments, accounts, wallets, settings, vendors };
+
+export default { payments, accounts, wallets, settings, vendors };

@@ -9,7 +9,7 @@
 
 import styled from 'styled-components';
 
-import { withLoader, Form, Span, P, Input, Img } from 'components/common';
+import { withLoader, Form, Span, P, Input, Img, Button } from 'components/common';
 
 import BalanceSummaryRaw from 'components/BalanceSummary';
 
@@ -19,60 +19,169 @@ import BalanceSummaryRaw from 'components/BalanceSummary';
 
 export * from 'components/common';
 
-export const DestinationInfo = styled.div`
+export const BalanceSummary = styled(BalanceSummaryRaw)`
+  font: var(--fonts__text);
+  font-size: 0.8em;
+  & > * {
+    font: var(--fonts__text);
+    font-size: 1em;
+  }
+  & > ${P} {
+    padding-top: 0.2em;
+  }
+  margin-top: 1em;
+  margin-bottom: auto;
+`;
+
+export const Submit = styled(Button)`
+  border-radius: unset;
   display: flex;
   flex-direction: column;
-  & ${P} {
-    margin-bottom: 0.5em;
+  align-items: center;
+  padding: 0.7em 0;
+  & ${Span}:first-child {
+    font: var(--fonts__text_bold);
+    font-size: 1.1em;
+    margin-bottom: 0.4em;
   }
   & ${Span} {
-    font-weight: 600;
+    font: var(--fonts__text);
+    font-size: 1em;
   }
 `;
 
-export const BalanceSummary = styled(BalanceSummaryRaw)``;
+export const SwitchDenomination = styled(Button)`
+  background: var(--colors__bg);
+  color: var(--colors__bg_dark);
+  border: none;
+  border-radius: unset;
+  width: 4.5em;
+  min-width: fit-content;
+  font: var(--fonts__text);
+`;
 
-export const AmountInput = styled(Input)`
-  display: ${({ hidden }) => (hidden ? 'none' : 'initial')};
+export const Fees = styled(P)`
+  font: var(--fonts__text);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--colors__bg);
+  padding: 1em 0;
+  font-size: 0.8em;
+  & ${Span}:first-child {
+    margin-bottom: 0.2em;
+  }
+`;
+
+export const Description = styled(P)`
+  position: relative;
+  font: var(--fonts__text);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--colors__bg);
+  padding: 1em 0;
+  font-size: 0.8em;
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    display: block;
+    height: 0.05em;
+    width: 50%;
+    background: var(--colors__bg_dark);
+  }
+
+  & ${Span}:first-child {
+    margin-bottom: 0.6em;
+  }
+  & ${Span}:last-child {
+    text-align: center;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    max-width: 90%;
+    word-break: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.8em;
+    color: var(--colors__text_dark);
+  }
 `;
 
 export const Vendor = styled.div`
   display: flex;
   align-items: center;
-  padding-left: 1em;
-  margin-top: 1.8em;
-  margin-bottom: 1.8em;
+  justify-content: center;
+  flex-direction: column;
+  padding-top: 1em;
+  padding-bottom: 1em;
   width: 100%;
-  font-size: 0.8em;
+  background: var(--colors__bg);
   & > ${Img} {
     background: #e3aff9;
     border-radius: 50%;
     height: 2.7em;
     width: 2.7em;
     padding: 0.3em;
+    margin-bottom: 0.7em;
   }
   & > ${P} {
-    margin-left: 1.5em;
-    display: flex;
     flex-direction: column;
-    max-width: 14em;
-  }
-  & ${Span} {
+    max-width: 100%;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
-  & ${Span}:last-child {
-    margin-top: 0.6em;
+
+  & ${P}:last-child {
+    margin-top: 0.2em;
     font-size: 0.8em;
     color: var(--colors__text_bright);
+    max-width: 14em;
+  }
+`;
+
+export const AmountInput = styled.input`
+  font: var(--fonts__text_thin);
+  width: 100%;
+  border: none;
+  border-radius: unset;
+  text-align: center;
+  font-size: 2.3em;
+  padding: 0.3em 0;
+  padding-left: 1.65em;
+  &::placeholder {
+    padding-left: 0.9em;
+  }
+`;
+
+export const AmountInputWraper = styled.div`
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 0.05em solid var(--colors__bg_dark);
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    display: block;
+    height: 0.05em;
+    width: 100%;
+    background: linear-gradient(
+      90deg,
+      rgba(213, 210, 210, 0) 0%,
+      var(--colors__bg_dark) 50%,
+      rgba(213, 210, 210, 0) 100%
+    );
   }
 `;
 
 export const Root = withLoader(styled(Form)`
-  & > ${P} {
-    font-weight: 600;
-  }
+  flex-grow: 2;
 
   & > ${Span} {
     word-break: initial;

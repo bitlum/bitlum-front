@@ -23,22 +23,19 @@ export const Main = styled(MainCommon)`
 
 export const Root = styled.div`
   display: grid;
-  grid-template-rows: auto var(--sizing__footer_heigh);
-  grid-template-areas:  "main"
-                        "footer";
+  grid-template-rows: auto;
+  grid-template-areas:  "main";
   color: var(--colors__text);
   font: var(--fonts__text);
   min-height: 100vh;
   background: var(--colors__bg);
   width: 100vw;
   font-size: 1.8rem;
-  & > ${Footer} {
+  /* & > ${Footer} {
     grid-area: footer;
-  }
+  } */
   & > ${Main} {
     grid-area: main;
-  }
-  & > ${Main} {
     display: flex;
     flex-direction: column;    
   }
@@ -54,6 +51,7 @@ export const Global = createGlobalStyle`
   --colors__text: #242323;
 
   --colors__bg_dark: #C1C3C6;
+  --colors__text_dark: #7a7d85;
 
   --colors__bg_bright: #FFF;
   --colors__text_bright: #7B7A7C;

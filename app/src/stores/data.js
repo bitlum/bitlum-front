@@ -257,9 +257,8 @@ const payments = {
   },
   send: createNewStore({
     name: 'PaymentsSend',
-    async run(to, amount, asset, { estimate } = {}) {
+    async run(to, amount, asset) {
       const result = await this.startFetching({
-        url: `${this.fetchOptions.url}${estimate ? '?estimate=true' : ''}`,
         headers: {
           Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
         },
@@ -271,6 +270,25 @@ const payments = {
     },
     fetchOptions: {
       url: getApiUrl`/api/payments/send`,
+      method: 'POST',
+    },
+  }),
+  estimate: createNewStore({
+    name: 'PaymentsEstimate',
+    async run(to, amount, asset) {
+      const result = await this.startFetching({
+        url: `${this.fetchOptions.url}'' : ''}`,
+        headers: {
+          Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
+        },
+        body: { to, amount, asset },
+      });
+      if (result.error && result.error.code.match('^401.*$')) {
+        accounts.authenticate.signout();
+      }
+    },
+    fetchOptions: {
+      url: getApiUrl`/api/payments/send?estimate=true`,
       method: 'POST',
     },
   }),

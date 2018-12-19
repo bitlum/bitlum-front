@@ -31,5 +31,7 @@ export const PaymentConfirmation = styled(PaymentConfirmationRaw)``;
 export const Root = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  height: 100%;
+  background: var(--colors__bg_bright);
 `;

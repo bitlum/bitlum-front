@@ -28,7 +28,7 @@ export const BalanceSummary = ({ accounts, className, appearance = 'normal', den
 
   if (appearance === 'onlyBalance') {
     return (
-      <Root className={className} loading={accounts.get.loading}>
+      <Root className={className} loading={accounts.get.loading} appearance={appearance}>
         Available
         {Object.keys(accounts.get.data.balances).map(asset => [
           <Main key={`${asset}Main`}>
@@ -42,7 +42,7 @@ export const BalanceSummary = ({ accounts, className, appearance = 'normal', den
     );
   }
   return (
-    <Root className={className} loading={accounts.get.loading}>
+    <Root className={className} loading={accounts.get.loading} appearance={appearance}>
       <Receive to="/payments/receive">Receive</Receive>
       BALANCE
       {Object.keys(accounts.get.data.balances).map(asset => [

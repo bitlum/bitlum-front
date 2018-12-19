@@ -27,10 +27,14 @@ export const Root = styled.div`
   align-content: center;
   text-align: center;
   font-weight: 200;
-  background: linear-gradient(45deg, #461a99 0%, #249ade 65%, #41d4cb 100%);
-  border-radius: 0.7em;
-  box-shadow: 0 0.6em 0.7em 0.2em rgba(21, 24, 46, 0.16);
-  color: var(--colors__text_accent);
+  ${({ appearance }) =>
+    appearance !== 'onlyBalance' &&
+    `
+        background: linear-gradient(45deg, #461a99 0%, #249ade 65%, #41d4cb 100%);
+        border-radius: 0.7em;
+        box-shadow: 0 0.6em 0.7em 0.2em rgba(21, 24, 46, 0.16);
+        color: var(--colors__text_accent);
+    `}
 `;
 
 export const Main = styled(P)`

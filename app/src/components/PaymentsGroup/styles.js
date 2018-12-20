@@ -23,10 +23,12 @@ import unfoldGroupIcon from 'assets/icons/chevron-down.svg';
 export * from 'components/common';
 
 export const AmountMain = styled.span`
+  font-size: 1.12em;
   color: ${({ positive }) => positive && 'var(--colors__text_ok)'};
 `;
 
 export const AmountAdditional = styled.span`
+  font-size: 0.8em;
   color: var(--colors__text_bright);
   margin-top: 0.4em;
 `;
@@ -50,7 +52,7 @@ export const VendorIcon = styled.div`
     background-color: var(--colors__bg_accent);
     font: var(--fonts__text_bold);
     color: var(--colors__bg_bright);
-    font-size: 0.8em;
+    font-size: 0.7em;
     top: -0.7em;
     right: -0.7em;
     min-height:1.7em;
@@ -81,7 +83,7 @@ export const Status = styled.div`
 export const Vendor = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 1.5em;
+  margin-left: 1.2em;
   & > ${P} {
     margin-left: 1.5em;
     display: flex;
@@ -114,8 +116,8 @@ export const GroupInfo = styled.div`
   font-size: 0.8em;
   cursor: pointer;
   & ${Vendor}, & ${Amount} {
-    margin-top: 1.6em;
-    margin-bottom: 1.6em;
+    margin-top: 1.4em;
+    margin-bottom: 1.4em;
   }
 
   &:hover ${Status} {

@@ -19,6 +19,7 @@ import { withLoader, Form, CopyButton, Span, P } from 'components/common';
 export * from 'components/common';
 
 export const Root = withLoader(styled(Form)`
+
   & ${CopyButton} {
     margin-left: 1em;
   }
@@ -36,7 +37,7 @@ export const Root = withLoader(styled(Form)`
 
 export const QRcode = styled(QRcodeCommon)`
   align-self: center;
-  max-width: 90vw;
+  max-width: 50vw;
 `;
 
 export default Root;

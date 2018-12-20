@@ -18,6 +18,8 @@ import PaymentDetails from 'components/PaymentDetails';
 import {
   Root,
   EmptyIcon,
+  ErrorIcon,
+  EmptyWrapper,
   P,
   Header,
   Button,
@@ -25,6 +27,7 @@ import {
   PaymentsGroup,
   Separator,
   BackButton,
+  Support,
 } from './styles';
 
 // -----------------------------------------------------------------------------
@@ -51,8 +54,13 @@ const Payment = ({ history, payments, t }) => {
         <Header>
           <BackButton />
           <P>Payment details</P>
+          <Support className="openIntercom" />
         </Header>
-        {t('components.Payment.error')}
+        <EmptyWrapper>
+          <ErrorIcon />
+          <P>Unable to load details :(</P>
+          <P>Try again later</P>
+        </EmptyWrapper>
       </Root>
     );
   }
@@ -63,8 +71,12 @@ const Payment = ({ history, payments, t }) => {
         <Header>
           <BackButton />
           <P>Payment details</P>
+          <Support className="openIntercom" />
         </Header>
-        {t('components.Payment.loading')}
+        <EmptyWrapper>
+          <EmptyIcon />
+          <P>Loading details</P>
+        </EmptyWrapper>
       </Root>
     );
   }
@@ -74,6 +86,7 @@ const Payment = ({ history, payments, t }) => {
       <Header>
         <BackButton />
         <P>Payment details</P>
+        <Support className="openIntercom" />
       </Header>
       <PaymentDetails {...payments.getById.data[0]} />
     </Root>

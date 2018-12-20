@@ -11,7 +11,7 @@ import React from 'react';
 
 import log from 'utils/logging';
 
-import { Root, Header, BackButton, P, CheckDestination } from './styles';
+import { Root, Header, BackButton, P, CheckDestination, Support } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -23,6 +23,7 @@ const Send = ({ wallets, wallet }) => {
       <Header>
         <BackButton />
         <P>Pay</P>
+        <Support className="openIntercom" />
       </Header>
       <CheckDestination wallets={wallets} wallet={wallet} />
     </Root>

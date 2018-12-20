@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import supportIcon from 'assets/icons/message-square.svg';
 
 export * from './Input';
 export * from './Button';
@@ -35,6 +36,16 @@ export const Tip = styled.div`
    width: fit-content;
    height: initial;
   }
+`;
+
+export const Support = styled.a`
+  background: url(${supportIcon});
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-left: auto;
+  margin-right: 1em;
+  height: 2.5rem;
+  width: 2.5rem;
 `;
 
 export * from './utils';

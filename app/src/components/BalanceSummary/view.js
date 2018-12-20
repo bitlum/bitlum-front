@@ -20,7 +20,7 @@ import { Root, Main, Additional, Receive, Send } from './styles';
 
 export const BalanceSummary = ({ accounts, className, appearance = 'normal', denomination, t }) => {
   if (accounts.get.error || !accounts.get.data) {
-    return <Root className={className}>Error loading account data</Root>;
+    return <Root className={className} appearance={appearance}>Unable to load balance info</Root>;
   }
   const totalBalance = Object.keys(accounts.get.data.balances)
     .map(asset => accounts.get.data.balances[asset].available)
@@ -32,11 +32,11 @@ export const BalanceSummary = ({ accounts, className, appearance = 'normal', den
         Available
         {Object.keys(accounts.get.data.balances).map(asset => [
           <Main key={`${asset}Main`}>
+            {accounts.get.data.balances[asset].denominationsAvailable[denomination].sign}{' '}
             {accounts.get.data.balances[asset].denominationsAvailable[denomination].amount.toFixed(
               accounts.get.data.balances[asset].denominationsAvailable[denomination].precision,
-            )}{' '}
-            {accounts.get.data.balances[asset].denominationsAvailable[denomination].sign}
-          </Main>
+            )}
+          </Main>,
         ])}
       </Root>
     );
@@ -47,16 +47,16 @@ export const BalanceSummary = ({ accounts, className, appearance = 'normal', den
       BALANCE
       {Object.keys(accounts.get.data.balances).map(asset => [
         <Main key={`${asset}Main`}>
+          {accounts.get.data.balances[asset].denominationsAvailable.main.sign}{' '}
           {accounts.get.data.balances[asset].denominationsAvailable.main.amount.toFixed(
             accounts.get.data.balances[asset].denominationsAvailable.main.precision,
-          )}{' '}
-          {accounts.get.data.balances[asset].denominationsAvailable.main.sign}
+          )}
         </Main>,
         <Additional key={`${asset}Additional`}>
+          {accounts.get.data.balances[asset].denominationsAvailable.additional.sign}{' '}
           {accounts.get.data.balances[asset].denominationsAvailable.additional.amount.toFixed(
             accounts.get.data.balances[asset].denominationsAvailable.additional.precision,
-          )}{' '}
-          {accounts.get.data.balances[asset].denominationsAvailable.additional.sign}
+          )}
         </Additional>,
       ])}
       <Send to={totalBalance === 0 ? '/payments/receive' : '/payments/check'}>

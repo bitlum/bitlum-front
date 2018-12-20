@@ -11,7 +11,7 @@ const newPayButton = payment => {
   payButton.setAttribute('data-payment', JSON.stringify(payment));
   payButton.onclick = e => {
     window.open(
-      `chrome-extension://${chrome.runtime.id}/index.html#/payments/check?payment=${e.target.getAttribute(
+      `chrome-extension://${chrome.runtime.id}/index.html#/payments/check?wallet=${e.target.getAttribute(
         'data-payment',
       )}`,
       'Bitlum - payment confirmation',

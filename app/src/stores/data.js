@@ -29,7 +29,7 @@ const settings = {
       BTC: {
         main: {
           price: 4000,
-          sign: '$',
+          sign: 'USD',
           precision: 2,
         },
         additional: {

@@ -11,7 +11,7 @@ import React from 'react';
 
 import log from 'utils/logging';
 
-import { Root, Header, BackButton, P, PaymentConfirmation } from './styles';
+import { Root, Header, BackButton, P, PaymentConfirmation, Support } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -23,6 +23,7 @@ const Confirm = ({ payments, vendors, payment, accounts, settings }) => {
       <Header>
         <BackButton />
         <P>Pay</P>
+        <Support className="openIntercom" />
       </Header>
       {payment ? (
         <PaymentConfirmation
@@ -32,7 +33,9 @@ const Confirm = ({ payments, vendors, payment, accounts, settings }) => {
           accounts={accounts}
           settings={settings}
         />
-      ) : null}
+      ) : (
+        <P>No payment provided to confirm</P>
+      )}
     </Root>
   );
 };

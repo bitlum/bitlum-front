@@ -102,6 +102,16 @@ export const Global = createGlobalStyle`
   background-color: var(--colors__bg_dark);
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.intercom-launcher-frame {
+  display: none!important;
+}
+
 /* Extension popup specific sizes*/
 html {
   min-width: 400px;

@@ -20,25 +20,21 @@ import goToDetailsIcon from 'assets/icons/chevron-right.svg';
 export * from 'components/common';
 
 export const AmountMain = styled.span`
+  font-size: 1.12em;
   color: ${({ direction }) => direction === 'incoming' && 'var(--colors__text_ok)'};
-  &:before {
-    content: '${({ direction }) => direction === 'incoming' && '+'}';
-  }
 `;
 
 export const AmountAdditional = styled.span`
+  font-size: 0.8em;
   color: var(--colors__text_bright);
   margin-top: 0.4em;
-  &:before {
-    content: '${({ direction }) => direction === 'incoming' && '+'}';
-  }
 `;
 
 export const Time = styled.span``;
 export const Description = styled.span`
   display: -webkit-box;
   -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;  
+  -webkit-box-orient: vertical;
   max-width: 15em;
   word-break: break-word;
   white-space: ${({ wrap }) => (wrap ? 'normal' : 'nowrap')};

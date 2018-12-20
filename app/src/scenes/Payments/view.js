@@ -18,8 +18,10 @@ import isYesteray from 'date-fns/is_yesterday';
 import {
   Root,
   EmptyIcon,
+  ErrorIcon,
   EmptyWrapper,
   P,
+  Support,
   Header,
   Button,
   BalanceSummary,
@@ -50,11 +52,42 @@ const getSeparatorText = date => {
 // eslint-disable-next-line
 const Payments = ({ payments, accounts, t }) => {
   if (payments.get.error) {
-    return <Root>{t('components.Payment.error')}</Root>;
+    return (
+      <Root empty>
+        <Header>
+          <NavLink to="/">
+            <Logo />
+          </NavLink>
+          <Support className="openIntercom" />
+        </Header>
+        <BalanceSummary key="BalanceSummary" accounts={accounts} />
+        <HeaderSecondary>Payments</HeaderSecondary>
+        <EmptyWrapper>
+          <EmptyIcon />
+          <P>Unable to load payments :(</P>
+          <P>Try again later</P>
+        </EmptyWrapper>
+      </Root>
+    );
   }
 
   if (payments.get.loading && !payments.get.data) {
-    return <Root>{t('components.Payment.loading')}</Root>;
+    return (
+      <Root empty loading>
+        <Header>
+          <NavLink to="/">
+            <Logo />
+          </NavLink>
+          <Support className="openIntercom" />
+        </Header>
+        <BalanceSummary key="BalanceSummary" accounts={accounts} />
+        <HeaderSecondary>Payments</HeaderSecondary>
+        <EmptyWrapper>
+          <EmptyIcon />
+          <P>Loading payments</P>
+        </EmptyWrapper>
+      </Root>
+    );
   }
 
   if ((!payments.get.data && !payments.get.loading) || payments.get.data.length === 0) {
@@ -64,6 +97,7 @@ const Payments = ({ payments, accounts, t }) => {
           <NavLink to="/">
             <Logo />
           </NavLink>
+          <Support className="openIntercom" />
         </Header>
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         <HeaderSecondary>Payments</HeaderSecondary>
@@ -100,6 +134,7 @@ const Payments = ({ payments, accounts, t }) => {
         <NavLink to="/">
           <Logo />
         </NavLink>
+        <Support className="openIntercom" />
       </Header>
       <BalanceSummary key="BalanceSummary" accounts={accounts} />
       <HeaderSecondary>Payments</HeaderSecondary>

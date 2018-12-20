@@ -19,10 +19,7 @@ import { Header as HeaderRaw } from 'components/common';
 
 export * from 'components/common';
 
-export const ReceivePayment = styled(ReceivePaymentCommon)`
-  width: 400px;
-  padding: 2em;
-`;
+export const ReceivePayment = styled(ReceivePaymentCommon)``;
 
 export const Header = styled(HeaderRaw)`
   background: var(--colors__bg);

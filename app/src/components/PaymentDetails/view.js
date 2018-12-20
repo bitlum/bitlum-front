@@ -92,12 +92,12 @@ export const PaymentItem = ({
             <P>Amount</P>
             <P>
               <Span>
-                {denominations.additional.amount !== 0 && denominations.main.amount === 0 && '~'}{' '}
+                {denominations.additional.amount !== 0 && denominations.main.amount === 0 && '≈'}{' '}
                 {denominations.main.amount.toFixed(denominations.main.precision)}{' '}
                 {denominations.main.sign}
               </Span>
               <Span>
-                {denominations.additional.amount === 0 && denominations.main.amount !== 0 && '~'}{' '}
+                {denominations.additional.amount === 0 && denominations.main.amount !== 0 && '≈'}{' '}
                 {denominations.additional.amount.toFixed(denominations.additional.precision)}{' '}
                 {denominations.additional.sign}
               </Span>
@@ -108,12 +108,12 @@ export const PaymentItem = ({
             <P>Fee</P>
             <P>
               <Span>
-                {denominations.additional.fees !== 0 && denominations.main.fees === 0 && '~'}{' '}
+                {denominations.additional.fees !== 0 && denominations.main.fees === 0 && '≈'}{' '}
                 {denominations.main.fees.toFixed(denominations.main.precision)}{' '}
                 {denominations.main.sign}
               </Span>
               <Span>
-                {denominations.additional.fees === 0 && denominations.main.fees !== 0 && '~'}{' '}
+                {denominations.additional.fees === 0 && denominations.main.fees !== 0 && '≈'}{' '}
                 {denominations.additional.fees.toFixed(denominations.additional.precision)}{' '}
                 {denominations.additional.sign}
               </Span>
@@ -123,12 +123,12 @@ export const PaymentItem = ({
             <P>Total</P>
             <P>
               <Span>
-                {denominations.additional.total !== 0 && denominations.main.total === 0 ? '~' : direction === 'incoming' ? '+' : ''}{' '}
+                {denominations.additional.total !== 0 && denominations.main.total === 0 ? '≈' : direction === 'incoming' ? '+' : ''}{' '}
                 {denominations.main.total.toFixed(denominations.main.precision)}{' '}
                 {denominations.main.sign}
               </Span>
               <Span>
-                {denominations.additional.total === 0 && denominations.main.total !== 0 ? '~' : direction === 'incoming' ? '+' : ''}{' '}
+                {denominations.additional.total === 0 && denominations.main.total !== 0 ? '≈' : direction === 'incoming' ? '+' : ''}{' '}
                 {denominations.additional.total.toFixed(denominations.additional.precision)}{' '}
                 {denominations.additional.sign}
               </Span>

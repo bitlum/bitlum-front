@@ -76,18 +76,22 @@ export const PaymentsGroup = ({
         </Vendor>
         <Amount>
           <AmountMain positive={positiveTotal}>
-            {groupedAmountAdditional !== 0 && groupedAmountMain === 0
-              ? '~ '
-              : positiveTotal
-              ? '+'
-              : ''}
-            {groupedAmountMain.toFixed(payments[0].denominations.main.precision)}{' '}
             {payments[0].denominations.main.sign}
+            {groupedAmountAdditional !== 0 && groupedAmountMain === 0
+              ? ' ≈ '
+              : positiveTotal
+              ? ' +'
+              : ' '}
+            {groupedAmountMain.toFixed(payments[0].denominations.main.precision)}{' '}
           </AmountMain>
           <AmountAdditional>
-            {groupedAmountMain !== 0 && groupedAmountAdditional === 0 ? '~ ' : ''}
-            {groupedAmountAdditional.toFixed(payments[0].denominations.additional.precision)}{' '}
             {payments[0].denominations.additional.sign}
+            {groupedAmountMain !== 0 && groupedAmountAdditional === 0
+              ? ' ≈ '
+              : positiveTotal
+              ? ' +'
+              : ' '}
+            {groupedAmountAdditional.toFixed(payments[0].denominations.additional.precision)}{' '}
           </AmountAdditional>
         </Amount>
         <Status status={status} counter={payments.length} />
@@ -102,22 +106,26 @@ export const PaymentsGroup = ({
               isDescriptionReadable={payment.description}
               description={payment.description || payment.receipt}
               direction={payment.direction}
-              mainDenominationString={`${
-                payment.denominations.additional.amount !== 0 &&
-                payment.denominations.main.amount === 0
-                  ? '~'
-                  : ''
-              } ${payment.denominations.main.total.toFixed(payment.denominations.main.precision)} ${
-                payment.denominations.main.sign
-              }`}
-              additionalDenominationString={`${
-                payment.denominations.main.amount !== 0 &&
-                payment.denominations.additional.amount === 0
-                  ? '~'
-                  : ''
-              } ${payment.denominations.additional.total.toFixed(
+              mainDenominationString={`${payment.denominations.main.sign}${
+                payment.denominations.additional.total !== 0 &&
+                payment.denominations.main.total === 0
+                  ? ' ≈ '
+                  : payment.denominations.main.total >= 0 &&
+                    payment.denominations.additional.total > 0
+                  ? ' +'
+                  : ' '
+              }${payment.denominations.main.total.toFixed(payment.denominations.main.precision)}`}
+              additionalDenominationString={`${payment.denominations.additional.sign}${
+                payment.denominations.main.total !== 0 &&
+                payment.denominations.additional.total === 0
+                  ? ' ≈ '
+                  : payment.denominations.main.total >= 0 &&
+                    payment.denominations.additional.total > 0
+                  ? ' +'
+                  : ' '
+              }${payment.denominations.additional.total.toFixed(
                 payment.denominations.additional.precision,
-              )} ${payment.denominations.additional.sign}`}
+              )}`}
             />
           ))}
         </GroupedItems>

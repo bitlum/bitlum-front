@@ -61,15 +61,6 @@ export class PaymentConfirmation extends Component {
     payments.estimate.cleanup();
   }
 
-  // static getDerivedStateFromProps(props, state) {
-  //   const { prefill, wallets } = props;
-  //   if (prefill && prefill.invoice) {
-  //     this.setState({ amount: undefined, destination: prefill.invoice });
-  //     // wallets.getDetails.run(prefill.invoice, 'BTC');
-  //   }
-  //   return state;
-  // }
-
   render() {
     const { payment, payments, vendors, settings, accounts, className, t } = this.props;
     const { amounts, denominationPairs, selectedDenomination } = this.state;
@@ -109,7 +100,16 @@ export class PaymentConfirmation extends Component {
             <SendResultDesc>
               {t(`confirmed.${payments.send.data.status}.description`)}
             </SendResultDesc>
-            <SendResultCta>{t(`confirmed.${payments.send.data.status}.cta`)}</SendResultCta>
+            <SendResultCta
+              className={payments.send.data.status === 'failed' ? 'openIntercom' : ''}
+              onClick={e => {
+                if (payments.send.data.status === 'pending') {
+                  window.location.hash = '';
+                }
+              }}
+            >
+              {t(`confirmed.${payments.send.data.status}.cta`)}
+            </SendResultCta>
             <Done
               primary
               onClick={e => {
@@ -121,16 +121,20 @@ export class PaymentConfirmation extends Component {
             </Done>
           </SendResult>
         ) : null}
-        <Vendor>
-          <Img
-            src={
-              (vendors.get.data && vendors.get.data.icon) ||
-              'https://static.thenounproject.com/png/404950-200.png'
-            }
-          />
-          <P>{(vendors.get.data && vendors.get.data.name) || 'Unknown'}</P>
-          <P>{payment.wuid}</P>
-        </Vendor>
+        {vendors.get.error ? (
+          <Vendor>Unable to load vendor data</Vendor>
+        ) : (
+          <Vendor>
+            <Img
+              src={
+                (vendors.get.data && vendors.get.data.icon) ||
+                'https://static.thenounproject.com/png/404950-200.png'
+              }
+            />
+            <P>{(vendors.get.data && vendors.get.data.name) || 'Unknown'}</P>
+            <P>{payment.wuid}</P>
+          </Vendor>
+        )}
         <AmountInputWraper>
           <AmountInput
             ref={input => input && input.focus()}
@@ -140,6 +144,7 @@ export class PaymentConfirmation extends Component {
               1 /
               10 ** settings.get.data.denominations[payment.asset][selectedDenomination].precision
             }
+            min="0"
             value={
               payment.amount != 0
                 ? denominations && denominations[selectedDenomination].amount
@@ -166,7 +171,11 @@ export class PaymentConfirmation extends Component {
               e.preventDefault();
               this.setState({
                 selectedDenomination: denominationPairs[selectedDenomination],
-                amounts: { current: denominations[denominationPairs[selectedDenomination]].amount },
+                amounts: {
+                  current: denominations[denominationPairs[selectedDenomination]].amount.toFixed(
+                    denominations[denominationPairs[selectedDenomination]].precision,
+                  ),
+                },
               });
             }}
           >
@@ -182,6 +191,7 @@ export class PaymentConfirmation extends Component {
         {payments.estimate.error && (
           <Message type="error"> {payments.estimate.error.message} </Message>
         )}
+        {payments.send.error && <Message type="error"> {payments.send.error.message} </Message>}
         {payment.description ? (
           <Description>
             <Span>Description</Span> <Span>{payment.description}</Span>
@@ -193,7 +203,7 @@ export class PaymentConfirmation extends Component {
             {denominations &&
               denominations[selectedDenomination].fees === 0 &&
               denominations[denominationPairs[selectedDenomination]].fees !== 0 &&
-              '~'}{' '}
+              '≈'}{' '}
             {denominations &&
               `${denominations[selectedDenomination].fees.toFixed(
                 denominations[selectedDenomination].precision,
@@ -206,7 +216,7 @@ export class PaymentConfirmation extends Component {
             {denominations &&
               denominations[selectedDenomination].total === 0 &&
               denominations[denominationPairs[selectedDenomination]].total !== 0 &&
-              '~'}{' '}
+              '≈'}{' '}
             {denominations &&
               `${(-1 * denominations[selectedDenomination].total).toFixed(
                 denominations[selectedDenomination].precision,

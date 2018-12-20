@@ -13,13 +13,15 @@ import formatDate from 'date-fns/format';
 import isToday from 'date-fns/is_today';
 import isYesteray from 'date-fns/is_yesterday';
 
-import { Img, P, Header as HeaderRaw } from 'components/common';
+import { Img, P, Header as HeaderRaw, withLoader } from 'components/common';
 
 import BalanceSummaryRaw from 'components/BalanceSummary';
 import PaymentsGroupRaw from 'components/PaymentsGroup';
 
 import LogoFull from 'assets/img/logo/full.png';
 import { ReactComponent as EmptyIconRaw } from 'assets/icons/paper.svg';
+import { ReactComponent as ErrorIconRaw } from 'assets/icons/x-circle.svg';
+
 
 // -----------------------------------------------------------------------------
 // Code
@@ -48,6 +50,12 @@ export const PaymentsGroup = styled(PaymentsGroupRaw)`
 `;
 
 export const EmptyIcon = styled(EmptyIconRaw)`
+  margin-bottom: 3rem;
+  height: 15rem;
+  opacity: 0.3;
+`;
+
+export const ErrorIcon = styled(ErrorIconRaw)`
   margin-bottom: 3rem;
   height: 15rem;
   opacity: 0.3;
@@ -104,7 +112,7 @@ export const LegendItem = styled.p`
 
 export const EmptyWrapper = styled.div``;
 
-export const Root = styled.div`
+export const Root = withLoader(styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -129,6 +137,6 @@ export const Root = styled.div`
       margin-top: 2em;
     }
   `};
-`;
+`);
 
 export default Root;

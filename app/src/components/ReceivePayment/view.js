@@ -59,15 +59,6 @@ export class ReceivePayment extends Component {
         }}
         loading={payments.receive.loading}
       >
-        <P>Receive payment</P>
-        <Span>You can receive both lightning and blockchain payments</Span>
-        <Span>
-          To receive in lightning you need to specify exact amount that you want to receive
-        </Span>
-        <Span>
-          To receive in blockchain just send whatever amount you want to showed blockchain address
-          (if you do not see the address just select "Blockchain" in the dropdown below)
-        </Span>
         {type === 'lightning' ? (
           <Input
             id="receiveAmount"
@@ -86,8 +77,8 @@ export class ReceivePayment extends Component {
             this.setState({ type: e.target.value });
           }}
         >
-          <option value="lightning">Lightning</option>
-          <option value="blockchain">Blockchain</option>
+          <option value="lightning">Via lightning invoice</option>
+          <option value="blockchain">Via bitcoin address</option>
         </Select>
         <Button primary type="submit">
           Receive

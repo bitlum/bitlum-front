@@ -62,4 +62,18 @@ export default {
     password: 'Your password',
     passwordInvalid: 'Wrong password',
   },
+  confirmed: {
+    failed: {
+      description: 'Your payment failed, but we’re not sure why',
+      cta: 'Contact us',
+    },
+    completed: {
+      description: '',
+      cta: '',
+    },
+    pending: {
+      description: 'Payment has been sent, but is still in a pending state',
+      cta: 'View transactions',
+    },
+  },
 };

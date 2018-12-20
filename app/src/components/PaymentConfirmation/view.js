@@ -127,11 +127,13 @@ export class PaymentConfirmation extends Component {
           <Vendor>
             <Img
               src={
-                (vendors.get.data && vendors.get.data.icon) ||
+                (vendors.get.data && vendors.get.data[0] && vendors.get.data[0].iconUrl) ||
                 'https://static.thenounproject.com/png/404950-200.png'
               }
             />
-            <P>{(vendors.get.data && vendors.get.data.name) || 'Unknown'}</P>
+            <P>
+              {(vendors.get.data && vendors.get.data[0] && vendors.get.data[0].name) || 'Unknown'}
+            </P>
             <P>{payment.wuid}</P>
           </Vendor>
         )}

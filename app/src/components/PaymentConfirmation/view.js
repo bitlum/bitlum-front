@@ -17,11 +17,16 @@ import {
   Input,
   Button,
   Fees,
+  SendResult,
+  SendResultDesc,
+  SendResultCta,
+  SendResultIcon,
   SwitchDenomination,
   Description,
   Submit,
   Message,
   P,
+  Done,
   Img,
   Span,
   Vendor,
@@ -95,8 +100,27 @@ export class PaymentConfirmation extends Component {
             payment.asset,
           );
         }}
-        loading={payments.estimate.loading}
+        loading={payments.estimate.loading || payments.send.loading}
       >
+        {payments.send.data ? (
+          <SendResult status={payments.send.data.status}>
+            <SendResultIcon status={payments.send.data.status} />
+            <P>Payment {payments.send.data.status}</P>
+            <SendResultDesc>
+              {t(`confirmed.${payments.send.data.status}.description`)}
+            </SendResultDesc>
+            <SendResultCta>{t(`confirmed.${payments.send.data.status}.cta`)}</SendResultCta>
+            <Done
+              primary
+              onClick={e => {
+                e.preventDefault();
+                window.close();
+              }}
+            >
+              Done
+            </Done>
+          </SendResult>
+        ) : null}
         <Vendor>
           <Img
             src={
@@ -129,7 +153,7 @@ export class PaymentConfirmation extends Component {
                   payment.wuid,
                   e.target.value /
                     settings.get.data.denominations[payment.asset][selectedDenomination].price,
-                  payment.asset
+                  payment.asset,
                 );
               }
             }}
@@ -155,7 +179,9 @@ export class PaymentConfirmation extends Component {
           accounts={accounts}
         />
         {false && <Message type="error"> {{}.message} </Message>}
-        {payments.estimate.error && <Message type="error"> {payments.estimate.error.message} </Message>}
+        {payments.estimate.error && (
+          <Message type="error"> {payments.estimate.error.message} </Message>
+        )}
         {payment.description ? (
           <Description>
             <Span>Description</Span> <Span>{payment.description}</Span>

@@ -13,15 +13,15 @@ import formatDate from 'date-fns/format';
 import isToday from 'date-fns/is_today';
 import isYesteray from 'date-fns/is_yesterday';
 
-import { Img, P, Header as HeaderRaw, withLoader } from 'components/common';
+import { Img, P, Header as HeaderRaw, withLoader, Support as SupportRaw } from 'components/common';
 
 import BalanceSummaryRaw from 'components/BalanceSummary';
 import PaymentsGroupRaw from 'components/PaymentsGroup';
 
 import LogoFull from 'assets/img/logo/full.png';
+import logoutIcon from 'assets/icons/log-out.svg';
 import { ReactComponent as EmptyIconRaw } from 'assets/icons/paper.svg';
 import { ReactComponent as ErrorIconRaw } from 'assets/icons/x-circle.svg';
-
 
 // -----------------------------------------------------------------------------
 // Code
@@ -36,6 +36,19 @@ export const Logo = styled(Img).attrs({
   content: url(${LogoFull});
   height: 2em;
   width: 9em;
+`;
+
+export const Support = styled(SupportRaw)`
+  margin-left: 0;
+`;
+export const LogOut = styled.a`
+  background: url(${logoutIcon});
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-left: auto;
+  margin-right: 1em;
+  height: 2.5rem;
+  width: 2.5rem;
 `;
 
 export const Separator = styled(P)`

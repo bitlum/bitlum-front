@@ -13,6 +13,8 @@ import LoginFormCommon from 'components/LoginForm';
 
 import LogoFull from 'assets/img/logo/full.png';
 
+import { A, Span } from 'components/common';
+
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
@@ -26,6 +28,18 @@ export const Root = styled.div`
   justify-content: center;
   align-items: center;
   height: 100%;
+  & ${A} ${Span}:last-child {
+    font: var(--fonts__text_bold);
+  }
+  & ${A} {
+    margin-top: 3.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--colors__bg_accent);
+    font-size: 0.8em;
+  }
 `;
 
 export const Logo = styled.img.attrs({
@@ -38,5 +52,8 @@ export const Logo = styled.img.attrs({
 `;
 
 export const LoginForm = styled(LoginFormCommon)`
-  width: 400px;
+  width: 100%;
+  & button {
+    margin-top: 1.5em;
+  }
 `;

@@ -34,7 +34,7 @@ export const SignupForm = ({ accounts, className, t }) => (
     <Input
       id="authEmail"
       type="email"
-      placeholder={t('auth.email')}
+      placeholder="Email of new account"
       labelValid={t('auth.email')}
       labelInvalid={t('auth.emailInvalid')}
       required
@@ -42,7 +42,7 @@ export const SignupForm = ({ accounts, className, t }) => (
     <Input
       id="authPassword"
       type="password"
-      placeholder={t('auth.password')}
+      placeholder="Password of new account"
       labelValid={t('auth.password')}
       labelInvalid={t('auth.passwordInvalid')}
       required

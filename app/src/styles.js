@@ -116,6 +116,7 @@ input::-webkit-inner-spin-button {
 html {
   min-width: 400px;
   width: 400px;
+  min-height: 600px;
 }
 
 

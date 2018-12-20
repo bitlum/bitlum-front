@@ -20,6 +20,7 @@ import {
   EmptyIcon,
   ErrorIcon,
   EmptyWrapper,
+  LogOut,
   P,
   Support,
   Header,
@@ -58,6 +59,11 @@ const Payments = ({ payments, accounts, t }) => {
           <NavLink to="/">
             <Logo />
           </NavLink>
+          <LogOut
+            onClick={() => {
+              accounts.authenticate.cleanup();
+            }}
+          />
           <Support className="openIntercom" />
         </Header>
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
@@ -78,6 +84,11 @@ const Payments = ({ payments, accounts, t }) => {
           <NavLink to="/">
             <Logo />
           </NavLink>
+          <LogOut
+            onClick={() => {
+              accounts.authenticate.cleanup();
+            }}
+          />
           <Support className="openIntercom" />
         </Header>
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
@@ -97,6 +108,11 @@ const Payments = ({ payments, accounts, t }) => {
           <NavLink to="/">
             <Logo />
           </NavLink>
+          <LogOut
+            onClick={() => {
+              accounts.authenticate.cleanup();
+            }}
+          />
           <Support className="openIntercom" />
         </Header>
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
@@ -134,6 +150,11 @@ const Payments = ({ payments, accounts, t }) => {
         <NavLink to="/">
           <Logo />
         </NavLink>
+        <LogOut
+          onClick={() => {
+            accounts.authenticate.cleanup();
+          }}
+        />
         <Support className="openIntercom" />
       </Header>
       <BalanceSummary key="BalanceSummary" accounts={accounts} />

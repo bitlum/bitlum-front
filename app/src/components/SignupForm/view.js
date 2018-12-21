@@ -23,16 +23,18 @@ export const SignupForm = ({ accounts, className, t }) => (
     className={className}
     onSubmit={e => {
       e.preventDefault();
-      const emailElement = e.target.querySelector('#authEmail');
+      const emailElement = e.target.querySelector('#signupEmail');
       const email = emailElement && emailElement.value;
-      const passwordElement = e.target.querySelector('#authPassword');
+      const passwordElement = e.target.querySelector('#signupPassword');
       const password = passwordElement && passwordElement.value;
-      accounts.signup.run(email, password);
+      const referralElement = e.target.querySelector('#signupReferral');
+      const referral = referralElement && referralElement.value;
+      accounts.signup.run(email, password, referral);
     }}
     loading={accounts.signup.loading}
   >
     <Input
-      id="authEmail"
+      id="signupEmail"
       type="email"
       placeholder="Email of new account"
       labelValid={t('auth.email')}
@@ -40,11 +42,19 @@ export const SignupForm = ({ accounts, className, t }) => (
       required
     />
     <Input
-      id="authPassword"
+      id="signupPassword"
       type="password"
       placeholder="Password of new account"
       labelValid={t('auth.password')}
       labelInvalid={t('auth.passwordInvalid')}
+      required
+    />
+    <Input
+      id="signupReferral"
+      type="text"
+      placeholder="Referral"
+      labelValid="Referral"
+      labelInvalid="Referral"
       required
     />
     <Button primary type="submit">

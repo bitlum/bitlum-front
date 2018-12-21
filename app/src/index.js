@@ -60,10 +60,6 @@ class App extends Component {
     // eslint-disable-next-line
     const { history } = this.props;
     GA({ type: 'pageview', page: window.location.pathname });
-    // window.localStorage.setItem(
-    //   'referral',
-    //   new URLSearchParams(window.location.search).get('referral'),
-    // );
     const query = window.location.hash.match(/\?(.*)/);
     if (!query || query && !new URLSearchParams(query[0]).get('nopopup')) {
       window.chrome.tabs.query({ active: true, highlighted: true }, tab => {

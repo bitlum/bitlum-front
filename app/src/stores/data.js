@@ -167,8 +167,9 @@ accounts.signup = createNewStore({
     accounts.authenticate.updateData(data);
     accounts.get.updateData(data);
   },
-  async run(email, password) {
-    const referral = localStorage.getItem('referral') || email;
+  async run(email, password, referralPassed) {
+    let referral = referralPassed;
+    if (!referral) referral = localStorage.getItem('referral') || email;
     this.startFetching({ body: { email, password, referral } });
   },
 });

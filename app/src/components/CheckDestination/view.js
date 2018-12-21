@@ -10,6 +10,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import GA from 'utils/GA';
 import log from 'utils/logging';
 
 import { Root, Input, Button, Message, P, Span, DestinationInfo, AmountInput } from './styles';
@@ -28,6 +29,11 @@ export class CheckDestination extends Component {
     const { wallets, wallet, className, history, t } = this.props;
 
     if (wallets.getDetails.data) {
+      GA({
+        type: 'event',
+        category: 'vuidDomainPair',
+        action: `${wallet.origin || 'manual'}_${wallets.getDetails.data}`,
+      });
       history.push(`/payments/confirm?payment=${JSON.stringify(wallets.getDetails.data)}`);
       return null;
     }

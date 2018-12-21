@@ -11,6 +11,7 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 
 import log from 'utils/logging';
+import GA from 'utils/GA';
 
 import view from './view';
 
@@ -34,6 +35,12 @@ class Wrapper extends React.Component {
       }
     }
     if (wallet) {
+      GA({
+        type: 'event',
+        category: 'lnDomains',
+        action: 'clickOnButton',
+        label: wallet.origin || 'manual',
+      });
       wallets.getDetails.run(wallet.wuid, wallet.asset);
     }
   }

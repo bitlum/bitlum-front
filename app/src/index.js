@@ -59,12 +59,28 @@ class App extends Component {
     // eslint-disable-next-line
     const { history } = this.props;
     GA({ type: 'pageview', page: window.location.pathname });
-    window.localStorage.setItem(
-      'referral',
-      new URLSearchParams(window.location.search).get('referral'),
-    );
+    // window.localStorage.setItem(
+    //   'referral',
+    //   new URLSearchParams(window.location.search).get('referral'),
+    // );
+    const query = window.location.hash.match(/\?(.*)/);
+    if (!query || query && !new URLSearchParams(query[0]).get('nopopup')) {
+      chrome.tabs.query({ active: true, highlighted: true }, tab => {
+        GA({
+          type: 'event',
+          category: 'lnDomains',
+          action: 'openPopup',
+          label: new URL(tab[0].url).origin,
+        });
+      });
+    }
+
     this.unlisten = history.listen(location => {
-      GA({ type: 'pageview', page: location.pathname });
+      let page = location.pathname;
+      if (location.pathname.match(/payments\/(\d+)/)) {
+        page = '/payments/details';
+      }
+      GA({ type: 'pageview', page });
     });
   }
 

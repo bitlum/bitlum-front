@@ -20,7 +20,7 @@ const getApiUrl = strings => {
   if (process.env.NODE_ENV === 'development') {
     return `http://lvh.me:3004${urlsWithoutApi}`;
   }
-  return `https://testnet.api.bitlum.io${urlsWithoutApi}`;
+  return `https://api.bitlum.io${urlsWithoutApi}`;
 };
 
 const settings = {

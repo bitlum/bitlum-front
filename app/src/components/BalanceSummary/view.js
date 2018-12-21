@@ -43,7 +43,7 @@ export const BalanceSummary = ({ accounts, className, appearance = 'normal', den
   }
   return (
     <Root className={className} loading={accounts.get.loading} appearance={appearance}>
-      <Receive to="/payments/receive">Receive</Receive>
+      <Receive to="/payments/receive/check">Receive</Receive>
       BALANCE
       {Object.keys(accounts.get.data.balances).map(asset => [
         <Main key={`${asset}Main`}>
@@ -59,7 +59,7 @@ export const BalanceSummary = ({ accounts, className, appearance = 'normal', den
           )}
         </Additional>,
       ])}
-      <Send to={totalBalance === 0 ? '/payments/receive' : '/payments/check'}>
+      <Send to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
         {totalBalance === 0 ? 'Receive' : 'Pay'}
       </Send>
     </Root>

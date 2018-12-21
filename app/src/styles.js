@@ -44,7 +44,7 @@ export const Root = styled.div`
 
 export const Global = createGlobalStyle`
 
-@import url('https://fonts.googleapis.com/css?family=Montserrat:200,400,700;');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:200,400,700');
 
 :root{
   --colors__bg: #F7F7F7;

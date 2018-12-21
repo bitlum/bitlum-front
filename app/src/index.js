@@ -39,6 +39,7 @@ import Payment from 'scenes/Payment';
 import Check from 'scenes/Check';
 import Confirm from 'scenes/Confirm';
 import Receive from 'scenes/Receive';
+import Select from 'scenes/Select';
 
 import { Global as GlobalStyles, Root, Footer, Main } from './styles';
 
@@ -65,7 +66,7 @@ class App extends Component {
     // );
     const query = window.location.hash.match(/\?(.*)/);
     if (!query || query && !new URLSearchParams(query[0]).get('nopopup')) {
-      chrome.tabs.query({ active: true, highlighted: true }, tab => {
+      window.chrome.tabs.query({ active: true, highlighted: true }, tab => {
         GA({
           type: 'event',
           category: 'lnDomains',
@@ -106,7 +107,8 @@ class App extends Component {
           ) : (
             [
               <Switch key="Switch">
-                <Route path="/payments/receive" component={Receive} />
+                <Route path="/payments/receive/check" component={Select} />
+                <Route path="/payments/receive/confirm" component={Receive} />
                 <Route path="/payments/check" component={Check} />
                 <Route path="/payments/confirm" component={Confirm} />
                 <Route path="/payments/:puid" component={Payment} />

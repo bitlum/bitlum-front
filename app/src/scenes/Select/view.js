@@ -9,20 +9,21 @@
 
 import React from 'react';
 
-import { Root, Header, ReceivePayment, P, BackButton, Support } from './styles';
+import { Root, Header, SelectReceiveAsset, P, BackButton, Support, Message } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
-const Receive = ({payments, receive}) => (
-  <Root>
+const Receive = ({ payments }) => (
+  <Root loading={payments.receive.loading}>
     <Header>
       <BackButton />
       <P>Receive</P>
       <Support className="openIntercom" />
     </Header>
-    <ReceivePayment payments={payments} receive={receive}/>
+    {payments.receive.error ? <Message type="error">{payments.receive.error.message}</Message> : null}
+    <SelectReceiveAsset disabled={payments.receive.error} />
   </Root>
 );
 

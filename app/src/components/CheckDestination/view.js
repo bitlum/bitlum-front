@@ -32,7 +32,7 @@ export class CheckDestination extends Component {
       GA({
         type: 'event',
         category: 'vuidDomainPair',
-        action: `${wallet.origin || 'manual'}_${wallets.getDetails.data}`,
+        action: `${(wallet && wallet.origin) || 'manual'}_${wallets.getDetails.data}`,
       });
       history.push(`/payments/confirm?payment=${JSON.stringify(wallets.getDetails.data)}`);
       return null;

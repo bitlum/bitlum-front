@@ -4,4 +4,4 @@ import { withRouter } from 'react-router';
 
 import view from './view';
 
-export default withNamespaces()(withRouter(inject('payments', 'settings')(observer(view))));
+export default withNamespaces()(withRouter(inject('payments')(observer(view))));

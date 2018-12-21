@@ -33,9 +33,9 @@ const settings = {
           precision: 2,
         },
         additional: {
-          price: 1,
-          sign: 'BTC',
-          precision: 8,
+          price: 10 ** 8,
+          sign: 'SAT',
+          precision: 0,
         },
       },
     },

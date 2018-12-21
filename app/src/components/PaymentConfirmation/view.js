@@ -41,10 +41,11 @@ import {
 
 export class PaymentConfirmation extends Component {
   state = {
-    amounts: {
-      current: this.props.payment.amount,
-      previous: undefined,
-    },
+    amountsOriginal: this.props.payment.amount,
+    amountsCurrent:
+      this.props.payment.amount *
+      this.props.settings.get.data.denominations[this.props.payment.asset].main.price,
+    amountsPrevious: undefined,
     selectedDenomination: 'main',
     denominationPairs: {
       main: 'additional',
@@ -63,7 +64,13 @@ export class PaymentConfirmation extends Component {
 
   render() {
     const { payment, payments, vendors, settings, accounts, className, t } = this.props;
-    const { amounts, denominationPairs, selectedDenomination } = this.state;
+    const {
+      amountsOriginal,
+      amountsCurrent,
+      amountsPrevious,
+      denominationPairs,
+      selectedDenomination,
+    } = this.state;
 
     const { denominations } =
       ((payments.estimate.data || payments.estimate.error) &&
@@ -73,7 +80,7 @@ export class PaymentConfirmation extends Component {
               asset: payment.asset,
               fees: payments.estimate.error.fees,
               amount:
-                amounts.current /
+                amountsCurrent /
                 settings.get.data.denominations[payment.asset][selectedDenomination].price,
             }),
         )) ||
@@ -86,8 +93,10 @@ export class PaymentConfirmation extends Component {
           e.preventDefault();
           payments.send.run(
             payment.wuid,
-            amounts.current /
-              settings.get.data.denominations[payment.asset][selectedDenomination].price,
+            amountsOriginal !== 0
+              ? amountsOriginal
+              : amountsCurrent /
+                  settings.get.data.denominations[payment.asset][selectedDenomination].price,
             payment.asset,
           );
         }}
@@ -138,8 +147,10 @@ export class PaymentConfirmation extends Component {
           </Vendor>
         )}
         <AmountInputWraper>
+          {settings.get.data.denominations[payment.asset][selectedDenomination].sign}
           <AmountInput
             ref={input => input && input.focus()}
+            length={amountsCurrent.toString().length}
             id="sendAmount"
             type="number"
             step={
@@ -150,12 +161,12 @@ export class PaymentConfirmation extends Component {
             value={
               payment.amount != 0
                 ? denominations && denominations[selectedDenomination].amount
-                : amounts.current
+                : amountsCurrent
             }
             disabled={payment.amount != 0}
             onChange={e => {
               if (!payments.estimate.loading) {
-                this.setState({ amounts: { current: e.target.value } });
+                this.setState({ amountsCurrent: e.target.value });
                 payments.estimate.run(
                   payment.wuid,
                   e.target.value /
@@ -173,11 +184,9 @@ export class PaymentConfirmation extends Component {
               e.preventDefault();
               this.setState({
                 selectedDenomination: denominationPairs[selectedDenomination],
-                amounts: {
-                  current: denominations[denominationPairs[selectedDenomination]].amount.toFixed(
-                    denominations[denominationPairs[selectedDenomination]].precision,
-                  ),
-                },
+                amountsCurrent: denominations[
+                  denominationPairs[selectedDenomination]
+                ].amount.toFixed(denominations[denominationPairs[selectedDenomination]].precision),
               });
             }}
           >
@@ -191,7 +200,12 @@ export class PaymentConfirmation extends Component {
         />
         {false && <Message type="error"> {{}.message} </Message>}
         {payments.estimate.error && (
-          <Message type="error"> {payments.estimate.error.message} </Message>
+          <Message type="error">
+            {' '}
+            {payments.estimate.error.code === '403RPA01'
+              ? 'You do not have enough balance'
+              : payments.estimate.error.message}{' '}
+          </Message>
         )}
         {payments.send.error && <Message type="error"> {payments.send.error.message} </Message>}
         {payment.description ? (
@@ -212,7 +226,7 @@ export class PaymentConfirmation extends Component {
               )} ${denominations[selectedDenomination].sign}`}
           </Span>
         </Fees>
-        <Submit primary type="submit">
+        <Submit primary type="submit" disabled={payments.estimate.error}>
           <Span>Pay</Span>
           <Span>
             {denominations &&

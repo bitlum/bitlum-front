@@ -76,4 +76,14 @@ export default {
       cta: 'View transactions',
     },
   },
+  receive: {
+    tips: {
+      blockchain: {
+        main: 'Send Bitcoin on address\nbelow to deposit them on wallet',
+      },
+      lightning: {
+        main: 'Send Lightning Network Bitcoin payment\non address above to deposit them on wallet',
+      },
+    },
+  },
 };

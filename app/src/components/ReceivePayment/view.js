@@ -12,30 +12,41 @@ import PropTypes from 'prop-types';
 
 import log from 'utils/logging';
 
-import { Root, Input, Button, Message, P, Span, Select, QRcode, CopyButton } from './styles';
+import {
+  Root,
+  Input,
+  Button,
+  Message,
+  P,
+  Span,
+  Select,
+  QRcode,
+  CopyButton,
+  AssetSelector,
+  AssetItem,
+  AmountInputWraper,
+  AmountInput,
+  SwitchDenomination,
+  Footer,
+} from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
 export class ReceivePayment extends Component {
-  constructor() {
-    super();
-    this.state = {
-      type: 'lightning',
-    };
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { payments } = this.props;
-    const { type } = this.state;
-    if (prevState.type !== type) {
-      payments.receive.cleanup();
-    }
-    if (prevState.type !== type && type === 'blockchain') {
-      payments.receive.run('blockchain', null, 'BTC');
-    }
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   const { payments, receive } = this.props;
+  //   payments.receive.run(receive.type, null, receive.asset);
+  // }
+  state = {
+    amountsCurrent: 0,
+    selectedDenomination: 'main',
+    denominationPairs: {
+      main: 'additional',
+      additional: 'main',
+    },
+  };
 
   componentWillUnmount() {
     const { payments } = this.props;
@@ -43,54 +54,107 @@ export class ReceivePayment extends Component {
   }
 
   render() {
-    const { type } = this.state;
-    const { payments, className, t } = this.props;
+    const { payments, settings, history, receive, className, t } = this.props;
+    const { selectedDenomination, denominationPairs, amountsCurrent } = this.state;
+
+    if (!receive) {
+      return (
+        <Root className={className}>
+          <P>Receive type not selected</P>
+        </Root>
+      );
+    }
 
     return (
       <Root
         className={className}
         onSubmit={e => {
           e.preventDefault();
-          const amountElement = e.target.querySelector('#receiveAmount');
-          const amountValue = amountElement && amountElement.value;
-          const typeElement = e.target.querySelector('#receiveType');
-          const typeValue = typeElement && typeElement.value;
-          payments.receive.run(typeValue, amountValue, 'BTC');
+          payments.receive.run(
+            receive.type,
+            amountsCurrent /
+              settings.get.data.denominations[receive.asset][selectedDenomination].price,
+            receive.asset,
+          );
         }}
         loading={payments.receive.loading}
       >
-        {type === 'lightning' ? (
-          <Input
-            id="receiveAmount"
-            type="number"
-            placeholder="Amount"
-            step="any"
-            labelValid="Amount"
-            labelInvalid="Invalid amount"
-            required
-          />
+        <Message type="info" key="receiveText">
+          {t(`receive.tips.${receive.type}.main`)}
+        </Message>
+        {receive.type === 'lightning' && !payments.receive.data ? (
+          <AmountInputWraper>
+            {settings.get.data.denominations[receive.asset][selectedDenomination].sign}
+            <AmountInput
+              length={amountsCurrent.toString().length}
+              ref={input => input && input.focus()}
+              id="sendAmount"
+              type="number"
+              step={
+                1 /
+                10 ** settings.get.data.denominations[receive.asset][selectedDenomination].precision
+              }
+              value={amountsCurrent}
+              min="0"
+              onChange={e => {
+                this.setState({ amountsCurrent: e.target.value });
+              }}
+              required
+            />
+            <SwitchDenomination
+              primary
+              onClick={e => {
+                e.preventDefault();
+                this.setState({
+                  selectedDenomination: denominationPairs[selectedDenomination],
+                  amountsCurrent: (
+                    (amountsCurrent /
+                      settings.get.data.denominations[receive.asset][selectedDenomination].price) *
+                    settings.get.data.denominations[receive.asset][
+                      denominationPairs[selectedDenomination]
+                    ].price
+                  ).toFixed(
+                    settings.get.data.denominations[receive.asset][
+                      denominationPairs[selectedDenomination]
+                    ].precision,
+                  ),
+                });
+              }}
+            >
+              {
+                settings.get.data.denominations[receive.asset][
+                  denominationPairs[selectedDenomination]
+                ].sign
+              }
+            </SwitchDenomination>
+          </AmountInputWraper>
         ) : null}
-        <Select
-          id="receiveType"
-          value={type}
-          onChange={e => {
-            this.setState({ type: e.target.value });
-          }}
-        >
-          <option value="lightning">Via lightning invoice</option>
-          <option value="blockchain">Via bitcoin address</option>
-        </Select>
-        <Button primary type="submit">
-          Receive
-        </Button>
         {payments.receive.data && [
-          <QRcode key="recaiveQR" value={payments.receive.data.wuid || ''} size="180" />,
-          <Message type="info" key="receiveText">
-            Send here {payments.receive.data.wuid}
-            <CopyButton copyData={payments.receive.data.wuid} />
-          </Message>,
+          <QRcode key="recaiveQR" value={payments.receive.data.wuid || ''} size={220} />,
+          <P>
+            <Span>{payments.receive.data.wuid}</Span>
+            <CopyButton data={payments.receive.data.wuid} />
+          </P>,
         ]}
         {payments.receive.error && <Message type="error">{payments.receive.error.message}</Message>}
+        <Footer>
+          {receive.type === 'lightning' && !payments.receive.data ? (
+            <Button primary type="submit">
+              Generate invoice
+            </Button>
+          ) : (
+            <P
+              primary
+              onClick={e => {
+                e.preventDefault();
+                history.push('/payments');
+              }}
+            >
+              <Span>After you will send payment you will see it in the payment list</Span>
+              <Span>Go to payments list</Span>
+            </P>
+          )}
+        </Footer>
       </Root>
     );
   }

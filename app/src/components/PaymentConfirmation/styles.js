@@ -38,11 +38,17 @@ export const BalanceSummary = styled(BalanceSummaryRaw)`
 `;
 
 export const Submit = styled(Button)`
+  border: none;
   border-radius: unset;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0.7em 0;
+  ${({ disabled }) =>
+    disabled &&
+    `pointer-events: none;
+     opacity: 0.5;
+     background-color: var(--colors__bg_dark);`}
   & ${Span}:first-child {
     font: var(--fonts__text_bold);
     font-size: 1.1em;
@@ -55,6 +61,7 @@ export const Submit = styled(Button)`
 `;
 
 export const SwitchDenomination = styled(Button)`
+  position: absolute;
   background: var(--colors__bg);
   color: var(--colors__bg_dark);
   border: none;
@@ -62,6 +69,7 @@ export const SwitchDenomination = styled(Button)`
   width: 4.5em;
   min-width: fit-content;
   font: var(--fonts__text);
+  right: 0;
 `;
 
 export const Fees = styled(P)`
@@ -150,30 +158,34 @@ export const Vendor = styled.div`
 
 export const AmountInput = styled.input`
   font: var(--fonts__text_thin);
-  width: 100%;
+  font-size: 1em;
   border: none;
   border-radius: unset;
   text-align: center;
-  font-size: 2.3em;
   padding: 0.3em 0;
-  padding-left: 1.65em;
+  padding-right: 1em;
+  margin-left: 0.2em;
+  max-width: 7em;
+  min-width: 2.2em;
   &::placeholder {
     padding-left: 0.9em;
   }
+  width: ${({ length }) => `${(length || 0) * 1}em`};
 `;
 
 export const AmountInputWraper = styled.div`
   display: flex;
   position: relative;
   align-items: center;
-  justify-content: space-between;
-  border-top: 0.05em solid var(--colors__bg_dark);
+  justify-content: center;
+  font: var(--fonts__text_thin);
+  font-size: 2.3em;
   &:after {
     content: '';
     position: absolute;
     bottom: 0;
     display: block;
-    height: 0.05em;
+    height: 0.02em;
     width: 100%;
     background: linear-gradient(
       90deg,

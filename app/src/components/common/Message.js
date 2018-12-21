@@ -15,7 +15,6 @@ import styled from 'styled-components';
 
 export const Message = styled.div`
   word-break: break-word;
-  border-radius: 0.2em;
   display: flex;
   width: 100%;
   align-items: center;

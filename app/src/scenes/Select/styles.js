@@ -9,9 +9,9 @@
 
 import styled from 'styled-components';
 
-import ReceivePaymentCommon from 'components/ReceivePayment';
+import SelectReceiveAssetRaw from 'components/SelectReceiveAsset';
 
-import { Header as HeaderRaw } from 'components/common';
+import { Header as HeaderRaw, withLoader } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -19,7 +19,14 @@ import { Header as HeaderRaw } from 'components/common';
 
 export * from 'components/common';
 
-export const ReceivePayment = styled(ReceivePaymentCommon)``;
+export const SelectReceiveAsset = styled(SelectReceiveAssetRaw)`
+  ${({ disabled }) =>
+    disabled &&
+    `
+      opacity: 0.5;
+      pointer-events: none;
+    `}
+`;
 
 export const Header = styled(HeaderRaw)`
   background: var(--colors__bg);
@@ -35,4 +42,4 @@ export const Root = styled.div`
   justify-content: center;
 `;
 
-export default Root;
+export default withLoader(Root);

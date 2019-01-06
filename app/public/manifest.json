@@ -25,20 +25,15 @@
     "default_title": "Bitlum",
     "default_popup": "index.html"
   },
+  "icons": { "16": "assets/icon16.png", "48": "assets/icon48.png", "128": "assets/icon128.png" },
   "background": {
     "scripts": ["background.js"],
     "persistent": true
   },
   "content_scripts": [
     {
-      "matches": [
-        "file://*/*",
-        "http://*/*",
-        "https://*/*"
-      ],
-      "js": [
-        "content.js"
-      ],
+      "matches": ["file://*/*", "http://*/*", "https://*/*"],
+      "js": ["content.js"],
       "run_at": "document_start",
       "all_frames": true
     }

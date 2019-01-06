@@ -57,6 +57,9 @@ const intercom = (function ICinitializer() {
     Intercom(...args) {
       window.Intercom(...args);
     },
+    endSession() {
+      window.Intercom('shutdown');
+    },
     boot(userSettings) {
       window.Intercom('boot', { ...settings, ...userSettings });
     },

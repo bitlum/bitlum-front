@@ -51,7 +51,7 @@ const getSeparatorText = date => {
 };
 
 // eslint-disable-next-line
-const Payments = ({ payments, accounts, t }) => {
+const Payments = ({ settings, payments, accounts, t }) => {
   if (payments.get.error) {
     return (
       <Root empty>
@@ -174,7 +174,6 @@ const Payments = ({ payments, accounts, t }) => {
               vendorName={paymentsGroup[1][0].vendorName}
               vendorIcon={paymentsGroup[1][0].vendorIcon}
               payments={paymentsGroup[1]}
-              round={payments.round}
             />,
           ];
           const currentGroupDate = new Date(Number(paymentsGroup[0].split('_')[0]));

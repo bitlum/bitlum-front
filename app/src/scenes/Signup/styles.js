@@ -40,6 +40,12 @@ export const Root = styled.div`
     color: var(--colors__bg_accent);
     font-size: 0.8em;
   }
+  & > ${Span} {
+    margin-top: 3.5em;
+    font-size: 0.8em;
+    color: var(--colors__bg_accent);
+    cursor: pointer;
+  }
 `;
 
 export const Logo = styled.img.attrs({

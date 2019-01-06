@@ -105,6 +105,7 @@ export const Footer = styled.div`
 
   & ${Span}:last-child {
     font: var(--fonts__text_bold);
+    cursor: pointer;
     font-size: 0.8em;
     color: var(--colors__bg_accent);
   }

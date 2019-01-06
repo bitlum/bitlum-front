@@ -26,7 +26,6 @@ import { I18nextProvider, withNamespaces } from 'react-i18next';
 import GA from 'utils/GA';
 import LiveChat from 'utils/LiveChat';
 import log from 'utils/logging';
-import getNet from 'utils/cryptonetChecker';
 import i18nConfig from 'locales';
 
 import stores from 'stores';
@@ -53,7 +52,12 @@ configure({
   enforceActions: 'observed',
 });
 
-LiveChat.boot();
+const userData = stores.accounts.get.data;
+LiveChat.boot({
+  email: userData && userData.email,
+  user_id: userData && userData.auid,
+  created_at: userData && userData.createdAt,
+});
 
 class App extends Component {
   componentWillMount() {
@@ -61,7 +65,7 @@ class App extends Component {
     const { history } = this.props;
     GA({ type: 'pageview', page: window.location.pathname });
     const query = window.location.hash.match(/\?(.*)/);
-    if (!query || query && !new URLSearchParams(query[0]).get('nopopup')) {
+    if (!query || (query && !new URLSearchParams(query[0]).get('nopopup'))) {
       window.chrome.tabs.query({ active: true, highlighted: true }, tab => {
         GA({
           type: 'event',

@@ -52,7 +52,7 @@ const getDate = date => {
 };
 
 const blockchainExplorers = {
-  BTC: 'https://chain.so/tx/BTCTEST/',
+  BTC: process.env.NODE_ENV === 'development' ? 'https://chain.so/tx/BTCTEST/' : 'https://chain.so/tx/BTC/',
 };
 
 export const PaymentItem = ({
@@ -92,14 +92,10 @@ export const PaymentItem = ({
             <P>Amount</P>
             <P>
               <Span>
-                {denominations.additional.amount !== 0 && denominations.main.amount === 0 && '≈'}{' '}
-                {denominations.main.amount.toFixed(denominations.main.precision)}{' '}
-                {denominations.main.sign}
+                {denominations.main.toString({omitDirection: true}).amount}
               </Span>
               <Span>
-                {denominations.additional.amount === 0 && denominations.main.amount !== 0 && '≈'}{' '}
-                {denominations.additional.amount.toFixed(denominations.additional.precision)}{' '}
-                {denominations.additional.sign}
+                {denominations.additional.toString({omitDirection: true}).amount}
               </Span>
             </P>
           </DetailsItem>
@@ -108,14 +104,10 @@ export const PaymentItem = ({
             <P>Fee</P>
             <P>
               <Span>
-                {denominations.additional.fees !== 0 && denominations.main.fees === 0 && '≈'}{' '}
-                {denominations.main.fees.toFixed(denominations.main.precision)}{' '}
-                {denominations.main.sign}
+                {denominations.main.toString({omitDirection: true}).fees}
               </Span>
               <Span>
-                {denominations.additional.fees === 0 && denominations.main.fees !== 0 && '≈'}{' '}
-                {denominations.additional.fees.toFixed(denominations.additional.precision)}{' '}
-                {denominations.additional.sign}
+                {denominations.additional.toString({omitDirection: true}).fees}
               </Span>
             </P>
           </DetailsItem>
@@ -123,14 +115,10 @@ export const PaymentItem = ({
             <P>Total</P>
             <P>
               <Span>
-                {denominations.additional.total !== 0 && denominations.main.total === 0 ? '≈' : direction === 'incoming' ? '+' : ''}{' '}
-                {denominations.main.total.toFixed(denominations.main.precision)}{' '}
-                {denominations.main.sign}
+                {denominations.main.toString({omitDirection: true}).total}
               </Span>
               <Span>
-                {denominations.additional.total === 0 && denominations.main.total !== 0 ? '≈' : direction === 'incoming' ? '+' : ''}{' '}
-                {denominations.additional.total.toFixed(denominations.additional.precision)}{' '}
-                {denominations.additional.sign}
+                {denominations.additional.toString({omitDirection: true}).total}
               </Span>
             </P>
           </DetailsItem>

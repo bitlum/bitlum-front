@@ -43,4 +43,4 @@ Wrapper.propTypes = {
   // payments: PropTypes.observableObject.isRequired,
 };
 
-export default withNamespaces()(inject('payments', 'accounts')(Wrapper));
+export default withNamespaces()(inject('payments', 'accounts', 'settings')(Wrapper));

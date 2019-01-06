@@ -13,8 +13,6 @@ import isSameDay from 'date-fns/is_same_day';
 import isToday from 'date-fns/is_today';
 import isYesteray from 'date-fns/is_yesterday';
 
-import PaymentDetails from 'components/PaymentDetails';
-
 import {
   Root,
   EmptyIcon,
@@ -28,6 +26,7 @@ import {
   Separator,
   BackButton,
   Support,
+  PaymentDetails,
 } from './styles';
 
 // -----------------------------------------------------------------------------

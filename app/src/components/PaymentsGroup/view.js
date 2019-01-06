@@ -37,20 +37,18 @@ export const PaymentsGroup = ({
   className,
   history,
   payments,
-  round,
   status,
   vendorName,
   vendorIcon,
   t,
 }) => {
   const [folded, toggleFold] = useState(true);
-  const groupedAmountMain = round(
+  const groupedAmountMain = payments[0].denominations.main.round(
     payments.reduce((p, c) => p + c.denominations.main.total, 0),
-    payments[0].denominations.main.precision,
   );
-  const groupedAmountAdditional = round(
+
+  const groupedAmountAdditional = payments[0].denominations.additional.round(
     payments.reduce((p, c) => p + c.denominations.additional.total, 0),
-    payments[0].denominations.additional.precision,
   );
   const positiveTotal = groupedAmountMain >= 0 && groupedAmountAdditional > 0;
   return (
@@ -76,22 +74,10 @@ export const PaymentsGroup = ({
         </Vendor>
         <Amount>
           <AmountMain positive={positiveTotal}>
-            {payments[0].denominations.main.sign}
-            {groupedAmountAdditional !== 0 && groupedAmountMain === 0
-              ? ' ≈ '
-              : positiveTotal
-              ? ' +'
-              : ' '}
-            {groupedAmountMain.toFixed(payments[0].denominations.main.precision)}{' '}
+            {payments[0].denominations.main.stringify(groupedAmountMain)}
           </AmountMain>
           <AmountAdditional>
-            {payments[0].denominations.additional.sign}
-            {groupedAmountMain !== 0 && groupedAmountAdditional === 0
-              ? ' ≈ '
-              : positiveTotal
-              ? ' +'
-              : ' '}
-            {groupedAmountAdditional.toFixed(payments[0].denominations.additional.precision)}{' '}
+            {payments[0].denominations.additional.stringify(groupedAmountAdditional)}
           </AmountAdditional>
         </Amount>
         <Status status={status} counter={payments.length} />
@@ -106,26 +92,8 @@ export const PaymentsGroup = ({
               isDescriptionReadable={payment.description}
               description={payment.description || payment.receipt}
               direction={payment.direction}
-              mainDenominationString={`${payment.denominations.main.sign}${
-                payment.denominations.additional.total !== 0 &&
-                payment.denominations.main.total === 0
-                  ? ' ≈ '
-                  : payment.denominations.main.total >= 0 &&
-                    payment.denominations.additional.total > 0
-                  ? ' +'
-                  : ' '
-              }${payment.denominations.main.total.toFixed(payment.denominations.main.precision)}`}
-              additionalDenominationString={`${payment.denominations.additional.sign}${
-                payment.denominations.main.total !== 0 &&
-                payment.denominations.additional.total === 0
-                  ? ' ≈ '
-                  : payment.denominations.main.total >= 0 &&
-                    payment.denominations.additional.total > 0
-                  ? ' +'
-                  : ' '
-              }${payment.denominations.additional.total.toFixed(
-                payment.denominations.additional.precision,
-              )}`}
+              mainDenominationString={payment.denominations.main.toString().total}
+              additionalDenominationString={payment.denominations.additional.toString().total}
             />
           ))}
         </GroupedItems>

@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import log from 'utils/logging';
+import LiveChat from 'utils/LiveChat';
 
 import { createNewStore } from './dataGeneric';
 
@@ -23,6 +24,17 @@ const getApiUrl = strings => {
   return `https://api.bitlum.io${urlsWithoutApi}`;
 };
 
+function round(number, precision, precisionMax) {
+  const rounded =
+    (Math.sign(number) * Math.floor(Math.abs(number) * 10 ** precision)) / 10 ** precision;
+
+  if (Number.isInteger(rounded) && precision < precisionMax) {
+    return round(number, precision + 1, precisionMax);
+  }
+
+  return rounded;
+}
+
 const settings = {
   default: {
     denominations: {
@@ -31,11 +43,35 @@ const settings = {
           price: 4000,
           sign: 'USD',
           precision: 2,
+          precisionMax: 4,
+          round(number) {
+            return round(number, this.precision, this.precisionMax);
+          },
+          stringify(number, { omitDirection = false, omitSign = false } = {}) {
+            return `${omitSign ? '' : this.sign} ${
+              omitDirection ? '' : number === 0 ? '' : number > 0 ? '+' : '-'
+            }${this.round(Math.abs(number))
+              .toFixed(this.precisionMax || 1)
+              .replace(/0+$/, '')
+              .replace(/\.$/, '')}`;
+          },
         },
         additional: {
           price: 10 ** 8,
           sign: 'SAT',
           precision: 0,
+          precisionMax: 0,
+          round(number) {
+            return round(number, this.precision, this.precisionMax);
+          },
+          stringify(number, { omitDirection = false, omitSign = false } = {}) {
+            return `${omitSign ? '' : this.sign} ${
+              omitDirection ? '' : number === 0 ? '' : number > 0 ? '+' : '-'
+            }${this.round(Math.abs(number))
+              .toFixed(this.precisionMax || 1)
+              .replace(/0+$/, '')
+              .replace(/\.$/, '')}`;
+          },
         },
       },
     },
@@ -54,48 +90,46 @@ settings.get = createNewStore({
   })(),
 });
 
-const round = (number, roundGrade) =>
-  (Math.sign(number) * Math.floor(Math.abs(number) * 10 ** roundGrade)) / 10 ** roundGrade;
-
 const accounts = {
   round,
   calcDenominations(balances) {
     const result = { ...balances };
     Object.keys(balances).forEach(balance => {
       result[balance] = { ...balances[balance] };
-      result[balance].denominationsAvailable = {
-        main: {
-          ...settings.get.data.denominations[balance].main,
-          amount: round(
-            balances[balance].available * settings.get.data.denominations[balance].main.price,
-            settings.get.data.denominations[balance].main.precision,
-          ),
-        },
-        additional: {
-          ...settings.get.data.denominations[balance].additional,
-          amount: round(
-            balances[balance].available * settings.get.data.denominations[balance].additional.price,
-            settings.get.data.denominations[balance].additional.precision,
-          ),
-        },
-      };
-      result[balance].denominationsPending = {
-        main: {
-          ...settings.get.data.denominations[balance].main,
-          amount: round(
-            balances[balance].pending * settings.get.data.denominations[balance].main.price,
-            settings.get.data.denominations[balance].main.precision,
-          ),
-        },
-        additional: {
-          ...settings.get.data.denominations[balance].additional,
-          amount: round(
-            balances[balance].pending * settings.get.data.denominations[balance].additional.price,
-            settings.get.data.denominations[balance].additional.precision,
-          ),
-        },
-      };
+      result[balance].denominationsAvailable = {};
+      result[balance].denominationsPending = {};
+      Object.keys(settings.get.data.denominations[balance]).forEach(denomination => {
+        const amountAvailable = settings.get.data.denominations[balance][denomination].round(
+          balances[balance].available *
+            settings.get.data.denominations[balance][denomination].price,
+        );
+
+        const amountPending = settings.get.data.denominations[balance][denomination].round(
+          balances[balance].pending * settings.get.data.denominations[balance][denomination].price,
+        );
+
+        result[balance].denominationsAvailable[denomination] = {
+          ...settings.get.data.denominations[balance][denomination],
+          amountAvailable,
+        };
+        result[balance].denominationsAvailable[denomination].toString = () => {
+          return settings.get.data.denominations[balance][denomination].stringify(amountAvailable, {
+            omitDirection: true,
+          });
+        };
+
+        result[balance].denominationsPending[denomination] = {
+          ...settings.get.data.denominations[balance][denomination],
+          amountPending,
+        };
+        result[balance].denominationsPending[denomination].toString = () => {
+          return settings.get.data.denominations[balance][denomination].stringify(amountPending, {
+            omitDirection: true,
+          });
+        };
+      });
     });
+
     return result;
   },
 };
@@ -130,15 +164,22 @@ accounts.authenticate = createNewStore({
     } else {
       Object.assign(this.data, data);
     }
+    LiveChat.boot({
+      email: data && data.email,
+      user_id: data && data.auid,
+      created_at: data && data.createdAt,
+    });
     accounts.get.updateData(data);
   },
   async run(email, password) {
     this.startFetching({ body: { email, password } });
   },
-  signout() {
+  cleanup() {
+    LiveChat.endSession();
     this.updateData(undefined);
+    this.updateError(undefined);
     Object.keys(payments).forEach(method => {
-      payments[method].cleanup();
+      payments[method].cleanup && payments[method].cleanup();
     });
   },
   get isAuthenticated() {
@@ -220,41 +261,41 @@ const payments = {
       : -1 * Number(payment.amount) - Number(payment.fees.total);
   },
   calcDenominations(payment) {
-    return {
-      denominations: {
-        main: {
-          ...settings.get.data.denominations[payment.asset].main,
-          total: round(
-            payments.getTotal(payment) * settings.get.data.denominations[payment.asset].main.price,
-            settings.get.data.denominations[payment.asset].main.precision,
-          ),
-          amount: round(
-            payment.amount * settings.get.data.denominations[payment.asset].main.price,
-            settings.get.data.denominations[payment.asset].main.precision,
-          ),
-          fees: round(
-            payment.fees.total * settings.get.data.denominations[payment.asset].main.price,
-            settings.get.data.denominations[payment.asset].main.precision,
-          ),
-        },
-        additional: {
-          ...settings.get.data.denominations[payment.asset].additional,
-          total: round(
-            payments.getTotal(payment) *
-              settings.get.data.denominations[payment.asset].additional.price,
-            settings.get.data.denominations[payment.asset].additional.precision,
-          ),
-          amount: round(
-            payment.amount * settings.get.data.denominations[payment.asset].additional.price,
-            settings.get.data.denominations[payment.asset].additional.precision,
-          ),
-          fees: round(
-            payment.fees.total * settings.get.data.denominations[payment.asset].additional.price,
-            settings.get.data.denominations[payment.asset].additional.precision,
-          ),
-        },
-      },
-    };
+    const result = { denominations: {} };
+    Object.keys(settings.get.data.denominations[payment.asset]).forEach(denomination => {
+      const total =
+        payments.getTotal(payment) *
+        settings.get.data.denominations[payment.asset][denomination].price;
+      const amount =
+        payment.amount * settings.get.data.denominations[payment.asset][denomination].price;
+      const fees =
+        payment.fees.total * settings.get.data.denominations[payment.asset][denomination].price;
+      result.denominations[denomination] = {
+        ...settings.get.data.denominations[payment.asset][denomination],
+        total: settings.get.data.denominations[payment.asset][denomination].round(total),
+        amount: settings.get.data.denominations[payment.asset][denomination].round(amount),
+        fees: settings.get.data.denominations[payment.asset][denomination].round(fees),
+      };
+
+      result.denominations[denomination].toString = ({ omitDirection, omitSign } = {}) => {
+        return {
+          total: settings.get.data.denominations[payment.asset][denomination].stringify(total, {
+            omitDirection,
+            omitSign,
+          }),
+          amount: settings.get.data.denominations[payment.asset][denomination].stringify(amount, {
+            omitDirection,
+            omitSign,
+          }),
+          fees: settings.get.data.denominations[payment.asset][denomination].stringify(fees, {
+            omitDirection,
+            omitSign,
+          }),
+        };
+      };
+    });
+
+    return result;
   },
   send: createNewStore({
     name: 'PaymentsSend',

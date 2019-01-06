@@ -27,6 +27,7 @@ const Login = ({history}) => (
       <Span>Do not have an account yet?</Span>
       <Span>Register here!</Span>
     </A>
+    <Span className="openIntercom">Have any problems? Contact us!</Span>
   </Root>
 );
 

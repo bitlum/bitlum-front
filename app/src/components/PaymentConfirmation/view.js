@@ -62,6 +62,13 @@ export class PaymentConfirmation extends Component {
     payments.estimate.cleanup();
   }
 
+  componentDidUpdate() {
+    const { payments } = this.props;
+    if (payments.send.data) {
+      setTimeout(window.close, 3000);
+    }
+  }
+
   render() {
     const { payment, payments, vendors, settings, accounts, className, t } = this.props;
     const {
@@ -184,9 +191,11 @@ export class PaymentConfirmation extends Component {
               e.preventDefault();
               this.setState({
                 selectedDenomination: denominationPairs[selectedDenomination],
-                amountsCurrent: denominations[
+                amountsCurrent: settings.get.data.denominations[payment.asset][
                   denominationPairs[selectedDenomination]
-                ].amount.toFixed(denominations[denominationPairs[selectedDenomination]].precision),
+                ].round(
+                  denominations[denominationPairs[selectedDenomination]].amount,
+                ),
               });
             }}
           >
@@ -217,26 +226,14 @@ export class PaymentConfirmation extends Component {
           <Span>Fee</Span>
           <Span>
             {denominations &&
-              denominations[selectedDenomination].fees === 0 &&
-              denominations[denominationPairs[selectedDenomination]].fees !== 0 &&
-              '≈'}{' '}
-            {denominations &&
-              `${denominations[selectedDenomination].fees.toFixed(
-                denominations[selectedDenomination].precision,
-              )} ${denominations[selectedDenomination].sign}`}
+              denominations[selectedDenomination].toString({ omitDirection: true }).fees}
           </Span>
         </Fees>
         <Submit primary type="submit" disabled={payments.estimate.error}>
           <Span>Pay</Span>
           <Span>
             {denominations &&
-              denominations[selectedDenomination].total === 0 &&
-              denominations[denominationPairs[selectedDenomination]].total !== 0 &&
-              '≈'}{' '}
-            {denominations &&
-              `${(-1 * denominations[selectedDenomination].total).toFixed(
-                denominations[selectedDenomination].precision,
-              )} ${denominations[selectedDenomination].sign}`}
+              denominations[selectedDenomination].toString({ omitDirection: true }).total}
           </Span>
         </Submit>
       </Root>

@@ -129,7 +129,7 @@ export const Root = withLoader(styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-bottom: 5em;
+  margin-bottom: 1em;
 
   & ${PaymentsGroup}, & ${BalanceSummary}, & ${Separator}, & ${HeaderSecondary}, & ${Legend} {
     margin-left: 2rem;

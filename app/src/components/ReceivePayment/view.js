@@ -41,6 +41,8 @@ export class ReceivePayment extends Component {
   // }
   state = {
     amountsCurrent: 0,
+    amountsPrevious: 0,
+    amountChanged: false,
     selectedDenomination: 'main',
     denominationPairs: {
       main: 'additional',
@@ -55,7 +57,7 @@ export class ReceivePayment extends Component {
 
   render() {
     const { payments, settings, history, receive, className, t } = this.props;
-    const { selectedDenomination, denominationPairs, amountsCurrent } = this.state;
+    const { selectedDenomination, denominationPairs, amountsCurrent, amountsPrevious, amountChanged } = this.state;
 
     if (!receive) {
       return (
@@ -97,7 +99,7 @@ export class ReceivePayment extends Component {
               value={amountsCurrent}
               min="0"
               onChange={e => {
-                this.setState({ amountsCurrent: e.target.value });
+                this.setState({ amountsCurrent: e.target.value, amountChanged: true });
               }}
               required
             />
@@ -106,17 +108,17 @@ export class ReceivePayment extends Component {
               onClick={e => {
                 e.preventDefault();
                 this.setState({
+                  amountChanged: false,
                   selectedDenomination: denominationPairs[selectedDenomination],
-                  amountsCurrent: (
+                  amountsPrevious: amountsCurrent,
+                  amountsCurrent: !amountChanged ? amountsPrevious : settings.get.data.denominations[receive.asset][
+                    denominationPairs[selectedDenomination]
+                  ].round(
                     (amountsCurrent /
                       settings.get.data.denominations[receive.asset][selectedDenomination].price) *
-                    settings.get.data.denominations[receive.asset][
-                      denominationPairs[selectedDenomination]
-                    ].price
-                  ).toFixed(
-                    settings.get.data.denominations[receive.asset][
-                      denominationPairs[selectedDenomination]
-                    ].precision,
+                      settings.get.data.denominations[receive.asset][
+                        denominationPairs[selectedDenomination]
+                      ].price,
                   ),
                 });
               }}

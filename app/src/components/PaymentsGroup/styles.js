@@ -37,7 +37,7 @@ export const VendorIcon = styled.div`
   position: relative;
 
   & > ${Img} {
-    background: #e3aff9;
+    background: ${({ color }) => color};
     border-radius: 50%;
     height: 2.7em;
     width: 2.7em;

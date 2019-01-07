@@ -173,6 +173,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
               status={paymentsGroup[1][0].status}
               vendorName={paymentsGroup[1][0].vendorName}
               vendorIcon={paymentsGroup[1][0].vendorIcon}
+              vendorColor={paymentsGroup[1][0].vendorColor}
               payments={paymentsGroup[1]}
             />,
           ];

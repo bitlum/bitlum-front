@@ -10,7 +10,14 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { CopyButton as CopyButtonRaw, Button as ButtonRaw, P, Span as SpanRaw, Img, Tip } from 'components/common';
+import {
+  CopyButton as CopyButtonRaw,
+  Button as ButtonRaw,
+  P,
+  Span as SpanRaw,
+  Img,
+  Tip,
+} from 'components/common';
 
 import { ReactComponent as CopyIcon } from 'assets/icons/copy.svg';
 
@@ -60,7 +67,7 @@ export const Vendor = styled.div`
   width: 100%;
   font-size: 0.8em;
   & > ${Img} {
-    background: #e3aff9;
+    background: ${({ color }) => color};
     border-radius: 50%;
     height: 2.7em;
     width: 2.7em;

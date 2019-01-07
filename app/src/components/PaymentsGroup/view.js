@@ -40,6 +40,7 @@ export const PaymentsGroup = ({
   status,
   vendorName,
   vendorIcon,
+  vendorColor,
   t,
 }) => {
   const [folded, toggleFold] = useState(true);
@@ -64,11 +65,11 @@ export const PaymentsGroup = ({
         }}
       >
         <Vendor>
-          <VendorIcon counter={payments.length}>
-            <Img src={vendorIcon || 'https://static.thenounproject.com/png/404950-200.png'} />
+          <VendorIcon counter={payments.length} color={vendorColor}>
+            <Img src={vendorIcon} />
           </VendorIcon>
           <P>
-            <Span>{vendorName || 'Unknown'}</Span>
+            <Span>{vendorName}</Span>
             <Span>{payments[0].description || payments[0].receipt}</Span>
           </P>
         </Vendor>

@@ -68,6 +68,7 @@ export const PaymentItem = ({
   status,
   vuid,
   vendorIcon,
+  vendorColor,
   vendorName,
   updatedAt,
   t,
@@ -75,12 +76,12 @@ export const PaymentItem = ({
   return (
     <Root className={className}>
       <MainInfo>
-        <Vendor>
-          <Img src={vendorIcon || 'https://static.thenounproject.com/png/404950-200.png'} />
+        <Vendor color={vendorColor}>
+          <Img src={vendorIcon}/>
           <P>
             <Span>
               {`${direction === 'incoming' ? 'Received from' : 'Sent to'}`}{' '}
-              {vendorName || 'Unknown'}
+              {vendorName}
             </Span>
             <Span>{`${getDate(updatedAt)}`}</Span>
           </P>

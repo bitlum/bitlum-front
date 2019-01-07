@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import styled from 'styled-components';
-import { withLoader, Form, Span, P, Input } from 'components/common';
+import { withLoader, Form, Span, P, Input, Message as MessageRaw } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -27,13 +27,22 @@ export const DestinationInfo = styled.div`
   }
 `;
 
+export const Message = styled(MessageRaw)`
+  flex-direction: column;
+  & ${Span} {
+    font: var(--fonts__text_bold);
+    margin-top: 0.5em;
+    cursor: pointer;
+  }
+`;
+
 export const Root = withLoader(styled(Form)`
   font-size: 0.8em;
   & > ${P} {
     margin-bottom: 1em;
     margin-left: 1.2em;
   }
-  & input::placeholder  {
+  & input::placeholder {
     font-size: 0.8em;
   }
   & > ${Span} {

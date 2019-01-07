@@ -10,6 +10,21 @@
 import log from 'utils/logging';
 import LiveChat from 'utils/LiveChat';
 
+import vendorShark from 'assets/icons/vendors/shark.svg';
+import vendorBear from 'assets/icons/vendors/bear.svg';
+import vendorBird from 'assets/icons/vendors/bird.svg';
+import vendorDog from 'assets/icons/vendors/dog.svg';
+import vendorCat from 'assets/icons/vendors/cat.svg';
+import vendorLion from 'assets/icons/vendors/lion.svg';
+import vendorFrog from 'assets/icons/vendors/frog.svg';
+import vendorChicken from 'assets/icons/vendors/chicken.svg';
+import vendorElephant from 'assets/icons/vendors/elephant.svg';
+import vendorFish from 'assets/icons/vendors/fish.svg';
+import vendorGorilla from 'assets/icons/vendors/gorilla.svg';
+import vendorHorse from 'assets/icons/vendors/horse.svg';
+import vendorPenguin from 'assets/icons/vendors/penguin.svg';
+import vendorSquirrel from 'assets/icons/vendors/squirrel.svg';
+
 import { createNewStore } from './dataGeneric';
 
 // -----------------------------------------------------------------------------
@@ -219,7 +234,7 @@ accounts.get = createNewStore({
   name: 'AccountsAuthenticate',
   data: (() => {
     try {
-      return JSON.parse(localStorage.getItem('accountData'));
+      return accounts.parseData(JSON.parse(localStorage.getItem('accountData')));
     } catch (error) {
       log.error(`Unable to read auth data from local storage (${error.message})`);
       return undefined;
@@ -358,8 +373,19 @@ payments.get = createNewStore({
   name: 'PaymentsGet',
   parseData(data) {
     return data.map(payment => {
+      let vendor = {};
+      if (!payment.vendorName) {
+        const randomVandor = vendors.getRandom(payment.vuid)[0];
+        vendor = {
+          vendorName: randomVandor.name,
+          vendorIcon: randomVandor.iconUrl,
+          vendorColor: randomVandor.color,
+        };
+      }
+
       return {
         ...payment,
+        ...vendor,
         ...payments.calcDenominations(payment),
       };
     });
@@ -382,8 +408,19 @@ payments.getById = createNewStore({
   name: 'PaymentsGetById',
   parseData(data) {
     return data.map(payment => {
+      let vendor = {};
+      if (!payment.vendorName) {
+        const randomVandor = vendors.getRandom(payment.vuid)[0];
+        vendor = {
+          vendorName: randomVandor.name,
+          vendorIcon: randomVandor.iconUrl,
+          vendorColor: randomVandor.color,
+        };
+      }
+
       return {
         ...payment,
+        ...vendor,
         ...payments.calcDenominations(payment),
       };
     });
@@ -434,18 +471,93 @@ const wallets = {
 };
 
 const vendors = {
-  get: createNewStore({
-    name: 'VendorsGet',
-    async run(vuid) {
-      this.startFetching({
-        url: `${this.fetchOptions.url}/${vuid}`,
-      });
-    },
-    fetchOptions: {
-      url: getApiUrl`/api/vendors`,
-    },
-  }),
+  randomVendors: (() =>
+    [
+      { name: 'Shark', iconUrl: vendorShark },
+      { name: 'Bear', iconUrl: vendorBear },
+      { name: 'Bird', iconUrl: vendorBird },
+      { name: 'Dog', iconUrl: vendorDog },
+      { name: 'Cat', iconUrl: vendorCat },
+      { name: 'Lion', iconUrl: vendorLion },
+      { name: 'Frog', iconUrl: vendorFrog },
+      { name: 'Chicken', iconUrl: vendorChicken },
+      { name: 'Elephant', iconUrl: vendorElephant },
+      { name: 'Fish', iconUrl: vendorFish },
+      { name: 'Gorilla', iconUrl: vendorGorilla },
+      { name: 'Horse', iconUrl: vendorHorse },
+      { name: 'Penguin', iconUrl: vendorPenguin },
+      { name: 'Squirrel', iconUrl: vendorSquirrel },
+    ]
+      .map(character =>
+        [
+          { color: '#F44336', name: 'Red' },
+          { color: '#E91E63', name: 'Pink' },
+          { color: '#9C27B0', name: 'Purple' },
+          { color: '#673AB7', name: 'Violet' },
+          { color: '#3F51B5', name: 'Indigo' },
+          { color: '#2196F3', name: 'Blue' },
+          { color: '#03A9F4', name: 'Sky' },
+          { color: '#00BCD4', name: 'Cyan' },
+          { color: '#009688', name: 'Teal' },
+          { color: '#4CAF50', name: 'Green' },
+          { color: '#8BC34A', name: 'Grass' },
+          { color: '#CDDC39', name: 'Lime' },
+          { color: '#FFEB3B', name: 'Yellow' },
+          { color: '#FFC107', name: 'Amber' },
+          { color: '#FF9800', name: 'Orange' },
+          { color: '#795548', name: 'Brown' },
+          { color: '#9E9E9E', name: 'Grey' },
+          { color: '#607D8B', name: 'Livid' },
+        ].map(color => ({
+          ...character,
+          ...color,
+          name: `${color.name} ${character.name}`,
+        })),
+      )
+      .flat())(),
+  generateUnique(usedNames) {
+    const unusedVendors = this.randomVendors.filter(vendor => !usedNames.includes(vendor.name));
+    return unusedVendors[Math.floor(Math.random() * unusedVendors.length)];
+  },
+  getRandom(vuid) {
+    let savedRandom;
+    try {
+      savedRandom = JSON.parse(localStorage.getItem('randomizedVendors')) || {};
+    } catch (e) {
+      savedRandom = {};
+      log.error(e);
+    }
+    const usedNames = Object.keys(savedRandom).map(vuidSaved => savedRandom[vuidSaved].name);
+    if (savedRandom[vuid]) {
+      return [savedRandom[vuid]];
+    }
+    const generated = this.generateUnique(usedNames);
+    localStorage.setItem(
+      'randomizedVendors',
+      JSON.stringify({ [vuid]: generated, ...savedRandom }),
+    );
+    return [generated];
+  },
 };
+
+vendors.get = createNewStore({
+  name: 'VendorsGet',
+  async run(vuid) {
+    this.startFetching({
+      url: `${this.fetchOptions.url}/${vuid}`,
+      vuid,
+    });
+  },
+  parseData(data, options) {
+    if (data.length === 0) {
+      return vendors.getRandom(options.vuid);
+    }
+    return data;
+  },
+  fetchOptions: {
+    url: getApiUrl`/api/vendors`,
+  },
+});
 
 export { payments, accounts, wallets, settings, vendors };
 

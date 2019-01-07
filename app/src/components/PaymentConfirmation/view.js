@@ -100,7 +100,7 @@ export class PaymentConfirmation extends Component {
           e.preventDefault();
           payments.send.run(
             payment.wuid,
-            amountsOriginal !== 0
+            amountsOriginal != 0
               ? amountsOriginal
               : amountsCurrent /
                   settings.get.data.denominations[payment.asset][selectedDenomination].price,
@@ -140,16 +140,9 @@ export class PaymentConfirmation extends Component {
         {vendors.get.error ? (
           <Vendor>Unable to load vendor data</Vendor>
         ) : (
-          <Vendor>
-            <Img
-              src={
-                (vendors.get.data && vendors.get.data[0] && vendors.get.data[0].iconUrl) ||
-                'https://static.thenounproject.com/png/404950-200.png'
-              }
-            />
-            <P>
-              {(vendors.get.data && vendors.get.data[0] && vendors.get.data[0].name) || 'Unknown'}
-            </P>
+          <Vendor color={vendors.get.data && vendors.get.data[0] && vendors.get.data[0].color}>
+            <Img src={vendors.get.data && vendors.get.data[0] && vendors.get.data[0].iconUrl} />
+            <P>{vendors.get.data && vendors.get.data[0] && vendors.get.data[0].name}</P>
             <P>{payment.wuid}</P>
           </Vendor>
         )}
@@ -193,9 +186,7 @@ export class PaymentConfirmation extends Component {
                 selectedDenomination: denominationPairs[selectedDenomination],
                 amountsCurrent: settings.get.data.denominations[payment.asset][
                   denominationPairs[selectedDenomination]
-                ].round(
-                  denominations[denominationPairs[selectedDenomination]].amount,
-                ),
+                ].round(denominations[denominationPairs[selectedDenomination]].amount),
               });
             }}
           >

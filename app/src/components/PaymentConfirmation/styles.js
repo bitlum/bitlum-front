@@ -133,7 +133,7 @@ export const Vendor = styled.div`
   width: 100%;
   background: var(--colors__bg);
   & > ${Img} {
-    background: #e3aff9;
+    background: ${({ color }) => color};
     border-radius: 50%;
     height: 2.7em;
     width: 2.7em;

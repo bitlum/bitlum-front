@@ -28,7 +28,10 @@ export class CheckDestination extends Component {
   render() {
     const { wallets, wallet, className, history, t } = this.props;
 
-    if (wallets.getDetails.data) {
+    if (
+      wallets.getDetails.data &&
+      !(wallets.getDetails.data.latestPayment && wallets.getDetails.data.type === 'lightning')
+    ) {
       GA({
         type: 'event',
         category: 'vuidDomainPair',
@@ -56,6 +59,21 @@ export class CheckDestination extends Component {
         {wallets.getDetails.error && (
           <Message type="error"> {wallets.getDetails.error.message} </Message>
         )}
+        {wallets.getDetails.data &&
+          wallets.getDetails.data.latestPayment &&
+          wallets.getDetails.data.type === 'lightning' && (
+            <Message type="info">
+              {' '}
+              This invoice is already paid.{' '}
+              <Span
+                onClick={() => {
+                  history.push(`/payments/${wallets.getDetails.data.latestPayment.puid}`);
+                }}
+              >
+                Go to payment details
+              </Span>{' '}
+            </Message>
+          )}
       </Root>
     );
   }

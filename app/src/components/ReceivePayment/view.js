@@ -57,7 +57,13 @@ export class ReceivePayment extends Component {
 
   render() {
     const { payments, settings, history, receive, className, t } = this.props;
-    const { selectedDenomination, denominationPairs, amountsCurrent, amountsPrevious, amountChanged } = this.state;
+    const {
+      selectedDenomination,
+      denominationPairs,
+      amountsCurrent,
+      amountsPrevious,
+      amountChanged,
+    } = this.state;
 
     if (!receive) {
       return (
@@ -111,15 +117,18 @@ export class ReceivePayment extends Component {
                   amountChanged: false,
                   selectedDenomination: denominationPairs[selectedDenomination],
                   amountsPrevious: amountsCurrent,
-                  amountsCurrent: !amountChanged ? amountsPrevious : settings.get.data.denominations[receive.asset][
-                    denominationPairs[selectedDenomination]
-                  ].round(
-                    (amountsCurrent /
-                      settings.get.data.denominations[receive.asset][selectedDenomination].price) *
-                      settings.get.data.denominations[receive.asset][
+                  amountsCurrent: !amountChanged
+                    ? amountsPrevious
+                    : settings.get.data.denominations[receive.asset][
                         denominationPairs[selectedDenomination]
-                      ].price,
-                  ),
+                      ].round(
+                        (amountsCurrent /
+                          settings.get.data.denominations[receive.asset][selectedDenomination]
+                            .price) *
+                          settings.get.data.denominations[receive.asset][
+                            denominationPairs[selectedDenomination]
+                          ].price,
+                      ),
                 });
               }}
             >
@@ -142,7 +151,13 @@ export class ReceivePayment extends Component {
         <Footer>
           {receive.type === 'lightning' && !payments.receive.data ? (
             <Button primary type="submit">
-              Generate invoice
+              Generate invoice to receive{'\n '}
+              {amountsCurrent == 0
+                ? 'any amount'
+                : `${settings.get.data.denominations[receive.asset][selectedDenomination].stringify(
+                    amountsCurrent,
+                    { omitDirection: true },
+                  )}`}
             </Button>
           ) : (
             <P

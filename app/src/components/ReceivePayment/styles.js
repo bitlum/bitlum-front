@@ -81,7 +81,7 @@ export const Footer = styled.div`
   margin-top: auto;
   width: 100%;
   height: 4em;
-
+  white-space: pre;
   & ${P} {
     display: flex;
     flex-direction: column;

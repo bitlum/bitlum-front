@@ -287,6 +287,7 @@ const payments = {
         payment.fees.total * settings.get.data.denominations[payment.asset][denomination].price;
       result.denominations[denomination] = {
         ...settings.get.data.denominations[payment.asset][denomination],
+        totalRaw: total,
         total: settings.get.data.denominations[payment.asset][denomination].round(total),
         amount: settings.get.data.denominations[payment.asset][denomination].round(amount),
         fees: settings.get.data.denominations[payment.asset][denomination].round(fees),

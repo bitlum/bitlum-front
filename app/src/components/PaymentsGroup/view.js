@@ -44,12 +44,11 @@ export const PaymentsGroup = ({
   t,
 }) => {
   const [folded, toggleFold] = useState(true);
-  const groupedAmountMain = payments[0].denominations.main.round(
-    payments.reduce((p, c) => p + c.denominations.main.total, 0),
-  );
+  const groupedAmountMain = payments.reduce((p, c) => p + c.denominations.main.totalRaw, 0);
 
-  const groupedAmountAdditional = payments[0].denominations.additional.round(
-    payments.reduce((p, c) => p + c.denominations.additional.total, 0),
+  const groupedAmountAdditional = payments.reduce(
+    (p, c) => p + c.denominations.additional.totalRaw,
+    0,
   );
   const positiveTotal = groupedAmountMain >= 0 && groupedAmountAdditional > 0;
   return (

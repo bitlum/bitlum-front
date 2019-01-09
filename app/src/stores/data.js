@@ -263,7 +263,7 @@ accounts.get = createNewStore({
       },
     });
     if (result.error && result.error.code.match('^401.*$')) {
-      accounts.authenticate.signout();
+      accounts.authenticate.cleanup();
     }
   },
 });
@@ -323,7 +323,7 @@ const payments = {
         body: { to, amount, asset },
       });
       if (result.error && result.error.code.match('^401.*$')) {
-        accounts.authenticate.signout();
+        accounts.authenticate.cleanup();
       }
     },
     fetchOptions: {
@@ -342,7 +342,7 @@ const payments = {
         body: { to, amount, asset },
       });
       if (result.error && result.error.code.match('^401.*$')) {
-        accounts.authenticate.signout();
+        accounts.authenticate.cleanup();
       }
     },
     fetchOptions: {
@@ -360,7 +360,7 @@ const payments = {
         body: { type, amount, asset },
       });
       if (result.error && result.error.code.match('^401.*$')) {
-        accounts.authenticate.signout();
+        accounts.authenticate.cleanup();
       }
     },
     fetchOptions: {
@@ -398,7 +398,7 @@ payments.get = createNewStore({
       },
     });
     if (result.error && result.error.code.match('^401.*$')) {
-      accounts.authenticate.signout();
+      accounts.authenticate.cleanup();
     }
   },
   fetchOptions: {
@@ -445,7 +445,7 @@ payments.getById = createNewStore({
     });
 
     if (result.error && result.error.code.match('^401.*$')) {
-      accounts.authenticate.signout();
+      accounts.authenticate.cleanup();
     }
   },
   fetchOptions: {

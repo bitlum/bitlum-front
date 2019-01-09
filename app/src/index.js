@@ -116,7 +116,7 @@ class App extends Component {
                 <Route
                   path="/signout"
                   render={() => {
-                    accounts.authenticate.signout();
+                    accounts.authenticate.cleanup();
                     return null;
                   }}
                 />

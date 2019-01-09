@@ -9,11 +9,16 @@
 
 import styled from 'styled-components';
 
-import formatDate from 'date-fns/format';
-import isToday from 'date-fns/is_today';
-import isYesteray from 'date-fns/is_yesterday';
+import { NavLink } from 'react-router-dom';
 
-import { Img, P, Header as HeaderRaw, withLoader, Support as SupportRaw } from 'components/common';
+import {
+  Img,
+  P,
+  Span,
+  Header as HeaderRaw,
+  withLoader,
+  Support as SupportRaw,
+} from 'components/common';
 
 import BalanceSummaryRaw from 'components/BalanceSummary';
 import PaymentsGroupRaw from 'components/PaymentsGroup';
@@ -36,6 +41,41 @@ export const Logo = styled(Img).attrs({
   content: url(${LogoFull});
   height: 2em;
   width: 9em;
+`;
+
+export const PayButton = styled(NavLink)`
+  display: flex;
+  align-items: center;
+  border-radius: 0.7em;
+  overflow: hidden;
+  width: calc(100vw - 4rem);
+  background: var(--colors__bg_bright);
+  padding: 1.7em 0;
+  font-size: 0.8em;
+  margin: 3em 2rem;
+  & ${Img}, & ${Span} {
+    transition: all 0.2s ease-in;
+  }
+  & ${Img} {
+    opacity: 0.4;
+    width: 3em;
+    height: 3em;
+    margin-left: 1.2em;
+  }
+  & ${Span} {
+    opacity: 0.5;
+    font-size: 1.4em;
+    font-weight: 600;
+    margin-left: 1em;
+  }
+
+  &:hover ${Img} {
+    opacity: 0.6;
+    color: blue;
+  }
+  &:hover ${Span} {
+    opacity: 1;
+  }
 `;
 
 export const Support = styled(SupportRaw)`
@@ -89,8 +129,8 @@ export const HeaderSecondary = styled(HeaderRaw)`
 `;
 
 export const BalanceSummary = styled(BalanceSummaryRaw)`
-  margin: 10rem 0;
-  height: 21.5rem;
+  margin-top: 2em;
+  height: 20rem;
 `;
 
 export const Legend = styled.div`

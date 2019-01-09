@@ -50,6 +50,8 @@ const GenericApiStore = {
 
   parseData: data => data,
 
+  sideEffect: () => {},
+
   loading: undefined,
 
   startedAt: undefined,
@@ -123,6 +125,7 @@ const GenericApiStore = {
     let dataParsed = response.data;
     if (dataParsed) {
       dataParsed = await this.parseData(response.data, options);
+      this.sideEffect(dataParsed);
     }
     this.updateData(dataParsed);
     this.updateError(response.error);

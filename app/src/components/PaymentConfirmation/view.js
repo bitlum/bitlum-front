@@ -155,7 +155,7 @@ export class PaymentConfirmation extends Component {
             type="number"
             step={
               1 /
-              10 ** settings.get.data.denominations[payment.asset][selectedDenomination].precision
+              10 ** settings.get.data.denominations[payment.asset][selectedDenomination].precisionMax
             }
             min="0"
             value={

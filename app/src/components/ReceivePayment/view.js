@@ -100,7 +100,7 @@ export class ReceivePayment extends Component {
               type="number"
               step={
                 1 /
-                10 ** settings.get.data.denominations[receive.asset][selectedDenomination].precision
+                10 ** settings.get.data.denominations[receive.asset][selectedDenomination].precisionMax
               }
               value={amountsCurrent}
               min="0"

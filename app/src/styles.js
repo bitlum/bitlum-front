@@ -11,6 +11,13 @@ import styled, { createGlobalStyle } from 'styled-components';
 
 import { Header as HeaderCommon, Footer, Main as MainCommon, media, Img } from 'components/common';
 
+import FontLight from 'assets/fonts/Montserrat-Light.ttf';
+import FontItalic from 'assets/fonts/Montserrat-Italic.ttf';
+import FontRegular from 'assets/fonts/Montserrat-Regular.ttf';
+import FontMedium from 'assets/fonts/Montserrat-Medium.ttf';
+import FontSemibold from 'assets/fonts/Montserrat-Semibold.ttf';
+import FontBold from 'assets/fonts/Montserrat-Bold.ttf';
+
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
@@ -46,6 +53,39 @@ export const Global = createGlobalStyle`
 
 @import url('https://fonts.googleapis.com/css?family=Montserrat:200,400,700');
 
+@font-face {
+  font-family: 'AppFont';
+  font-weight: 300;
+  src: url(${FontLight});
+}
+@font-face {
+  font-family: 'AppFont';
+  font-weight: 400;
+  font-style: italic;
+  src: url(${FontItalic});
+}
+@font-face {
+  font-family: 'AppFont';
+  font-weight: 400;
+  src: url(${FontRegular});
+}
+@font-face {
+  font-family: 'AppFont';
+  font-weight: 500;
+  src: url(${FontMedium});
+}
+@font-face {
+  font-family: 'AppFont';
+  font-weight: 600;
+  src: url(${FontSemibold});
+}
+@font-face {
+  font-family: 'AppFont';
+  font-weight: 700;
+  src: url(${FontBold});
+}
+
+
 :root{
   --colors__bg: #F7F7F7;
   --colors__text: #242323;
@@ -75,13 +115,13 @@ export const Global = createGlobalStyle`
   --colors__bg_completed: #40D3CB;
   --colors__bg_failed: #F40566;
 
-  --fonts__text: 400 1.6rem 'Montserrat', sans-serif;
-  --fonts__text_thin: 200 1.6rem 'Montserrat', sans-serif;
-  --fonts__text_bold: 600 1.6rem 'Montserrat', sans-serif;
+  --fonts__text: 400 1.6rem 'AppFont', sans-serif;
+  --fonts__text_thin: 300 1.6rem 'AppFont', sans-serif;
+  --fonts__text_bold: 600 1.6rem 'AppFont', sans-serif;
 
-  --fonts__header: 400 2.4rem 'Montserrat', sans-serif;
-  --fonts__header_thin: 200 2.4rem 'Montserrat', sans-serif;
-  --fonts__header_bold: 600 2.4rem 'Montserrat', sans-serif;
+  --fonts__header: 400 2.4rem 'AppFont', sans-serif;
+  --fonts__header_thin: 300 2.4rem 'AppFont', sans-serif;
+  --fonts__header_bold: 600 2.4rem 'AppFont', sans-serif;
 
   --sizing__header_heigh: 9rem;
   --sizing__footer_heigh: 2rem;

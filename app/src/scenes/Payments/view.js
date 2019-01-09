@@ -32,8 +32,12 @@ import {
   Logo,
   Legend,
   LegendItem,
+  PayButton,
+  Img,
+  Span,
 } from './styles';
 
+import newPaymentIcon from 'assets/icons/plus-circle.svg';
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
@@ -52,6 +56,12 @@ const getSeparatorText = date => {
 
 // eslint-disable-next-line
 const Payments = ({ settings, payments, accounts, t }) => {
+  const totalBalance =
+    accounts.get.data &&
+    Object.keys(accounts.get.data.balances)
+      .map(asset => accounts.get.data.balances[asset].available)
+      .reduce((p, c) => p + Number(c), 0);
+
   if (payments.get.error) {
     return (
       <Root empty>
@@ -67,7 +77,11 @@ const Payments = ({ settings, payments, accounts, t }) => {
           <Support className="openIntercom" />
         </Header>
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
-        <HeaderSecondary>Payments</HeaderSecondary>
+        {/* <HeaderSecondary>Payments</HeaderSecondary> */}
+        <PayButton to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
+          <Img src={newPaymentIcon} />
+          <Span>{totalBalance === 0 ? 'Receive funds' : 'Make new payment'}</Span>
+        </PayButton>
         <EmptyWrapper>
           <EmptyIcon />
           <P>Unable to load payments :(</P>
@@ -92,7 +106,11 @@ const Payments = ({ settings, payments, accounts, t }) => {
           <Support className="openIntercom" />
         </Header>
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
-        <HeaderSecondary>Payments</HeaderSecondary>
+        {/* <HeaderSecondary>Payments</HeaderSecondary> */}
+        <PayButton to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
+          <Img src={newPaymentIcon} />
+          <Span>{totalBalance === 0 ? 'Receive funds' : 'Make new payment'}</Span>
+        </PayButton>
         <EmptyWrapper>
           <EmptyIcon />
           <P>Loading payments</P>
@@ -116,7 +134,11 @@ const Payments = ({ settings, payments, accounts, t }) => {
           <Support className="openIntercom" />
         </Header>
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
-        <HeaderSecondary>Payments</HeaderSecondary>
+        {/* <HeaderSecondary>Payments</HeaderSecondary> */}
+        <PayButton to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
+          <Img src={newPaymentIcon} />
+          <Span>{totalBalance === 0 ? 'Receive funds' : 'Make new payment'}</Span>
+        </PayButton>
         <EmptyWrapper>
           <EmptyIcon />
           <P>No payments here yet</P>
@@ -158,7 +180,11 @@ const Payments = ({ settings, payments, accounts, t }) => {
         <Support className="openIntercom" />
       </Header>
       <BalanceSummary key="BalanceSummary" accounts={accounts} />
-      <HeaderSecondary>Payments</HeaderSecondary>
+      {/* <HeaderSecondary>Payments</HeaderSecondary> */}
+      <PayButton to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
+        <Img src={newPaymentIcon} />
+        <Span>{totalBalance === 0 ? 'Receive funds' : 'Make new payment'}</Span>
+      </PayButton>
       <Legend>
         <LegendItem type="pending">Pending</LegendItem>
         <LegendItem type="completed">Completed</LegendItem>

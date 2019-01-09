@@ -16,18 +16,16 @@ import backIcon from 'assets/icons/arrow-left.svg';
 // Code
 // -----------------------------------------------------------------------------
 
-export const BackButton = styled(
-  ({ children,  ...rest }) => (
-    <div
-      onClick={() => {
-        window.history.back();
-      }}
-      {...rest}
-    >
-      {children}
-    </div>
-  ),
-)`
+export const BackButton = styled(({ children, ...rest }) => (
+  <div
+    onClick={() => {
+      window.history.back();
+    }}
+    {...rest}
+  >
+    {children}
+  </div>
+))`
   font-size: 1em;
   cursor: pointer;
   background: no-repeat url(${backIcon});
@@ -36,6 +34,7 @@ export const BackButton = styled(
   height: 1em;
   margin-left: 0.9em;
   margin-right: 1.4em;
+  visibility: ${({ hidden }) => hidden && 'hidden'};
 `;
 
 export default BackButton;

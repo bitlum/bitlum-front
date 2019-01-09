@@ -16,9 +16,8 @@ import { Button as ButtonCommon } from './Button';
 // Code
 // -----------------------------------------------------------------------------
 
-const CopyText = styled.p``;
 export const CopyButton = styled(
-  ({ copyData, copyText = 'Copy', copiedText = 'Copied!', children,  ...rest }) => (
+  ({ copyData, copyText = 'Copy', copiedText = 'Copied!', children, ...rest }) => (
     <div
       onClick={e => {
         const copyContainer = document.createElement('input');
@@ -28,42 +27,38 @@ export const CopyButton = styled(
         document.execCommand('Copy');
         copyContainer.remove();
         const button = e.currentTarget;
-        button.classList.add('copied');
+        button.setAttribute('data-afterText', copiedText);
         setTimeout(() => {
-          button.classList.remove('copied');
+          button.setAttribute('data-afterText', copyText);
         }, 800);
       }}
+      data-afterText={copyText}
       {...rest}
     >
       {children}
-      <CopyText>{copyText}</CopyText>
-      <CopyText>{copiedText}</CopyText>
     </div>
   ),
 )`
+  position: relative;
   font-size: 1em;
   border-radius: 0.2em;
   font-weight: 600;
   text-align: center;
   display: flex;
-  align-items:center;
-  cursor:pointer;
+  align-items: center;
+  cursor: pointer;
   grid-template-columns: 1fr;
-  & > ${CopyText} {
+  &:after {
+    content: attr(data-afterText);
+    position: absolute;
+    font-size: 0.8em;
+    bottom: -1.5em;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%);
     word-break: initial;
     width: max-content;
     transition: opacity 0.3s ease-in-out;
-  }
-
-  & > ${CopyText}:last-child {
-    opacity: 0;
-  }
-
-  &.copied > ${CopyText}:last-child {
-    opacity: 1;
-  }
-  &.copied > ${CopyText}:first-child {
-    opacity: 0;
   }
 `;
 

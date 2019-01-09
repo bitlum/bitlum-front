@@ -26,6 +26,7 @@ class Wrapper extends React.Component {
         params: { puid },
       },
     } = this.props;
+
     payments.getById.run(puid);
   }
 

@@ -12,19 +12,15 @@ import PropTypes from 'prop-types';
 
 import log from 'utils/logging';
 
-import { Root, Main, Additional, Receive, Send } from './styles';
+import { Root, Main, Additional, Receive, Send, Img, Span } from './styles';
+
+import receiveIcon from 'assets/icons/plus-circle.svg';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
-export const BalanceSummary = ({
-  accounts,
-  className,
-  appearance = 'normal',
-  denomination,
-  t,
-}) => {
+export const BalanceSummary = ({ accounts, className, appearance = 'normal', denomination, t }) => {
   if (accounts.get.error || !accounts.get.data) {
     return (
       <Root className={className} appearance={appearance}>
@@ -50,8 +46,10 @@ export const BalanceSummary = ({
   }
   return (
     <Root className={className} loading={accounts.get.loading} appearance={appearance}>
-      <Receive to="/payments/receive/check">Receive</Receive>
-      BALANCE
+      <Receive to="/payments/receive/check">
+        <Span>Receive</Span>
+        <Img src={receiveIcon} />
+      </Receive>
       {Object.keys(accounts.get.data.balances).map(asset => [
         <Main key={`${asset}Main`}>
           {accounts.get.data.balances[asset].denominationsAvailable.main.toString()}
@@ -60,9 +58,9 @@ export const BalanceSummary = ({
           {accounts.get.data.balances[asset].denominationsAvailable.additional.toString()}
         </Additional>,
       ])}
-      <Send to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
+      {/* <Send to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
         {totalBalance === 0 ? 'Receive' : 'Pay'}
-      </Send>
+      </Send> */}
     </Root>
   );
 };

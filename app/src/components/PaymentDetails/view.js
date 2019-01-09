@@ -52,12 +52,14 @@ const getDate = date => {
 };
 
 const blockchainExplorers = {
-  BTC: process.env.NODE_ENV === 'development' ? 'https://chain.so/tx/BTCTEST/' : 'https://chain.so/tx/BTC/',
+  BTC:
+    process.env.NODE_ENV === 'development'
+      ? 'https://chain.so/tx/BTCTEST/'
+      : 'https://chain.so/tx/BTC/',
 };
 
-export const PaymentItem = ({
+export const PaymentDetails = ({
   className,
-  puid,
   type,
   txid,
   asset,
@@ -77,11 +79,10 @@ export const PaymentItem = ({
     <Root className={className}>
       <MainInfo>
         <Vendor color={vendorColor}>
-          <Img src={vendorIcon}/>
+          <Img src={vendorIcon} />
           <P>
             <Span>
-              {`${direction === 'incoming' ? 'Received from' : 'Sent to'}`}{' '}
-              {vendorName}
+              {`${direction === 'incoming' ? 'Received from' : 'Sent to'}`} {vendorName}
             </Span>
             <Span>{`${getDate(updatedAt)}`}</Span>
           </P>
@@ -92,35 +93,23 @@ export const PaymentItem = ({
           <DetailsItem align="right">
             <P>Amount</P>
             <P>
-              <Span>
-                {denominations.main.toString({omitDirection: true}).amount}
-              </Span>
-              <Span>
-                {denominations.additional.toString({omitDirection: true}).amount}
-              </Span>
+              <Span>{denominations.main.toString({ omitDirection: true }).amount}</Span>
+              <Span>{denominations.additional.toString({ omitDirection: true }).amount}</Span>
             </P>
           </DetailsItem>
           <DetailsItem align="right">
             {/* <Tip>Temporary Fee tips</Tip> */}
             <P>Fee</P>
             <P>
-              <Span>
-                {denominations.main.toString({omitDirection: true}).fees}
-              </Span>
-              <Span>
-                {denominations.additional.toString({omitDirection: true}).fees}
-              </Span>
+              <Span>{denominations.main.toString({ omitDirection: true }).fees}</Span>
+              <Span>{denominations.additional.toString({ omitDirection: true }).fees}</Span>
             </P>
           </DetailsItem>
           <DetailsItem accent align="right" direction={direction}>
             <P>Total</P>
             <P>
-              <Span>
-                {denominations.main.toString({omitDirection: true}).total}
-              </Span>
-              <Span>
-                {denominations.additional.toString({omitDirection: true}).total}
-              </Span>
+              <Span>{denominations.main.toString({ omitDirection: true }).total}</Span>
+              <Span>{denominations.additional.toString({ omitDirection: true }).total}</Span>
             </P>
           </DetailsItem>
           <DetailsItem>
@@ -132,49 +121,51 @@ export const PaymentItem = ({
           </DetailsItem>
         </Details>
       </MainInfo>
-      <AdditionalInfo>
-        <Details>
-          {type === 'blockchain' && (
+      {vuid !== 'bitlum' ? (
+        <AdditionalInfo>
+          <Details>
+            {type === 'blockchain' && (
+              <DetailsItem>
+                {/* <Tip>Temporary Invoice tips</Tip> */}
+                <P>From</P>
+                <P>
+                  <Span unreadable>{vuid}</Span>
+                </P>
+                <CopyButton data={vuid} />
+              </DetailsItem>
+            )}
             <DetailsItem>
               {/* <Tip>Temporary Invoice tips</Tip> */}
-              <P>From</P>
+              <P>{type === 'blockchain' ? 'To' : 'Invoice'}</P>
               <P>
-                <Span unreadable>{vuid}</Span>
+                <Span unreadable>{receipt}</Span>
               </P>
-              <CopyButton data={vuid} />
+              <CopyButton data={receipt} />
             </DetailsItem>
-          )}
-          <DetailsItem>
-            {/* <Tip>Temporary Invoice tips</Tip> */}
-            <P>{type === 'blockchain' ? 'To' : 'Invoice'}</P>
-            <P>
-              <Span unreadable>{receipt}</Span>
-            </P>
-            <CopyButton data={receipt} />
-          </DetailsItem>
-          <DetailsItem>
-            {/* <Tip>Temporary Preimage tips</Tip> */}
-            <P>{type === 'blockchain' ? 'Transaction ID' : 'Preimage'}</P>
-            <P>
-              <Span unreadable>NEED TO SAVE PREIMAGE FROM PAYSERVEEEEER</Span>
-              {type === 'blockchain' && (
-                <Button link>
-                  <A href={`${blockchainExplorers[asset]}${txid}`} target="_blank">
-                    Open in explorer
-                  </A>
-                </Button>
-              )}
-            </P>
-            <CopyButton data={txid} />
-          </DetailsItem>
-        </Details>
-      </AdditionalInfo>
+            <DetailsItem>
+              {/* <Tip>Temporary Preimage tips</Tip> */}
+              <P>{type === 'blockchain' ? 'Transaction ID' : 'Preimage'}</P>
+              <P>
+                <Span unreadable>NEED TO SAVE PREIMAGE FROM PAYSERVEEEEER</Span>
+                {type === 'blockchain' && (
+                  <Button link>
+                    <A href={`${blockchainExplorers[asset]}${txid}`} target="_blank">
+                      Open in explorer
+                    </A>
+                  </Button>
+                )}
+              </P>
+              <CopyButton data={txid} />
+            </DetailsItem>
+          </Details>
+        </AdditionalInfo>
+      ) : null}
     </Root>
   );
 };
 
-PaymentItem.propTypes = {};
+PaymentDetails.propTypes = {};
 
-PaymentItem.defaultProps = {};
+PaymentDetails.defaultProps = {};
 
-export default PaymentItem;
+export default PaymentDetails;

@@ -46,12 +46,14 @@ const getSeparatorText = date => {
 };
 
 // eslint-disable-next-line
-const Payment = ({ history, payments, t }) => {
+const Payment = ({ history, payments, location: { search }, t }) => {
+  const backButtonHidden = new URLSearchParams(search).get('nopopup') === 'true';
+
   if (payments.getById.error || (!payments.getById.data && !payments.getById.loading)) {
     return (
       <Root>
         <Header>
-          <BackButton />
+          <BackButton hidden={backButtonHidden} />
           <P>Payment details</P>
           <Support className="openIntercom" />
         </Header>
@@ -68,7 +70,7 @@ const Payment = ({ history, payments, t }) => {
     return (
       <Root>
         <Header>
-          <BackButton />
+          <BackButton hidden={backButtonHidden} />
           <P>Payment details</P>
           <Support className="openIntercom" />
         </Header>
@@ -80,10 +82,26 @@ const Payment = ({ history, payments, t }) => {
     );
   }
 
+  if (!payments.getById.data[0]) {
+    return (
+      <Root>
+        <Header>
+          <BackButton hidden={backButtonHidden} />
+          <P>Payment details</P>
+          <Support className="openIntercom" />
+        </Header>
+        <EmptyWrapper>
+          <EmptyIcon />
+          <P>Payment not found</P>
+        </EmptyWrapper>
+      </Root>
+    );
+  }
+
   return (
     <Root>
       <Header>
-        <BackButton />
+        <BackButton hidden={backButtonHidden} />
         <P>Payment details</P>
         <Support className="openIntercom" />
       </Header>

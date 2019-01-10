@@ -37,7 +37,9 @@ export class CheckDestination extends Component {
         category: 'vuidDomainPair',
         action: `${(wallet && wallet.origin) || 'manual'}_${wallets.getDetails.data}`,
       });
-      history.push(`/payments/confirm?payment=${JSON.stringify(wallets.getDetails.data)}`);
+      history.push(
+        `/payments/confirm?payment=${JSON.stringify({ ...wallet, ...wallets.getDetails.data })}`,
+      );
       return null;
     }
 

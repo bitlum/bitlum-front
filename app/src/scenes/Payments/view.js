@@ -159,10 +159,10 @@ const Payments = ({ settings, payments, accounts, t }) => {
     const dayOfPayment = new Date(
       payment.status === 'pending' ? '01-01-9999' : payment.updatedAt,
     ).setHours(0, 0, 0, 0);
-    if (!paymentsGrouped[`${dayOfPayment}_${payment.vuid}_${payment.status}`]) {
-      paymentsGrouped[`${dayOfPayment}_${payment.vuid}_${payment.status}`] = [payment];
+    if (!paymentsGrouped[`${dayOfPayment}_${payment.vuid}_${payment.origin}_${payment.status}`]) {
+      paymentsGrouped[`${dayOfPayment}_${payment.vuid}_${payment.origin}_${payment.status}`] = [payment];
     } else {
-      paymentsGrouped[`${dayOfPayment}_${payment.vuid}_${payment.status}`].push(payment);
+      paymentsGrouped[`${dayOfPayment}_${payment.vuid}_${payment.origin}_${payment.status}`].push(payment);
     }
   });
 

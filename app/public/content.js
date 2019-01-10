@@ -170,7 +170,7 @@ const handleWuid = wuid => {
   const payment = {
     wuid,
     asset: 'BTC',
-    origin: window.location.origin,
+    origin: window.location.hostname,
   };
   window.open(
     `chrome-extension://${chrome.runtime.id}/index.html#/payments/check?wallet=${JSON.stringify(

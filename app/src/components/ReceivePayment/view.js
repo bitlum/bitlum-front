@@ -88,8 +88,15 @@ export class ReceivePayment extends Component {
         loading={payments.receive.loading}
       >
         <Message type="info" key="receiveText">
-          {t(`receive.tips.${receive.type}.main`)}
+          {payments.receive.data
+            ? t(`receive.tips.${receive.type}.main`)
+            : t(
+                `receive.tips.${receive.type}.${
+                  receive.type === 'lightning' ? 'beforeAmount' : 'main'
+                }`,
+              )}
         </Message>
+
         {receive.type === 'lightning' && !payments.receive.data ? (
           <AmountInputWraper>
             {settings.get.data.denominations[receive.asset][selectedDenomination].sign}
@@ -100,7 +107,8 @@ export class ReceivePayment extends Component {
               type="number"
               step={
                 1 /
-                10 ** settings.get.data.denominations[receive.asset][selectedDenomination].precisionMax
+                10 **
+                  settings.get.data.denominations[receive.asset][selectedDenomination].precisionMax
               }
               value={amountsCurrent}
               min="0"

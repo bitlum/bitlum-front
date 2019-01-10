@@ -34,7 +34,7 @@ class Wrapper extends React.Component {
       }
     }
 
-    vendors.get.run(payment.vuid);
+    vendors.get.run(payment.vuid, { origin: payment.origin });
 
     if (!accounts.get.data) {
       accounts.get.run();

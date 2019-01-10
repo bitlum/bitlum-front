@@ -46,7 +46,7 @@ const Notifications = {
                   options.puid
                 }?nopopup=true`,
                 '_blank',
-                'width=450,height=650,titlebar=0,menubar=0,location=0',
+                'width=450,height=700,titlebar=0,menubar=0,location=0',
               );
             }
           }

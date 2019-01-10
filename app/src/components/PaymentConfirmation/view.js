@@ -105,6 +105,7 @@ export class PaymentConfirmation extends Component {
               : amountsCurrent /
                   settings.get.data.denominations[payment.asset][selectedDenomination].price,
             payment.asset,
+            { origin: payment.origin },
           );
         }}
         loading={payments.estimate.loading || payments.send.loading}
@@ -155,7 +156,8 @@ export class PaymentConfirmation extends Component {
             type="number"
             step={
               1 /
-              10 ** settings.get.data.denominations[payment.asset][selectedDenomination].precisionMax
+              10 **
+                settings.get.data.denominations[payment.asset][selectedDenomination].precisionMax
             }
             min="0"
             value={

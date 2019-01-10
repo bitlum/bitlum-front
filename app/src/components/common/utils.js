@@ -15,6 +15,7 @@ import styled, { css } from 'styled-components';
 
 export const withLoader = styledComponent => styled(styledComponent)`
   opacity: ${({ loading }) => (loading ? '0.3' : '1')};
+  pointer-events: ${({ loading }) => (loading ? 'none' : 'initial')};
   :before {
     z-index: 1;
     content: '';

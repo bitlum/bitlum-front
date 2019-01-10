@@ -82,7 +82,8 @@ export default {
         main: 'Send Bitcoin on address\nbelow to deposit them on wallet',
       },
       lightning: {
-        main: 'Send Lightning Network Bitcoin payment\non address above to deposit them on wallet',
+        beforeAmount: 'Specify how much you want to receive.\nLeave 0 if you want to receive any amount',
+        main: 'Send Lightning Network Bitcoin payment\non address below to deposit them on wallet',
       },
     },
   },

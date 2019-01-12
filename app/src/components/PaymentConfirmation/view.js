@@ -80,7 +80,7 @@ export class PaymentConfirmation extends Component {
     } = this.state;
 
     const { denominations } =
-      ((payments.estimate.data || payments.estimate.error) &&
+      ((payments.estimate.data || payments.estimate.error && payments.estimate.error.fees) &&
         payments.calcDenominations(
           payments.estimate.data ||
             (payments.estimate.error && {

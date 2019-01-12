@@ -65,21 +65,20 @@ const getApiUrl = strings => {
   return `https://api.bitlum.io${urlsWithoutApi}`;
 };
 
-
-const  vendorShark = 'assets/icons/vendors/shark.svg';
-const  vendorBear = 'assets/icons/vendors/bear.svg';
-const  vendorBird = 'assets/icons/vendors/bird.svg';
-const  vendorDog = 'assets/icons/vendors/dog.svg';
-const  vendorCat = 'assets/icons/vendors/cat.svg';
-const  vendorLion = 'assets/icons/vendors/lion.svg';
-const  vendorFrog = 'assets/icons/vendors/frog.svg';
-const  vendorChicken = 'assets/icons/vendors/chicken.svg';
-const  vendorElephant = 'assets/icons/vendors/elephant.svg';
-const  vendorFish = 'assets/icons/vendors/fish.svg';
-const  vendorGorilla = 'assets/icons/vendors/gorilla.svg';
-const  vendorHorse = 'assets/icons/vendors/horse.svg';
-const  vendorPenguin = 'assets/icons/vendors/penguin.svg';
-const  vendorSquirrel = 'assets/icons/vendors/squirrel.svg';
+const vendorShark = 'assets/icons/vendors/shark.svg';
+const vendorBear = 'assets/icons/vendors/bear.svg';
+const vendorBird = 'assets/icons/vendors/bird.svg';
+const vendorDog = 'assets/icons/vendors/dog.svg';
+const vendorCat = 'assets/icons/vendors/cat.svg';
+const vendorLion = 'assets/icons/vendors/lion.svg';
+const vendorFrog = 'assets/icons/vendors/frog.svg';
+const vendorChicken = 'assets/icons/vendors/chicken.svg';
+const vendorElephant = 'assets/icons/vendors/elephant.svg';
+const vendorFish = 'assets/icons/vendors/fish.svg';
+const vendorGorilla = 'assets/icons/vendors/gorilla.svg';
+const vendorHorse = 'assets/icons/vendors/horse.svg';
+const vendorPenguin = 'assets/icons/vendors/penguin.svg';
+const vendorSquirrel = 'assets/icons/vendors/squirrel.svg';
 
 const vendors = {
   randomVendors: (() =>
@@ -151,7 +150,6 @@ const vendors = {
   },
 };
 
-
 const paymentsFetcher = setInterval(async () => {
   let authData;
   // let accountData;
@@ -167,16 +165,16 @@ const paymentsFetcher = setInterval(async () => {
         Authorization: `Bearer ${authData.token}`,
       },
     }).then(res => res.json());
-    
+
     if (result.data) {
-      const latestIncoming = result.data.find(payment=> payment.direction === 'incoming');
+      const latestIncoming = result.data.find(payment => payment.direction === 'incoming');
       if (latestIncoming) {
         let vendor;
-        if(latestIncoming.vendorName) {
+        if (latestIncoming.vendorName) {
           vendor = {
             name: latestIncoming.vendorName,
             iconUrl: latestIncoming.vendorIcon,
-          }
+          };
         } else {
           vendor = vendors.getRandom(latestIncoming.vuid)[0];
         }
@@ -188,7 +186,23 @@ const paymentsFetcher = setInterval(async () => {
           'assets/icon48.png',
         );
       }
- 
     }
   }
 }, 5000);
+
+const getClipboardData = () => {
+  const clipBoardInput = document.createElement('input');
+  clipBoardInput.style = 'position: absolute;';
+  document.body.appendChild(clipBoardInput);
+  clipBoardInput.focus();
+  document.execCommand('paste');
+  const clipboardValue = clipBoardInput.value;
+  document.body.removeChild(clipBoardInput);
+  return clipboardValue;
+};
+
+// let previousClipboardWuid;
+// const clipboardChecker = setInterval(() => {
+//   const currentClipboard = getClipboardData();
+
+// }, 1000);

@@ -75,10 +75,10 @@ export const Root = styled.div`
     position: absolute;
     right: 1.4em;
     opacity: 0.4;
-    background: no-repeat url(${goToDetailsIcon}) center;
+    /* background: no-repeat url(${goToDetailsIcon}) center; */
     background-color: var(--colors__bg_dark);
     height: 100%;
-    width: 1em;
+    width: 0.7em;
     background-size: contain;
   }
   &:hover:after {

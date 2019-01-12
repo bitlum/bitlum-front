@@ -105,8 +105,8 @@ export const Global = createGlobalStyle`
   --colors__bg_ok: #35bb78;
   --colors__text_ok: #35bb78;
 
-  --colors__bg_error: #ffb7a8;
-  --colors__text_error: red;
+  --colors__bg_error: rgba(244,5,102,0.11);
+  --colors__text_error: #F40566;
 
   --colors__bg_warn: #f8c57e;
   --colors__text_warn: #ff9500;
@@ -148,7 +148,9 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
-.intercom-launcher-frame {
+.intercom-launcher-frame,
+.intercom-launcher-discovery-frame {
+  pointer-events: none!important;
   display: none!important;
 }
 

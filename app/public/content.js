@@ -177,7 +177,7 @@ const handleWuid = wuid => {
       payment,
     )}&nopopup=true`,
     '_blank',
-    'width=450,height=600,titlebar=0,menubar=0,location=0',
+    'width=450,height=700,titlebar=0,menubar=0,location=0',
   );
 };
 

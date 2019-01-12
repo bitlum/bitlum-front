@@ -26,12 +26,12 @@ export const Header = styled(HeaderRaw)`
   border-bottom: 0.05em solid var(--colors__bg_dark);
 `;
 
-
 export const CheckDestination = styled(CheckDestinationRaw)`
-  padding: 2em 0;
+  padding-top: 2em;
 `;
 
 export const Root = styled.div`
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;

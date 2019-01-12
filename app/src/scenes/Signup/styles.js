@@ -58,8 +58,9 @@ export const Logo = styled.img.attrs({
 `;
 
 export const SignupForm = styled(SignupFormCommon)`
-  width: 100%;
-  & button {
-    margin-top: 1.5em;
+  width: calc(100% - 2em);
+  margin: 0 1em;
+  & > div:last-of-type input {
+    margin-bottom: 1.5em;
   }
 `;

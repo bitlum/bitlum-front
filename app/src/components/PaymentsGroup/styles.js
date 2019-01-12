@@ -30,18 +30,21 @@ export const AmountMain = styled.span`
 export const AmountAdditional = styled.span`
   font-size: 0.8em;
   color: var(--colors__text_bright);
-  margin-top: 0.4em;
+  margin-top: 0.5em;
 `;
 //
 export const VendorIcon = styled.div`
   position: relative;
-
+  height: 2.7em;
+  
   & > ${Img} {
-    background: ${({ color }) => color};
-    border-radius: 50%;
+    background: ${({ color }) => color || '#fff'};
+    filter: ${({ color }) => color && 'saturate(0.5) brightness(1.12) contrast(1.1)'};
+    opacity: ${({ color }) => color && 0.7};
+    padding: ${({ color }) => color && '0.4em'};
+    border-radius: 0.3em;
     height: 2.7em;
     width: 2.7em;
-    padding: 0.3em;
   }
 
   &:after {
@@ -68,13 +71,12 @@ export const Status = styled.div`
   align-self: stretch;
   width: 0.4em;
   margin-left: 0.6em;
-  background-color: ${({ status }) => `var(--colors__bg_${status})`};
+  background-color: ${({ status }) =>
+    status === 'completed' ? '#fff' : `var(--colors__bg_${status})`};
   &:before {
-    background: no-repeat url(${({ counter }) => (counter > 1 ? unfoldGroupIcon : goToDetailsIcon)})
-      center;
     background-size: contain;
     height: 100%;
-    width: 1em;
+    width: 0.6em;
     color: var(--colors__bg_bright);
     position: absolute;
   }
@@ -121,8 +123,8 @@ export const GroupInfo = styled.div`
   }
 
   &:hover ${Status} {
-    margin-left: 0;
-    width: 1em;
+    margin-left: 0.4em;
+    width: 0.6em;
     &:before {
       content: '';
     }
@@ -131,8 +133,8 @@ export const GroupInfo = styled.div`
   ${({ folded }) =>
     !folded &&
     `& ${Status} {
-     margin-left: 0;
-     width: 1em;
+     margin-left: 0.4em;
+     width: 0.6em;
      &:before {
       content: '';
     }

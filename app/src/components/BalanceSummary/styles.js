@@ -82,7 +82,7 @@ export const Root = styled.div`
           padding-left: 0.4em;
         }
         align-items: flex-start;
-        background: #4ea5f5;
+        background: var(--colors__bg_dark);
         // background: linear-gradient(45deg, #461a99 0%, #249ade 65%, #41d4cb 100%);
         border-radius: 0.7em;
         // box-shadow: 0 0.6em 0.7em 0.2em rgba(21, 24, 46, 0.16);

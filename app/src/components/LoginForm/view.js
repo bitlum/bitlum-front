@@ -47,16 +47,16 @@ export const LoginForm = ({ accounts, className, t }) => (
       labelInvalid="Password invalid"
       required
     />
-    <Button primary type="submit">
-      Login
-    </Button>
+
     {accounts.authenticate.error && (
       <Message type="error">{accounts.authenticate.error.message}</Message>
     )}
-    {accounts.authenticate.data &&
-      Object.keys(accounts.authenticate.data).length === 0 && (
-        <Message type="error">No account was found with such email</Message>
-      )}
+    {accounts.authenticate.data && Object.keys(accounts.authenticate.data).length === 0 && (
+      <Message type="error">No account was found with such email</Message>
+    )}
+    <Button primary type="submit">
+      Login
+    </Button>
   </Root>
 );
 

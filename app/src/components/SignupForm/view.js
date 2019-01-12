@@ -57,10 +57,11 @@ export const SignupForm = ({ accounts, className, t }) => (
       labelInvalid="Referral"
       required
     />
+
+    {accounts.signup.error && <Message type="error">{accounts.signup.error.message}</Message>}
     <Button primary type="submit">
       {t('nav.signup')}
     </Button>
-    {accounts.signup.error && <Message type="error">{accounts.signup.error.message}</Message>}
   </Root>
 );
 

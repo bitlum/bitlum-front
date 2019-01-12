@@ -46,15 +46,19 @@ export const Logo = styled(Img).attrs({
 export const PayButton = styled(NavLink)`
   display: flex;
   align-items: center;
-  border-radius: 0.7em;
+  justify-content: center;
+  border-radius: 0.2em;
   overflow: hidden;
   width: calc(100vw - 4rem);
-  background: var(--colors__bg_bright);
+  background: var(--colors__bg_accent);
   padding: 1.7em 0;
   font-size: 0.8em;
   margin: 3em 2rem;
+  height: 5.6em;
+  opacity: 0.9;
+  color: var(--colors__text_accent);
   & ${Img}, & ${Span} {
-    transition: all 0.2s ease-in;
+    /* transition: all 0.2s ease-in; */
   }
   & ${Img} {
     opacity: 0.4;
@@ -63,17 +67,15 @@ export const PayButton = styled(NavLink)`
     margin-left: 1.2em;
   }
   & ${Span} {
-    opacity: 0.5;
-    font-size: 1.4em;
+    font-size: 2em;
     font-weight: 600;
-    margin-left: 1em;
   }
 
   &:hover ${Img} {
     opacity: 0.6;
     color: blue;
   }
-  &:hover ${Span} {
+  &:hover {
     opacity: 1;
   }
 `;

@@ -33,7 +33,7 @@ export const CopyButton = styled(({ data, className }) => (
   </CopyButtonRaw>
 ))`
   position: absolute;
-  right: -3em;
+  right: -3.5em;
   top: -0.12em;
   font: var(--fonts__text);
   font-size: 0.7em;
@@ -61,17 +61,17 @@ export const Span = styled(SpanRaw)`
 export const Vendor = styled.div`
   display: flex;
   align-items: center;
-  padding-left: 1em;
+  padding-left: 0.9em;
   margin-top: 1.8em;
   margin-bottom: 1.8em;
   width: 100%;
   font-size: 0.8em;
   & > ${Img} {
-    background: ${({ color }) => color};
-    border-radius: 50%;
+    background: ${({ color }) => color || '#fff'};
+    padding: ${({ color }) => color && '0.4em'};
+    border-radius: 0.3em;
     height: 2.7em;
     width: 2.7em;
-    padding: 0.3em;
   }
   & > ${P} {
     margin-left: 1.5em;
@@ -95,14 +95,14 @@ export const Status = styled.div`
   margin-left: auto;
   font-size: 0.8em;
   text-align: right;
-  padding-right: 4.6em;
+  padding-right: 5.6em;
   height: 1.8em;
   border-bottom: 0.15em solid ${({ status }) => `var(--colors__bg_${status})`};
 `;
 
 export const Details = styled.div`
-  padding-left: 4.1em;
-  padding-right: 3em;
+  padding-left: 3.7em;
+  padding-right: 3.7em;
   width: 100%;
 `;
 
@@ -131,15 +131,18 @@ export const DetailsItem = styled.div`
     padding-bottom: 1em;
   }
 
-  & ${P} ${Span}:first-child {
+  & ${P} ${Span}:first-of-type {
     font: ${({ accent }) => (accent ? 'var(--fonts__text_bold)' : 'var(--fonts__text)')};
-    font-size: 1em;
     margin-bottom: 0.3em;
   }
 
-  & ${P} ${Span}:last-child {
-    font-size: 1em;
+  & ${P} ${Span}:last-of-type {
+    font-size: 0.8em;
     color: var(--colors__text_bright);
+  }
+
+  & ${P} ${Span}:first-of-type {
+    font-size: 1em;
   }
 
   & ${P}:last-child {

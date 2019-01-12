@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import GA from 'utils/GA';
 import log from 'utils/logging';
 
-import { Root, Input, Button, Message, P, Span, DestinationInfo, AmountInput } from './styles';
+import { Root, Input, Button, Message, P, Span, A, DestinationInfo, AmountInput } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -76,6 +76,13 @@ export class CheckDestination extends Component {
               </Span>{' '}
             </Message>
           )}
+        <P>
+          <Span>Want to try Lightning Network?</Span>
+          <Span>You can easily do it on Yalls.org by paying for any article or emoji 😉</Span>
+          <A target="_blank" href="https://yalls.org/articles/97d67df1-d721-417d-a6c0-11d793739be9:0965AC5E-56CD-4870-9041-E69616660E6F/a6bb346e-6616-437c-b1f8-e7be244f9645">
+            Try it out!
+          </A>
+        </P>
       </Root>
     );
   }

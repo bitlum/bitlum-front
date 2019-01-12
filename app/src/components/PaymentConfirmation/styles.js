@@ -25,6 +25,7 @@ export * from 'components/common';
 
 export const BalanceSummary = styled(BalanceSummaryRaw)`
   font: var(--fonts__text);
+  color: ${({ notEnough }) => notEnough && 'var(--colors__text_error)'};
   font-size: 0.8em;
   & > * {
     font: var(--fonts__text);
@@ -133,14 +134,21 @@ export const Vendor = styled.div`
   width: 100%;
   background: var(--colors__bg);
   & > ${Img} {
-    background: ${({ color }) => color};
-    border-radius: 50%;
+    margin-top: -2.5em;
+    background: ${({ color }) => color || '#fff'};
+    padding: ${({ color }) => (color ? '0.4em' : '0.2em')};
+    border-radius: 0.3em;
     height: 2.7em;
     width: 2.7em;
-    padding: 0.3em;
     margin-bottom: 0.7em;
   }
-  & > ${P} {
+  & ${P} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  & ${Span} {
     flex-direction: column;
     max-width: 100%;
     overflow: hidden;
@@ -148,9 +156,14 @@ export const Vendor = styled.div`
     text-overflow: ellipsis;
   }
 
-  & ${P}:last-child {
-    margin-top: 0.2em;
+  & ${Span}:first-of-type {
     font-size: 0.8em;
+    font-weight: 500;
+  }
+
+  & ${Span}:last-child {
+    margin-top: 0.2em;
+    font-size: 0.7em;
     color: var(--colors__text_bright);
     max-width: 14em;
   }

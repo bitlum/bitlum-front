@@ -79,8 +79,8 @@ const Payments = ({ settings, payments, accounts, t }) => {
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
         <PayButton to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
-          <Img src={newPaymentIcon} />
-          <Span>{totalBalance === 0 ? 'Receive funds' : 'Make new payment'}</Span>
+          {/* <Img src={newPaymentIcon} /> */}
+          <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
         </PayButton>
         <EmptyWrapper>
           <EmptyIcon />
@@ -108,8 +108,8 @@ const Payments = ({ settings, payments, accounts, t }) => {
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
         <PayButton to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
-          <Img src={newPaymentIcon} />
-          <Span>{totalBalance === 0 ? 'Receive funds' : 'Make new payment'}</Span>
+          {/* <Img src={newPaymentIcon} /> */}
+          <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
         </PayButton>
         <EmptyWrapper>
           <EmptyIcon />
@@ -136,8 +136,8 @@ const Payments = ({ settings, payments, accounts, t }) => {
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
         <PayButton to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
-          <Img src={newPaymentIcon} />
-          <Span>{totalBalance === 0 ? 'Receive funds' : 'Make new payment'}</Span>
+          {/* <Img src={newPaymentIcon} /> */}
+          <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
         </PayButton>
         <EmptyWrapper>
           <EmptyIcon />
@@ -159,10 +159,16 @@ const Payments = ({ settings, payments, accounts, t }) => {
     const dayOfPayment = new Date(
       payment.status === 'pending' ? '01-01-9999' : payment.updatedAt,
     ).setHours(0, 0, 0, 0);
-    if (!paymentsGrouped[`${dayOfPayment}_${payment.vuid}_${payment.origin}_${payment.status}`]) {
-      paymentsGrouped[`${dayOfPayment}_${payment.vuid}_${payment.origin}_${payment.status}`] = [payment];
+    if (
+      !paymentsGrouped[`${dayOfPayment}_${payment.vuid}_${payment.vendorName}_${payment.status}`]
+    ) {
+      paymentsGrouped[`${dayOfPayment}_${payment.vuid}_${payment.vendorName}_${payment.status}`] = [
+        payment,
+      ];
     } else {
-      paymentsGrouped[`${dayOfPayment}_${payment.vuid}_${payment.origin}_${payment.status}`].push(payment);
+      paymentsGrouped[
+        `${dayOfPayment}_${payment.vuid}_${payment.vendorName}_${payment.status}`
+      ].push(payment);
     }
   });
 
@@ -182,14 +188,14 @@ const Payments = ({ settings, payments, accounts, t }) => {
       <BalanceSummary key="BalanceSummary" accounts={accounts} />
       {/* <HeaderSecondary>Payments</HeaderSecondary> */}
       <PayButton to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
-        <Img src={newPaymentIcon} />
-        <Span>{totalBalance === 0 ? 'Receive funds' : 'Make new payment'}</Span>
+        {/* <Img src={newPaymentIcon} /> */}
+        <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
       </PayButton>
-      <Legend>
+      {/* <Legend>
         <LegendItem type="pending">Pending</LegendItem>
         <LegendItem type="completed">Completed</LegendItem>
         <LegendItem type="failed">Failed</LegendItem>
-      </Legend>
+      </Legend> */}
       {Object.entries(paymentsGrouped)
         .sort((p, c) => c[0].split('_')[0] - p[0].split('_')[0])
         .map((paymentsGroup, index, self) => {
@@ -209,6 +215,10 @@ const Payments = ({ settings, payments, accounts, t }) => {
             result.unshift(
               <Separator key={currentGroupDate}>{getSeparatorText(currentGroupDate)}</Separator>,
             );
+          }
+
+          if (index === 0 && currentGroupDate.getFullYear() === 9999) {
+            result.unshift(<Separator key={currentGroupDate}>Pending</Separator>);
           }
 
           const nextGroupDate =

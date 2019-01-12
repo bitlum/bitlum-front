@@ -58,13 +58,13 @@ const settings = {
           price: 4000,
           sign: 'USD',
           precision: 2,
-          precisionMax: 4,
+          precisionMax: 5,
           round(number) {
             return round(number, this.precision, this.precisionMax);
           },
           stringify(number, { omitDirection = false, omitSign = false } = {}) {
-            return `${omitSign ? '' : this.sign} ${
-              omitDirection ? '' : number === 0 ? '' : number > 0 ? '+' : '-'
+            return `${omitDirection ? '' : number === 0 ? '' : number > 0 ? '+ ' : '- '}${
+              omitSign ? '' : `${this.sign} `
             }${this.round(Math.abs(number))
               .toFixed(this.precisionMax || 1)
               .replace(/0+$/, '')
@@ -80,8 +80,8 @@ const settings = {
             return round(number, this.precision, this.precisionMax);
           },
           stringify(number, { omitDirection = false, omitSign = false } = {}) {
-            return `${omitSign ? '' : this.sign} ${
-              omitDirection ? '' : number === 0 ? '' : number > 0 ? '+' : '-'
+            return `${omitDirection ? '' : number === 0 ? '' : number > 0 ? '+ ' : '- '}${
+              omitSign ? '' : `${this.sign} `
             }${this.round(Math.abs(number))
               .toFixed(this.precisionMax || 1)
               .replace(/0+$/, '')
@@ -491,24 +491,24 @@ const vendors = {
     ]
       .map(character =>
         [
-          { color: '#F44336', name: 'Red' },
-          { color: '#E91E63', name: 'Pink' },
-          { color: '#9C27B0', name: 'Purple' },
-          { color: '#673AB7', name: 'Violet' },
-          { color: '#3F51B5', name: 'Indigo' },
-          { color: '#2196F3', name: 'Blue' },
-          { color: '#03A9F4', name: 'Sky' },
-          { color: '#00BCD4', name: 'Cyan' },
-          { color: '#009688', name: 'Teal' },
-          { color: '#4CAF50', name: 'Green' },
-          { color: '#8BC34A', name: 'Grass' },
-          { color: '#CDDC39', name: 'Lime' },
-          { color: '#FFEB3B', name: 'Yellow' },
-          { color: '#FFC107', name: 'Amber' },
-          { color: '#FF9800', name: 'Orange' },
-          { color: '#795548', name: 'Brown' },
-          { color: '#9E9E9E', name: 'Grey' },
-          { color: '#607D8B', name: 'Livid' },
+          { color: '#e57373', name: 'Red' },
+          { color: '#F06292', name: 'Pink' },
+          { color: '#BA68C8', name: 'Purple' },
+          { color: '#9575CD', name: 'Violet' },
+          { color: '#7986CB', name: 'Indigo' },
+          { color: '#64B5F6', name: 'Blue' },
+          { color: '#4FC3F7', name: 'Sky' },
+          { color: '#4DD0E1', name: 'Cyan' },
+          { color: '#4DB6AC', name: 'Teal' },
+          { color: '#81C784', name: 'Green' },
+          { color: '#AED581', name: 'Grass' },
+          { color: '#DCE775', name: 'Lime' },
+          { color: '#FFF176', name: 'Yellow' },
+          { color: '#FFD54F', name: 'Amber' },
+          { color: '#FFB74D', name: 'Orange' },
+          { color: '#A1887F', name: 'Brown' },
+          { color: '#E0E0E0', name: 'Grey' },
+          { color: '#90A4AE', name: 'Livid' },
         ].map(color => ({
           ...character,
           ...color,

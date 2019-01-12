@@ -55,12 +55,8 @@ export const PaymentsGroup = ({
     <Root className={className}>
       <GroupInfo
         folded={folded}
-        onClick={e => {
-          if (payments.length > 1) {
-            toggleFold(!folded);
-          } else {
-            history.push(`/payments/${payments[0].puid}`);
-          }
+        onClick={() => {
+          toggleFold(!folded);
         }}
       >
         <Vendor>

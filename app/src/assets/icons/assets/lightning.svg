@@ -2,9 +2,13 @@
 <!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFC83D;}
+	.st1{fill:#FFFFFF;}
+</style>
 <g>
-	<circle fill="#ffc83d" class="st0" cx="8" cy="8" r="8"/>
-	<path fill="#FFFFFF" class="st1" fill="#fff" d="M9.6,2.8L5.4,8.2c0,0-0.5,0.5,0.2,0.7c0.9,0,2.4,0,2.4,0l-1.6,4.2l4.2-5.4c0,0,0.5-0.5-0.2-0.7
-		c-0.9,0-2.4,0-2.4,0L9.6,2.8z"/>
+	<rect class="st0" width="16" height="16"/>
+	<path class="st1" d="M9.5,3.1L5.5,8.3c0,0-0.5,0.5,0.2,0.7C6.6,9,8,9,8,9l-1.5,4.1l3.9-5.2c0,0,0.5-0.5-0.2-0.7c-0.8,0-2.3,0-2.3,0
+		L9.5,3.1z"/>
 </g>
 </svg>

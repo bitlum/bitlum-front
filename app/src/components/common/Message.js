@@ -17,6 +17,7 @@ export const Message = styled.div`
   word-break: break-word;
   display: flex;
   width: 100%;
+  justify-content: center;
   align-items: center;
   padding: 0.85em 1.3em;
   font-size: 1em;

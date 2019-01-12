@@ -143,8 +143,10 @@ export class PaymentConfirmation extends Component {
         ) : (
           <Vendor color={vendors.get.data && vendors.get.data[0] && vendors.get.data[0].color}>
             <Img src={vendors.get.data && vendors.get.data[0] && vendors.get.data[0].iconUrl} />
-            <P>{vendors.get.data && vendors.get.data[0] && vendors.get.data[0].name}</P>
-            <P>{payment.wuid}</P>
+            <P>
+              <Span>{vendors.get.data && vendors.get.data[0] && vendors.get.data[0].name}</Span>
+              <Span>{payment.wuid}</Span>
+            </P>
           </Vendor>
         )}
         <AmountInputWraper>
@@ -199,6 +201,7 @@ export class PaymentConfirmation extends Component {
           appearance="onlyBalance"
           denomination={selectedDenomination}
           accounts={accounts}
+          notEnough={payments.estimate.error && payments.estimate.error.code === '403RPA01'}
         />
         {false && <Message type="error"> {{}.message} </Message>}
         {payments.estimate.error && (

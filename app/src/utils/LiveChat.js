@@ -14,7 +14,7 @@ import log from 'utils/logging';
 // Code
 // -----------------------------------------------------------------------------
 
-const APP_ID = 'ij0qke59';
+const APP_ID = 'ggy8jg8v';
 const settings = {
   app_id: APP_ID,
   custom_launcher_selector: '.openIntercom',

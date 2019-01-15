@@ -88,7 +88,7 @@ export class CheckDestination extends Component {
           <Span>Don’t worry! We have prepared list of services for you on yalls.org 😉</Span>
           <A
             target="_blank"
-            href="https://yalls.org/articles/97d67df1-d721-417d-a6c0-11d793739be9:0965AC5E-56CD-4870-9041-E69616660E6F/a6bb346e-6616-437c-b1f8-e7be244f9645"
+            href="https://yalls.org/articles/97d67df1-d721-417d-a6c0-11d793739be9:0965AC5E-56CD-4870-9041-E69616660E6F/bce2eae0-802c-40f9-b119-02b4b150a4ce"
           >
             Try it out!
           </A>

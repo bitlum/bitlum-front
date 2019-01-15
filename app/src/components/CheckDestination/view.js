@@ -26,7 +26,7 @@ export class CheckDestination extends Component {
   }
 
   render() {
-    const { wallets, wallet, className, history, t } = this.props;
+    const { wallets, wallet, className, history, t, accounts } = this.props;
 
     if (
       wallets.getDetails.data &&
@@ -59,27 +59,37 @@ export class CheckDestination extends Component {
         />
 
         {wallets.getDetails.error && (
-          <Message type="error"> {wallets.getDetails.error.message} </Message>
+          <Message type="error">
+            {t([`errors.${wallets.getDetails.error.code}`, 'errors.default'])}
+          </Message>
         )}
         {wallets.getDetails.data &&
           wallets.getDetails.data.latestPayment &&
           wallets.getDetails.data.type === 'lightning' && (
             <Message type="info">
               {' '}
-              This invoice is already paid.{' '}
-              <Span
-                onClick={() => {
-                  history.push(`/payments/${wallets.getDetails.data.latestPayment.puid}`);
-                }}
-              >
-                Go to payment details
-              </Span>{' '}
+              This invoice is already paid{' '}
+              {accounts.get.data &&
+              accounts.get.data.auid === wallets.getDetails.data.latestPayment.auid ? (
+                <Span
+                  onClick={() => {
+                    history.push(`/payments/${wallets.getDetails.data.latestPayment.puid}`);
+                  }}
+                >
+                  Go to payment details
+                </Span>
+              ) : (
+                ' by someone else'
+              )}
             </Message>
           )}
         <P>
-          <Span>Want to try Lightning Network?</Span>
-          <Span>You can easily do it on Yalls.org by paying for any article or emoji 😉</Span>
-          <A target="_blank" href="https://yalls.org/articles/97d67df1-d721-417d-a6c0-11d793739be9:0965AC5E-56CD-4870-9041-E69616660E6F/a6bb346e-6616-437c-b1f8-e7be244f9645">
+          <Span>Do not known where to pay using Lightning Network?</Span>
+          <Span>Don’t worry! We have prepared list of services for you on yalls.org 😉</Span>
+          <A
+            target="_blank"
+            href="https://yalls.org/articles/97d67df1-d721-417d-a6c0-11d793739be9:0965AC5E-56CD-4870-9041-E69616660E6F/a6bb346e-6616-437c-b1f8-e7be244f9645"
+          >
             Try it out!
           </A>
         </P>

@@ -11,7 +11,7 @@ import styled from 'styled-components';
 
 import { NavLink } from 'react-router-dom';
 
-import { P, Img } from 'components/common';
+import { P, Img, Span } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -20,6 +20,7 @@ import { P, Img } from 'components/common';
 export * from 'components/common';
 
 export const Main = styled(P)`
+  opacity: 0.9;
   font-size: 2.3em;
   font-weight: 400;
 `;
@@ -58,6 +59,7 @@ export const Receive = styled(NavLink)`
 export const Send = styled(NavLink)`
   font: var(--fonts__header_bold);
   margin-top: 1em;
+  width: 100%;
 `;
 
 export const Root = styled.div`
@@ -68,7 +70,10 @@ export const Root = styled.div`
   align-items: center;
   text-align: center;
   font-weight: 200;
-
+  & > ${Span} {
+    padding-left: 1em;
+    margin-top: 1em;
+  }
   ${({ appearance }) =>
     appearance !== 'onlyBalance' &&
     `   &:before {
@@ -82,9 +87,12 @@ export const Root = styled.div`
           padding-left: 0.4em;
         }
         align-items: flex-start;
-        background: var(--colors__bg_dark);
-        // background: linear-gradient(45deg, #461a99 0%, #249ade 65%, #41d4cb 100%);
-        border-radius: 0.7em;
+        // background: var(--colors__bg_dark);
+        background: linear-gradient(45deg, #461a99 0%, #249ade 65%, #41d4cb 100%);
+        filter: grayscale(1);
+        opacity: 0.9;
+        border-top-right-radius: 0.7em;
+        border-top-left-radius: 0.7em;
         // box-shadow: 0 0.6em 0.7em 0.2em rgba(21, 24, 46, 0.16);
         color: var(--colors__text_accent);
     `}

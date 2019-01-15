@@ -23,7 +23,7 @@ import PaymentDetailsRaw from 'components/PaymentDetails';
 export * from 'components/common';
 
 export const Header = styled(HeaderRaw)`
-  height: var(--sizing__header_heigh);
+  min-height: var(--sizing__header_heigh);
   font: var(--fonts__header_thin);
   position: fixed;
   top: 0;

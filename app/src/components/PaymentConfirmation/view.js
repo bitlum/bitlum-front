@@ -80,7 +80,7 @@ export class PaymentConfirmation extends Component {
     } = this.state;
 
     const { denominations } =
-      ((payments.estimate.data || payments.estimate.error && payments.estimate.error.fees) &&
+      ((payments.estimate.data || (payments.estimate.error && payments.estimate.error.fees)) &&
         payments.calcDenominations(
           payments.estimate.data ||
             (payments.estimate.error && {
@@ -209,10 +209,14 @@ export class PaymentConfirmation extends Component {
             {' '}
             {payments.estimate.error.code === '403RPA01'
               ? 'You do not have enough balance'
-              : payments.estimate.error.message}{' '}
+              : t([`errors.${payments.estimate.error.code}`, 'errors.default'])}{' '}
           </Message>
         )}
-        {payments.send.error && <Message type="error"> {payments.send.error.message} </Message>}
+        {payments.send.error && (
+          <Message type="error">
+            {t([`errors.${payments.send.error.code}`, 'errors.default'])}
+          </Message>
+        )}
         {payment.description ? (
           <Description>
             <Span>Description</Span> <Span>{payment.description}</Span>

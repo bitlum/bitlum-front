@@ -17,7 +17,7 @@ import { Root, Header, BackButton, P, CheckDestination, Support } from './styles
 // Code
 // -----------------------------------------------------------------------------
 
-const Send = ({ wallets, wallet }) => {
+const Send = ({ wallets, wallet, accounts }) => {
   return (
     <Root>
       <Header>
@@ -25,7 +25,7 @@ const Send = ({ wallets, wallet }) => {
         <P>Pay</P>
         <Support className="openIntercom" />
       </Header>
-      <CheckDestination wallets={wallets} wallet={wallet} />
+      <CheckDestination wallets={wallets} wallet={wallet} accounts={accounts} />
     </Root>
   );
 };

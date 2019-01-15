@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import styled from 'styled-components';
-import { withLoader, Form, Button , Message} from 'components/common';
+import { withLoader, Form, Button, Message, A } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -17,7 +17,13 @@ import { withLoader, Form, Button , Message} from 'components/common';
 export * from 'components/common';
 
 export const Root = withLoader(styled(Form)`
-& ${Button} {
+  & ${A} {
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--colors__bg_accent);
+  }
+
+  & ${Button} {
     height: 2.7em;
   }
   & ${Message} {

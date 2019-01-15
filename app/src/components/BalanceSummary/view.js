@@ -24,7 +24,7 @@ export const BalanceSummary = ({ accounts, className, appearance = 'normal', den
   if (accounts.get.error || !accounts.get.data) {
     return (
       <Root className={className} appearance={appearance}>
-        Unable to load balance info
+        <Span>Unable to load balance info</Span>
       </Root>
     );
   }

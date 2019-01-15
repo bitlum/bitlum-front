@@ -31,7 +31,7 @@ export const Root = styled.div`
   & ${A} ${Span}:last-child {
     font: var(--fonts__text_bold);
   }
-  & ${A} {
+  & > ${A} {
     margin-top: 3.5em;
     display: flex;
     flex-direction: column;

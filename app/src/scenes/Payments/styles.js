@@ -47,14 +47,14 @@ export const PayButton = styled(NavLink)`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.2em;
+  border-bottom-left-radius: 0.7em;
+  border-bottom-right-radius: 0.7em;
   overflow: hidden;
   width: calc(100vw - 4rem);
   background: var(--colors__bg_accent);
-  padding: 1.7em 0;
-  font-size: 0.8em;
-  margin: 3em 2rem;
-  height: 5.6em;
+  margin: 1.8em 2rem;
+  margin-top: 0;
+  height: 3.2em;
   opacity: 0.9;
   color: var(--colors__text_accent);
   & ${Img}, & ${Span} {
@@ -67,7 +67,7 @@ export const PayButton = styled(NavLink)`
     margin-left: 1.2em;
   }
   & ${Span} {
-    font-size: 2em;
+    font-size: 1.5em;
     font-weight: 600;
   }
 
@@ -81,6 +81,7 @@ export const PayButton = styled(NavLink)`
 `;
 
 export const Support = styled(SupportRaw)`
+  margin-right: 1.3em;
   margin-left: 0;
 `;
 export const LogOut = styled.a`
@@ -131,8 +132,8 @@ export const HeaderSecondary = styled(HeaderRaw)`
 `;
 
 export const BalanceSummary = styled(BalanceSummaryRaw)`
-  margin-top: 2em;
-  height: 20rem;
+  margin-top: 4em;
+  height: 16.5rem;
 `;
 
 export const Legend = styled.div`
@@ -187,7 +188,7 @@ export const Root = withLoader(styled.div`
       align-items: center;
       justify-content: center;
       opacity: 0.6;
-      font-size: 2em;
+      font-size: 1em;
       text-align: center;
       margin-top: 2em;
     }

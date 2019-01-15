@@ -14,10 +14,21 @@ import styled, { css } from 'styled-components';
 // -----------------------------------------------------------------------------
 
 export const withLoader = styledComponent => styled(styledComponent)`
-  opacity: ${({ loading }) => (loading ? '0.3' : '1')};
+  /* opacity: ${({ loading }) => (loading ? '0.3' : '1')}; */
+  filter: ${({ loading }) => loading && 'blur(2px)'};
   pointer-events: ${({ loading }) => (loading ? 'none' : 'initial')};
+  :after {
+    position:absolute;
+    content: '';
+    z-index: 1000;
+    background-color: rgba(255,255,255,0.8);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    display: ${({ loading }) => (loading ? 'block' : 'none')};
+  }
   :before {
-    z-index: 1;
+    z-index: 2000;
     content: '';
     position: absolute;
     width: 2em;

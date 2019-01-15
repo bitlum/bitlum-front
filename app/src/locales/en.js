@@ -51,6 +51,12 @@ export default {
       blockchain: 'Address',
     },
   },
+  errors: {
+    '401MAC01': 'Wrong password for account {{email}}',
+    '404RAC00': 'Account {{email}} does not exists',
+    '500MCO12': 'Account {{email}} already exists<1>Login instead?</1>',
+    default: 'Oops, something went wrong',
+  },
   account: {
     id: 'Account ID',
     restrictions: 'Restrictions',
@@ -82,7 +88,8 @@ export default {
         main: 'Send Bitcoin on address\nbelow to deposit them on wallet',
       },
       lightning: {
-        beforeAmount: 'Specify how much you want to receive.\nLeave 0 if you want to receive any amount',
+        beforeAmount:
+          'Specify how much you want to receive.\nLeave 0 if you want to receive any amount',
         main: 'Send Lightning Network Bitcoin payment\non address below to deposit them on wallet',
       },
     },

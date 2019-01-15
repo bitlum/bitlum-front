@@ -30,7 +30,7 @@ export const DestinationInfo = styled.div`
 export const Message = styled(MessageRaw)`
   flex-direction: column;
   & ${Span} {
-    font: var(--fonts__text_bold);
+    font-weight: 600;
     margin-top: 0.5em;
     cursor: pointer;
   }

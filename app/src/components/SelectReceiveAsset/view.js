@@ -38,7 +38,7 @@ export const SelectReceiveAsset = ({ className, history, t }) => {
         <Img src={iconOffchain} />
         <P>
           <Span>Lightning Network Bitcoin</Span>
-          <Span>Fastest, and cheapest way to deposit Bitcoin</Span>
+          <Span>Receive with lightning faster than other methods and takes less fees</Span>
         </P>
       </AssetItem>
       <AssetItem
@@ -54,17 +54,20 @@ export const SelectReceiveAsset = ({ className, history, t }) => {
         <Img src={iconOnchain} />
         <P>
           <Span>On-chain Bitcoin</Span>
-          <Span>
-            Send on-chain Bitcoin payent directly to wallet
-          </Span>
+          <Span>Receive with on-chain / regular Bitcoin payment will take about ~10 minutes to confirm</Span>
         </P>
       </AssetItem>
-      <AssetItem className="openIntercom">
+      <AssetItem
+        onClick={() => {
+          window.open('https://zigzag.io', '_blank');
+        }}
+      >
         <Img src={iconAltcoins} />
         <P>
-          <Span>Want to receive altcoins?</Span>
+          <Span>Recieve with alt-coins</Span>
           <Span>
-            Write us which altcoin you want!
+            Receive with alt-coin implies conversion of alt-coin to Bitcoin with fee using
+            zigzag.io service
           </Span>
         </P>
       </AssetItem>

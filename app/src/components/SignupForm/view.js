@@ -9,16 +9,17 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Trans } from 'react-i18next';
 
 import log from 'utils/logging';
 
-import { Root, Input, Button, Message } from './styles';
+import { Root, Input, Button, Message, A } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
-export const SignupForm = ({ accounts, className, t }) => (
+export const SignupForm = ({ accounts, className, history, t, exists }) => (
   <Root
     className={className}
     onSubmit={e => {
@@ -55,10 +56,22 @@ export const SignupForm = ({ accounts, className, t }) => (
       placeholder="Referral"
       labelValid="Referral"
       labelInvalid="Referral"
-      required
     />
 
-    {accounts.signup.error && <Message type="error">{accounts.signup.error.message}</Message>}
+    {accounts.signup.error && (
+      <Message type="error">
+        <Trans i18nKey={[`errors.${accounts.signup.error.code}`, 'errors.default']}>
+          {' '}
+          <A
+            onClick={() => {
+              history.push('/login');
+            }}
+          >
+            {' '}
+          </A>
+        </Trans>
+      </Message>
+    )}
     <Button primary type="submit">
       {t('nav.signup')}
     </Button>

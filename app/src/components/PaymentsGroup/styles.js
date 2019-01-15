@@ -77,6 +77,7 @@ export const Status = styled.div`
     background-size: contain;
     height: 100%;
     width: 0.6em;
+    background: var(--colors__bg_dark);
     color: var(--colors__bg_bright);
     position: absolute;
   }

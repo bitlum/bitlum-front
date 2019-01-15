@@ -15,10 +15,10 @@ import { Root, Logo, SignupForm, A, Span } from './styles';
 // Code
 // -----------------------------------------------------------------------------
 
-const Signup = ({history}) => (
+const Signup = ({ history }) => (
   <Root>
     <Logo />
-    <SignupForm />
+    <SignupForm history={history} />
     <A
       onClick={() => {
         history.push(`/login`);

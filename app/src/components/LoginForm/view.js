@@ -49,7 +49,9 @@ export const LoginForm = ({ accounts, className, t }) => (
     />
 
     {accounts.authenticate.error && (
-      <Message type="error">{accounts.authenticate.error.message}</Message>
+      <Message type="error">
+        {t([`errors.${accounts.authenticate.error.code}`, 'errors.default'])}
+      </Message>
     )}
     {accounts.authenticate.data && Object.keys(accounts.authenticate.data).length === 0 && (
       <Message type="error">No account was found with such email</Message>

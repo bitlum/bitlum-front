@@ -32,6 +32,7 @@ import {
   Logo,
   Legend,
   LegendItem,
+  Message,
   PayButton,
   Img,
   Span,
@@ -82,11 +83,10 @@ const Payments = ({ settings, payments, accounts, t }) => {
           {/* <Img src={newPaymentIcon} /> */}
           <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
         </PayButton>
-        <EmptyWrapper>
-          <EmptyIcon />
+        <Message type="error">
           <P>Unable to load payments :(</P>
           <P>Try again later</P>
-        </EmptyWrapper>
+        </Message>
       </Root>
     );
   }
@@ -140,14 +140,11 @@ const Payments = ({ settings, payments, accounts, t }) => {
           <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
         </PayButton>
         <EmptyWrapper>
-          <EmptyIcon />
-          <P>No payments here yet</P>
+          <P>No payments made yet</P>
           <P>
-            Go{' '}
             <NavLink to="/payments/receive/check">
-              <Button link>receive</Button>
-            </NavLink>{' '}
-            one! :)
+              <Button link>Go receive one!</Button>
+            </NavLink>
           </P>
         </EmptyWrapper>
       </Root>

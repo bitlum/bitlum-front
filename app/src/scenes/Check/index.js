@@ -69,4 +69,4 @@ class Wrapper extends React.Component {
 
 Wrapper.propTypes = {};
 
-export default inject('payments', 'wallets')(observer(Wrapper));
+export default inject('payments', 'wallets', 'accounts')(observer(Wrapper));

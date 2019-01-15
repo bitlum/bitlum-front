@@ -155,7 +155,11 @@ export class ReceivePayment extends Component {
             <CopyButton data={payments.receive.data.wuid} />
           </P>,
         ]}
-        {payments.receive.error && <Message type="error">{payments.receive.error.message}</Message>}
+        {payments.receive.error && (
+          <Message type="error">
+            {t([`errors.${payments.receive.error.code}`, 'errors.default'])}
+          </Message>
+        )}
         <Footer>
           {receive.type === 'lightning' && !payments.receive.data ? (
             <Button primary type="submit">

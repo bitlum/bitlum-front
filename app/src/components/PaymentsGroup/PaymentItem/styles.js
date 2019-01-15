@@ -32,9 +32,6 @@ export const AmountAdditional = styled.span`
 
 export const Time = styled.span``;
 export const Description = styled.span`
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
   max-width: 15em;
   word-break: break-word;
   white-space: ${({ wrap }) => (wrap ? 'normal' : 'nowrap')};
@@ -43,6 +40,12 @@ export const Description = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   color: var(--colors__text_bright);
+  ${({ wrap }) =>
+    wrap
+      ? `display: -webkit-box;
+         -webkit-line-clamp: 5;
+         -webkit-box-orient: vertical;`
+      : ''};
 `;
 
 export const Info = styled.div`

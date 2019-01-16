@@ -12,7 +12,13 @@ To simplify on-boarding of new beta users we deposit $1 on every new beta accoun
 
 **WARNING: Be sure not to keep more than $50 funds on wallet: first of all it is devoted for small amounts, second it is custodial, third it is in beta stage, fourth we have deposit limits.**
 
-
-<p align="center">
-  <a target="_blank" rel="noopener noreferrer" href="https://chrome.google.com/webstore/detail/bitlum-dev-edition/jjgbpgjndagcekjgmafbddfneekoiejn"><img src="https://camo.githubusercontent.com/03f42faaa039db4a737c86efffa8fb51160b1c3e/68747470733a2f2f692e696d6775722e636f6d2f6b5742515539512e706e67" alt="Install for Chrome" data-canonical-src="https://i.imgur.com/kWBQU9Q.png" width="215" style="max-width:100%;"></a>
-  <a target="_blank" rel="noopener noreferrer" href="https://chrome.google.com/webstore/detail/bitlum-dev-edition/jjgbpgjndagcekjgmafbddfneekoiejn">
+<p align="left">
+<a href="https://bitlum.io"><img src="https://i.imgur.com/QDmvwaM.png" alt="First beta tester page" style="max-width:10%;" width="200"></a>
+<a href="https://bitlum.io"><img src="https://i.imgur.com/GnY1bW8.png" alt="Payment confirmation page" style="max-width:10%;" width="200"></a>
+<a href="https://bitlum.io"><img src="https://i.imgur.com/0081VkI.png" alt="Zero balance page" style="max-width:10%;" width="200"></a>
+<a href="https://bitlum.io"><img src="https://i.imgur.com/H0xD95c.png" alt="Receive funds page" style="max-width:10%;" width="200"></a>
+<a href="https://bitlum.io"><img src="https://i.imgur.com/CaVLGct.png" alt="Bonus payment details page" style="max-width:10%;" width="200"></a>
+<a href="https://bitlum.io"><img src="https://i.imgur.com/DVkjipA.png" alt="Put address page" style="max-width:10%;" width="200"></a>
+<a href="https://bitlum.io"><img src="https://i.imgur.com/CmBvCRK.png" alt="Payment details page" style="max-width:10%;" width="200"></a>
+<a href="https://bitlum.io"><img src="https://i.imgur.com/m3nyjQv.png" alt="Payment list page" style="max-width:10%;" width="200"></a>
+</p>

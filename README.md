@@ -1,5 +1,5 @@
 <p align="center">
-<a href="https://bitlum.io"><img src="https://i.imgur.com/dwhqCgZ.png" alt="Bitlum, get it now at bitlum.io" style="max-width:100%;" width="400"></a>
+<a href="https://bitlum.io"><img src="https://i.imgur.com/dwhqCgZ.png" alt="Bitlum, get it now at bitlum.io" style="max-width:10%;" width="200"></a>
 </p>
 
 ## Overview

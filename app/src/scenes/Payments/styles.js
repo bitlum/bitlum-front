@@ -208,6 +208,7 @@ export const Permissions = styled(MessageRaw)`
     font-size: 0.8em;
   }
   & ${P} ${A} {
+    font-size: 0.99em;
     font-weight: 500;
     text-decoration: underline;
   }

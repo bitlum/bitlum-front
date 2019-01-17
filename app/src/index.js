@@ -72,7 +72,7 @@ class App extends Component {
           type: 'event',
           category: 'lnDomains',
           action: 'openPopup',
-          label: new URL(tab[0].url).hostname,
+          label: tab[0].url && new URL(tab[0].url).hostname || 'unknown',
         });
       });
     }

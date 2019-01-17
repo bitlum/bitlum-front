@@ -50,13 +50,13 @@ export const SignupForm = ({ accounts, className, history, t, exists }) => (
       labelInvalid={t('auth.passwordInvalid')}
       required
     />
-    <Input
+    {/* <Input
       id="signupReferral"
       type="text"
       placeholder="Referral"
       labelValid="Referral"
       labelInvalid="Referral"
-    />
+    /> */}
 
     {accounts.signup.error && (
       <Message type="error">

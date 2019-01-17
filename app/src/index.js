@@ -24,6 +24,7 @@ import { I18nextProvider, withNamespaces } from 'react-i18next';
 
 // import registerServiceWorker from 'registerServiceWorker';
 import GA from 'utils/GA';
+import HA from 'utils/HA';
 import LiveChat from 'utils/LiveChat';
 import log from 'utils/logging';
 import i18nConfig from 'locales';

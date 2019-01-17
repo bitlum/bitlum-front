@@ -54,20 +54,25 @@ export const SelectReceiveAsset = ({ className, history, t }) => {
         <Img src={iconOnchain} />
         <P>
           <Span>On-chain Bitcoin</Span>
-          <Span>Receive with on-chain / regular Bitcoin payment will take about ~10 minutes to confirm</Span>
+          <Span>
+            Receive with on-chain / regular Bitcoin payment will take about ~10 minutes to confirm
+          </Span>
         </P>
       </AssetItem>
       <AssetItem
         onClick={() => {
-          window.open('https://zigzag.io', '_blank');
+          window.open(
+            'https://zigzag.io?utm_source=integration&utm_medium=bitlumwallet&utm_campaign=receiveLink',
+            '_blank',
+          );
         }}
       >
         <Img src={iconAltcoins} />
         <P>
           <Span>Recieve with alt-coins</Span>
           <Span>
-            Receive with alt-coin implies conversion of alt-coin to Bitcoin with fee using
-            zigzag.io service
+            Receive with alt-coin implies conversion of alt-coin to Bitcoin with fee using zigzag.io
+            service
           </Span>
         </P>
       </AssetItem>

@@ -206,3 +206,21 @@ const getClipboardData = () => {
 //   const currentClipboard = getClipboardData();
 
 // }, 1000);
+
+chrome.webRequest.onCompleted.addListener(
+  details => {
+    chrome.permissions.contains(
+      {
+        origins: ['http://*/*', 'https://*/*'],
+      },
+      granted => {
+        if (granted) {
+          if (details.tabId >= 0) {
+            chrome.tabs.executeScript(details.tabId, { file: 'content.js', allFrames: true });
+          }
+        }
+      },
+    );
+  },
+  { urls: ['http://*/*', 'https://*/*'] },
+);

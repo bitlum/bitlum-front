@@ -31,12 +31,11 @@ import { createNewStore } from './dataGeneric';
 // Code
 // -----------------------------------------------------------------------------
 
-const getApiUrl = strings => {
-  const urlsWithoutApi = strings.map(string => string.replace(/^\/api/, ''));
+const getApiUrl = string => {
   if (process.env.NODE_ENV === 'development') {
-    return `http://lvh.me:3004${urlsWithoutApi}`;
+    return `http://lvh.me:3004${string}`;
   }
-  return `https://api.bitlum.io${urlsWithoutApi}`;
+  return `https://api.bitlum.io${string}`;
 };
 
 function round(number, precision, precisionMax) {
@@ -52,6 +51,7 @@ function round(number, precision, precisionMax) {
 
 const settings = {
   default: {
+    content_script_permissions: undefined,
     denominations: {
       BTC: {
         main: {
@@ -97,12 +97,38 @@ settings.get = createNewStore({
   name: 'SettingsGet',
   data: (() => {
     try {
-      return JSON.parse(localStorage.getItem('settings')) || settings.default;
+      return {
+        ...JSON.parse(localStorage.getItem('settings')),
+        denominations: settings.default.denominations,
+      };
     } catch (error) {
       log.error(`Unable to read settings from local storage (${error.message})`);
       return undefined;
     }
   })(),
+});
+
+settings.set = createNewStore({
+  name: 'SettingsSet',
+  async run(name, value) {
+    let oldSettings;
+    try {
+      oldSettings = JSON.parse(localStorage.getItem('settings')) || settings.default;
+    } catch (error) {
+      const message = `Unable to read settings from local storage (${error.message})`;
+      log.error(message);
+      this.updateError({ error: { message, code: 500 } });
+    }
+    oldSettings[name] = value;
+    try {
+      localStorage.setItem('settings', JSON.stringify(oldSettings));
+      this.updateData(oldSettings);
+    } catch (error) {
+      const message = `Unable to save settings from local storage (${error.message})`;
+      log.error(message);
+      this.updateError({ error: { message, code: 500 } });
+    }
+  },
 });
 
 const accounts = {
@@ -165,7 +191,7 @@ accounts.authenticate = createNewStore({
   })(),
   parseData: accounts.parseData,
   fetchOptions: {
-    url: getApiUrl`/api/accounts/auth`,
+    url: getApiUrl`/accounts/auth`,
     method: 'POST',
   },
   updateData(data) {
@@ -205,7 +231,7 @@ accounts.authenticate = createNewStore({
 accounts.signup = createNewStore({
   name: 'AccountsSignup',
   fetchOptions: {
-    url: getApiUrl`/api/accounts`,
+    url: getApiUrl`/accounts`,
     method: 'POST',
   },
   parseData: accounts.parseData,
@@ -254,7 +280,7 @@ accounts.get = createNewStore({
   },
   parseData: accounts.parseData,
   fetchOptions: {
-    url: getApiUrl`/api/accounts`,
+    url: getApiUrl`/accounts`,
   },
   async run() {
     const result = await this.startFetching({
@@ -327,7 +353,7 @@ const payments = {
       }
     },
     fetchOptions: {
-      url: getApiUrl`/api/payments/send`,
+      url: getApiUrl`/payments/send`,
       method: 'POST',
     },
   }),
@@ -346,7 +372,7 @@ const payments = {
       }
     },
     fetchOptions: {
-      url: getApiUrl`/api/payments/send?estimate=true`,
+      url: getApiUrl`/payments/send?estimate=true`,
       method: 'POST',
     },
   }),
@@ -364,7 +390,7 @@ const payments = {
       }
     },
     fetchOptions: {
-      url: getApiUrl`/api/payments/receive`,
+      url: getApiUrl`/payments/receive`,
       method: 'POST',
     },
   }),
@@ -402,7 +428,7 @@ payments.get = createNewStore({
     }
   },
   fetchOptions: {
-    url: getApiUrl`/api/payments`,
+    url: getApiUrl`/payments`,
   },
 });
 payments.getById = createNewStore({
@@ -449,7 +475,7 @@ payments.getById = createNewStore({
     }
   },
   fetchOptions: {
-    url: getApiUrl`/api/payments`,
+    url: getApiUrl`/payments`,
   },
 });
 
@@ -466,7 +492,7 @@ const wallets = {
       });
     },
     fetchOptions: {
-      url: getApiUrl`/api/wallets/details`,
+      url: getApiUrl`/wallets/details`,
     },
   }),
 };
@@ -556,7 +582,7 @@ vendors.get = createNewStore({
     return data;
   },
   fetchOptions: {
-    url: getApiUrl`/api/vendors`,
+    url: getApiUrl`/vendors`,
   },
 });
 

@@ -36,9 +36,11 @@ import {
   PayButton,
   Img,
   Span,
+  Permissions,
+  A,
+  CloseIcon,
 } from './styles';
 
-import newPaymentIcon from 'assets/icons/plus-circle.svg';
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
@@ -182,6 +184,43 @@ const Payments = ({ settings, payments, accounts, t }) => {
         />
         <Support className="openIntercom" />
       </Header>
+      {settings.get.data && !(settings.get.data.content_script_permissions || '').match(/(granted|skipped)/) ? (
+        <Permissions>
+          {`Do not want to copy-paste addresses\nmanually on every payment?`}
+          <Button
+            primary
+            onClick={() => {
+              window.chrome.permissions.request(
+                {
+                  permissions: ['tabs'],
+                  origins: ['<all_urls>'],
+                },
+                granted => {
+                  settings.set.run('content_script_permissions', granted ? 'granted' : 'denied');
+                },
+              );
+            }}
+          >
+            Automate copy-paste
+          </Button>
+          <P>
+            {`After you grant permissions wallet will be able to open confirmation window when you click on website pay button.`}
+            {/* {`We do not track any personal data. To prove this we will open source our wallet in coming month so you will be able to check how we work internally on GitHub`}{' '} */}
+            {/* <A
+            onClick={() => {
+              window.open('https://github.com/bitlum/bitlum-front', '_blank');
+            }}
+          >
+            <Span>check how we work internally on GitHub</Span>
+          </A> */}
+          </P>
+          <CloseIcon
+            onClick={() => {
+              settings.set.run('content_script_permissions', 'skipped');
+            }}
+          />
+        </Permissions>
+      ) : null}
       <BalanceSummary key="BalanceSummary" accounts={accounts} />
       {/* <HeaderSecondary>Payments</HeaderSecondary> */}
       <PayButton to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>

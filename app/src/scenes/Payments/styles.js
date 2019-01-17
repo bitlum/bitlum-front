@@ -14,8 +14,11 @@ import { NavLink } from 'react-router-dom';
 import {
   Img,
   P,
+  A,
+  Button,
   Span,
   Header as HeaderRaw,
+  Message as MessageRaw,
   withLoader,
   Support as SupportRaw,
 } from 'components/common';
@@ -27,6 +30,7 @@ import LogoFull from 'assets/img/logo/full.png';
 import logoutIcon from 'assets/icons/log-out.svg';
 import { ReactComponent as EmptyIconRaw } from 'assets/icons/paper.svg';
 import { ReactComponent as ErrorIconRaw } from 'assets/icons/x-circle.svg';
+import { ReactComponent as CloseIconRaw } from 'assets/icons/x-circle.svg';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -117,6 +121,16 @@ export const ErrorIcon = styled(ErrorIconRaw)`
   opacity: 0.3;
 `;
 
+export const CloseIcon = styled(CloseIconRaw)`
+  position: absolute;
+  height: 1.4em;
+  top: 0.75em;
+  width: 1.4em;
+  right: 0.75em;
+  filter: invert(0.6);
+  cursor: pointer;
+`;
+
 export const Header = styled(HeaderRaw)`
   background: var(--colors__bg_bright);
   height: var(--sizing__header_heigh);
@@ -167,6 +181,37 @@ export const LegendItem = styled.p`
 `;
 
 export const EmptyWrapper = styled.div``;
+
+export const Permissions = styled(MessageRaw)`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  white-space: pre-wrap;
+  text-align: center;
+  margin-bottom: -3.5em;
+  background: var(--colors__bg_info);
+  font-weight: 500;
+  & * {
+    word-break: break-word;
+  }
+  & > ${Button} {
+    margin: 1em 0;
+    font-weight: 500;
+  }
+  & ${Span} {
+    font-weight: 600;
+  }
+  & ${P} {
+    font-weight: normal;
+    font-size: 0.8em;
+  }
+  & ${P} ${A} {
+    font-weight: 500;
+    text-decoration: underline;
+  }
+`;
 
 export const Root = withLoader(styled.div`
   display: flex;

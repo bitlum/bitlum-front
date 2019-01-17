@@ -40,7 +40,7 @@ const getApiUrl = string => {
 
 function round(number, precision, precisionMax) {
   const rounded =
-    (Math.sign(number) * Math.floor(Math.abs(number) * 10 ** precision)) / 10 ** precision;
+    (Math.sign(number) * Math.round(Math.abs(number) * 10 ** precision)) / 10 ** precision;
 
   if (Number.isInteger(rounded) && precision < precisionMax) {
     return round(number, precision + 1, precisionMax);

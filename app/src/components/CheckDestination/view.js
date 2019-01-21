@@ -35,7 +35,8 @@ export class CheckDestination extends Component {
       GA({
         type: 'event',
         category: 'vuidDomainPair',
-        action: `${(wallet && wallet.origin) || 'manual'}_${wallets.getDetails.data && wallets.getDetails.data.vuid}`,
+        action: `${(wallet && wallet.origin) || 'manual'}_${wallets.getDetails.data &&
+          wallets.getDetails.data.vuid}`,
       });
       history.push(
         `/payments/confirm?payment=${JSON.stringify({ ...wallet, ...wallets.getDetails.data })}`,
@@ -46,6 +47,7 @@ export class CheckDestination extends Component {
     return (
       <Root className={className} loading={wallets.getDetails.loading}>
         <P>Destination</P>
+
         <Input
           id="sendAddress"
           type="text"
@@ -57,7 +59,9 @@ export class CheckDestination extends Component {
           }}
           required
         />
-
+        <A href="https://zigzag.io" target="_blank">
+          Withdraw here to other assets in 5 seconds
+        </A>
         {wallets.getDetails.error && (
           <Message type="error">
             {t([`errors.${wallets.getDetails.error.code}`, 'errors.default'])}

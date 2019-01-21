@@ -79,6 +79,14 @@ export const Root = withLoader(styled(Form)`
     color: var(--colors__bg_accent);
     cursor: pointer;
   }
+
+  & > ${A} {
+    font-size: 0.6em;
+    font-weight: 500;
+    text-decoration: underline;
+    margin-left: 2em;
+    margin-top: 1em;
+  }
 `);
 
 export default Root;

@@ -219,7 +219,15 @@ export const Root = withLoader(styled.div`
   flex-direction: column;
   justify-content: center;
   margin-bottom: 1em;
-
+  & > ${MessageRaw} {
+    & ${Span} {
+      font-weight: 500;
+      padding: 0.5em 0;
+      font-size: 1.1em;
+    }
+    text-align: center;
+    white-space: pre-line;
+  }
   & ${PaymentsGroup}, & ${BalanceSummary}, & ${Separator}, & ${HeaderSecondary}, & ${Legend} {
     margin-left: 2rem;
     margin-right: 2rem;

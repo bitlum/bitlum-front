@@ -135,6 +135,20 @@ const Payments = ({ settings, payments, accounts, t }) => {
           />
           <Support className="openIntercom" />
         </Header>
+        {accounts.get.data &&
+        accounts.get.data.restrictions.unconfirmed &&
+        accounts.get.data.restrictions.unconfirmed.value ? (
+          <Message type="warn">
+            <CloseIcon
+              onClick={() => {
+                settings.set.run('email_confirmation_skipped', true);
+              }}
+            />
+            We sent confirmation link to
+            <Span>{accounts.get.data.email}</Span>
+            {`To get your 0.5$ bonus please confirm your email\nIf you can't find it, check spam or contact us`}
+          </Message>
+        ) : null}
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
         <PayButton to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
@@ -184,6 +198,20 @@ const Payments = ({ settings, payments, accounts, t }) => {
         />
         <Support className="openIntercom" />
       </Header>
+      {accounts.get.data &&
+      accounts.get.data.restrictions.unconfirmed &&
+      accounts.get.data.restrictions.unconfirmed.value ? (
+        <Message type="warn">
+          <CloseIcon
+            onClick={() => {
+              settings.set.run('email_confirmation_skipped', true);
+            }}
+          />
+          We sent confirmation link to
+          <Span>{accounts.get.data.email}</Span>
+          {`To get your 0.5$ bonus please confirm your email\nIf you can't find it, check spam or contact us`}
+        </Message>
+      ) : null}
       {settings.get.data &&
       !(settings.get.data.content_script_permissions || '').match(/(granted|skipped)/) ? (
         <Permissions>

@@ -15,7 +15,7 @@ import { Root, Header, SelectReceiveAsset, P, BackButton, Support, Message } fro
 // Code
 // -----------------------------------------------------------------------------
 
-const Receive = ({ payments, t }) => (
+const Select = ({ payments, t }) => (
   <Root loading={payments.receive.loading}>
     <Header>
       <BackButton />
@@ -23,10 +23,12 @@ const Receive = ({ payments, t }) => (
       <Support className="openIntercom" />
     </Header>
     {payments.receive.error ? (
-      <Message type="error">{t([`errors.${payments.receive.error.code}`, 'errors.default'])}</Message>
+      <Message type="error">
+        {t([`errors.${payments.receive.error.code}`, 'errors.default'])}
+      </Message>
     ) : null}
     <SelectReceiveAsset disabled={payments.receive.error} />
   </Root>
 );
 
-export default Receive;
+export default Select;

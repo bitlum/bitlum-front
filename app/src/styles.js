@@ -108,7 +108,7 @@ export const Global = createGlobalStyle`
   --colors__bg_error: rgba(244,5,102,0.11);
   --colors__text_error: #F40566;
 
-  --colors__bg_warn: #f8c57e;
+  --colors__bg_warn: #ffdfb2;
   --colors__text_warn: #ff9500;
 
   --colors__bg_pending: #F5A623;

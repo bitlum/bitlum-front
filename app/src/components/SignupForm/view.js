@@ -13,7 +13,7 @@ import { Trans } from 'react-i18next';
 
 import log from 'utils/logging';
 
-import { Root, Input, Button, Message, A } from './styles';
+import { Root, Input, Button, Message, A, P } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -50,13 +50,14 @@ export const SignupForm = ({ accounts, className, history, t, exists }) => (
       labelInvalid={t('auth.passwordInvalid')}
       required
     />
-    {/* <Input
+    <P>{`Did you receive invitation from someone?\nYou can put their email here`}</P>
+    <Input
       id="signupReferral"
       type="text"
-      placeholder="Referral"
-      labelValid="Referral"
-      labelInvalid="Referral"
-    /> */}
+      placeholder="Email of person that invited you"
+      labelValid="Email of person that invited you"
+      labelInvalid="Email of person that invited you"
+    />
 
     {accounts.signup.error && (
       <Message type="error">

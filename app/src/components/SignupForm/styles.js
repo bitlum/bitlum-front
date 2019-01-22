@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import styled from 'styled-components';
-import { withLoader, Form, Button, Message, A } from 'components/common';
+import { withLoader, Form, Button, Message, A, P } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -28,6 +28,14 @@ export const Root = withLoader(styled(Form)`
   }
   & ${Message} {
     margin: 1em 0;
+  }
+  & > ${P} {
+    margin-left: 0.3em;
+    font-size: 0.8em;
+    font-weight: 500;
+    color: var(--colors__text_dark);
+    margin-top: 1em;
+    white-space: pre-line;
   }
 `);
 

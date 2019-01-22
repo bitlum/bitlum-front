@@ -53,12 +53,14 @@ configure({
   enforceActions: 'observed',
 });
 
-const userData = stores.accounts.get.data;
-LiveChat.boot({
-  email: userData && userData.email,
-  user_id: userData && userData.auid,
-  created_at: userData && userData.createdAt,
-});
+if (process.env.NODE_ENV === 'production') {
+  const userData = stores.accounts.get.data;
+  LiveChat.boot({
+    email: userData && userData.email,
+    user_id: userData && userData.auid,
+    created_at: userData && userData.createdAt,
+  });
+}
 
 class App extends Component {
   componentWillMount() {
@@ -72,7 +74,7 @@ class App extends Component {
           type: 'event',
           category: 'lnDomains',
           action: 'openPopup',
-          label: tab[0].url && new URL(tab[0].url).hostname || 'unknown',
+          label: (tab[0].url && new URL(tab[0].url).hostname) || 'unknown',
         });
       });
     }

@@ -146,7 +146,8 @@ const Payments = ({ settings, payments, accounts, t }) => {
             />
             We sent confirmation link to
             <Span>{accounts.get.data.email}</Span>
-            {`To get your 0.5$ bonus please confirm your email\nIf you can't find it, check spam or contact us`}
+            To get your 0.5$ bonus please confirm your email <A class="openIntercom">and then contact us</A>
+            {`\nIf you can't find email, check spam or contact us`}
           </Message>
         ) : null}
         <BalanceSummary key="BalanceSummary" accounts={accounts} />

@@ -225,6 +225,9 @@ export const Root = withLoader(styled.div`
       padding: 0.5em 0;
       font-size: 1.1em;
     }
+    & ${A} {
+      text-decoration: underline;
+    }
     text-align: center;
     white-space: pre-line;
   }

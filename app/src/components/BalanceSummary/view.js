@@ -21,7 +21,7 @@ import receiveIcon from 'assets/icons/plus-circle.svg';
 // -----------------------------------------------------------------------------
 
 export const BalanceSummary = ({ accounts, className, appearance = 'normal', denomination, t }) => {
-  if (accounts.get.error || !accounts.get.data) {
+  if (accounts.get.error && !accounts.get.data) {
     return (
       <Root className={className} appearance={appearance}>
         <Span>Unable to load balance info</Span>

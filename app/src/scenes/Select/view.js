@@ -24,7 +24,9 @@ const Select = ({ payments, t }) => (
     </Header>
     {payments.receive.error ? (
       <Message type="error">
-        {t([`errors.${payments.receive.error.code}`, 'errors.default'])}
+        {t([`errors.${payments.receive.error.code}`, 'errors.default'], {
+          ...payments.receive.error,
+        })}
       </Message>
     ) : null}
     <SelectReceiveAsset disabled={payments.receive.error} />

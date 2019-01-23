@@ -20,6 +20,7 @@ export const Message = styled.div`
   width: 100%;
   justify-content: center;
   align-items: center;
+  text-align: center;
   padding: 0.85em 1.3em;
   font-size: 0.8em;
   color: ${({ type }) => `var(--colors__text_${type})`};

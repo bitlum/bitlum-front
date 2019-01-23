@@ -23,6 +23,10 @@ export const Root = withLoader(styled(Form)`
   & ${Message} {
     margin: 1em 0;
   }
+  & input {
+    padding: 1.3em;
+    font-size: 0.9em;
+  }
 `);
 
 export default Root;

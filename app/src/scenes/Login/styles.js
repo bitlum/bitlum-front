@@ -41,7 +41,7 @@ export const Root = styled.div`
     font-size: 0.8em;
   }
   & > ${Span} {
-    margin-top: 3.5em;
+    margin-top: 1.5em;
     font-size: 0.8em;
     color: var(--colors__bg_accent);
     cursor: pointer;
@@ -53,7 +53,7 @@ export const Logo = styled.img.attrs({
 })`
   position: relative;
   content: url(${LogoFull});
-  height: 4.5em;
+  height: 3.5em;
   margin-bottom: 2em;
 `;
 

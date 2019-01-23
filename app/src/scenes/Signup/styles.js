@@ -13,13 +13,20 @@ import SignupFormCommon from 'components/SignupForm';
 
 import LogoFull from 'assets/img/logo/full.png';
 
-import { A, Span } from 'components/common';
+import { A, Span, Header as HeaderRaw } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
 export * from 'components/common';
+
+export const Header = styled(HeaderRaw)`
+  background: var(--colors__bg);
+  font: var(--fonts__header_thin);
+  min-height: var(--sizing__header_heigh);
+  border-bottom: 0.05em solid var(--colors__bg_dark);
+`;
 
 export const Root = styled.div`
   background-color: var(--colors__bg);
@@ -41,10 +48,11 @@ export const Root = styled.div`
     font-size: 0.8em;
   }
   & > ${Span} {
-    margin-top: 3.5em;
+    margin-top: 1.5em;
     font-size: 0.8em;
     color: var(--colors__bg_accent);
     cursor: pointer;
+    margin-bottom: auto;
   }
 `;
 
@@ -53,13 +61,14 @@ export const Logo = styled.img.attrs({
 })`
   position: relative;
   content: url(${LogoFull});
-  height: 4.5em;
+  height: 3.5em;
   margin-bottom: 2em;
 `;
 
 export const SignupForm = styled(SignupFormCommon)`
   width: calc(100% - 2em);
   margin: 0 1em;
+  margin-top: 1em;
   & > div:last-of-type input {
     margin-bottom: 1.5em;
   }

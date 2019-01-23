@@ -9,7 +9,7 @@
 
 import React from 'react';
 
-import { Root, Logo, SignupForm, A, Span } from './styles';
+import { Root, Logo, SignupForm, A, Span, Header, P, BackButton } from './styles';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -17,7 +17,10 @@ import { Root, Logo, SignupForm, A, Span } from './styles';
 
 const Signup = ({ history }) => (
   <Root>
-    <Logo />
+    <Header>
+      <BackButton />
+      <P>Sign up</P>
+    </Header>
     <SignupForm history={history} />
     <A
       onClick={() => {

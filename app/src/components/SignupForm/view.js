@@ -37,7 +37,7 @@ export const SignupForm = ({ accounts, className, history, t, exists }) => (
     <Input
       id="signupEmail"
       type="email"
-      placeholder="Email of new account"
+      placeholder="Email"
       labelValid={t('auth.email')}
       labelInvalid={t('auth.emailInvalid')}
       required
@@ -45,12 +45,12 @@ export const SignupForm = ({ accounts, className, history, t, exists }) => (
     <Input
       id="signupPassword"
       type="password"
-      placeholder="Password of new account"
+      placeholder="Password"
       labelValid={t('auth.password')}
       labelInvalid={t('auth.passwordInvalid')}
       required
     />
-    <P>{`Did you receive invitation from someone?\nYou can put their email here`}</P>
+    <P>Have you been invited by someone?</P>
     <Input
       id="signupReferral"
       type="text"

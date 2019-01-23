@@ -24,8 +24,10 @@ export const Root = withLoader(styled(Form)`
     margin: 1em 0;
   }
   & input {
-    padding: 1.3em;
     font-size: 0.9em;
+  }
+  & label {
+    left: 1.4em;
   }
 `);
 

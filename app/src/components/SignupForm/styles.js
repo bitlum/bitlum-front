@@ -39,8 +39,10 @@ export const Root = withLoader(styled(Form)`
     white-space: pre-line;
   }
   & input {
-    padding: 1.3em;
     font-size: 0.9em;
+  }
+  & label {
+    left: 1.4em;
   }
 `);
 

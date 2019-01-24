@@ -262,7 +262,7 @@ accounts.get = createNewStore({
     try {
       return accounts.parseData(JSON.parse(localStorage.getItem('accountData')));
     } catch (error) {
-      log.error(`Unable to read auth data from local storage (${error.message})`);
+      log.error(`Unable to read account data from local storage (${error.message})`);
       return undefined;
     }
   })(),
@@ -283,6 +283,7 @@ accounts.get = createNewStore({
     url: getApiUrl`/accounts`,
   },
   async run() {
+    const oldData = this.data;
     const result = await this.startFetching({
       headers: {
         Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
@@ -290,6 +291,9 @@ accounts.get = createNewStore({
     });
     if (result.error && result.error.code.match('^401.*$')) {
       accounts.authenticate.cleanup();
+    }
+    if (result.error && oldData) {
+      this.updateData(oldData);
     }
   },
 });

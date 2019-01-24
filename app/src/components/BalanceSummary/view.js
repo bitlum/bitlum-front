@@ -22,6 +22,16 @@ import receiveIcon from 'assets/icons/plus-circle.svg';
 
 export const BalanceSummary = ({ accounts, className, appearance = 'normal', denomination, t }) => {
   if (
+    !accounts.get.data && accounts.get.loading
+  ) {
+    return (
+      <Root className={className} appearance={appearance}>
+        <Span>Loading balance info...</Span>
+      </Root>
+    );
+  }
+
+  if (
     (accounts.get.error && !accounts.get.data) ||
     (!accounts.get.error && (!accounts.get.data || !accounts.get.data.balances))
   ) {

@@ -27,7 +27,7 @@ class Wrapper extends React.Component {
     this.polling = setInterval(() => {
       payments.get.run();
       accounts.get.run();
-    }, 5000);
+    }, 3000);
   }
 
   componentWillUnmount() {

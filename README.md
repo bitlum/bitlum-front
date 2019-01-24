@@ -8,7 +8,7 @@
 
 Wallet aimed on non-technical users who would like to experience Lightning Network and at same time would tolerate risk keeping small amounts of funds on cutodial wallet to get rid of technical knowledge needed to maintain lightning node.
 
-To simplify on-boarding of new beta users we deposit $1 on every account during bets stage. If you are interested in beta testing fill up the form on [bitlum.io](https://bitlum.io), at the end you will be prompted to join Telegram group.
+To simplify on-boarding of new beta users we deposit $1 on every account during beta stage. If you are interested in beta testing fill up the form on [bitlum.io](https://bitlum.io), at the end you will be prompted to join Telegram group.
 
 **WARNING: Despite we have balance limits of 0.008 BTC you can top up more through onchain. But we encourage you not to keep more than $50 on your balance: wallet still in beta stage and it is custodial. In case of errors we will not be able to refund any amount higher than our limits.**
 

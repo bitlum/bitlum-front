@@ -21,16 +21,16 @@ import receiveIcon from 'assets/icons/plus-circle.svg';
 // -----------------------------------------------------------------------------
 
 export const BalanceSummary = ({ accounts, className, appearance = 'normal', denomination, t }) => {
-  if (accounts.get.error && !accounts.get.data) {
+  if (
+    (accounts.get.error && !accounts.get.data) ||
+    (!accounts.get.error && (!accounts.get.data || !accounts.get.data.balances))
+  ) {
     return (
       <Root className={className} appearance={appearance}>
         <Span>Unable to load balance info</Span>
       </Root>
     );
   }
-  const totalBalance = Object.keys(accounts.get.data.balances)
-    .map(asset => accounts.get.data.balances[asset].available)
-    .reduce((p, c) => p + Number(c), 0);
 
   if (appearance === 'onlyBalance') {
     return (

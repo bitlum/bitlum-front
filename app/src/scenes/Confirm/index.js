@@ -11,6 +11,7 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 
 import log from 'utils/logging';
+import GA from 'utils/GA';
 
 import view from './view';
 
@@ -43,7 +44,26 @@ class Wrapper extends React.Component {
       } catch (e) {
         console.log(e);
       }
+      GA({
+        type: 'event',
+        category: 'payment',
+        action: 'insertedManually',
+        label: payment.origin || 'unknown',
+      });
+    } else {
+      GA({
+        type: 'event',
+        category: 'payment',
+        action: 'insertedAutomatically_button',
+        label: payment.origin,
+      });
     }
+
+    GA({
+      type: 'event',
+      category: 'vuidDomainPair',
+      action: `${payment.origin || 'unknown'}_${payment.vuid}`,
+    });
 
     vendors.get.run(payment.vuid, { origin: payment.origin });
 

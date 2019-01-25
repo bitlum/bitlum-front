@@ -32,12 +32,6 @@ export class CheckDestination extends Component {
       wallets.getDetails.data &&
       !(wallets.getDetails.data.latestPayment && wallets.getDetails.data.type === 'lightning')
     ) {
-      GA({
-        type: 'event',
-        category: 'vuidDomainPair',
-        action: `${(wallet && wallet.origin) || 'manual'}_${wallets.getDetails.data &&
-          wallets.getDetails.data.vuid}`,
-      });
       history.push(
         `/payments/confirm?payment=${JSON.stringify({ ...wallet, ...wallets.getDetails.data })}`,
       );

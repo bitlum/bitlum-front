@@ -109,7 +109,16 @@ export class PaymentConfirmation extends Component {
           });
 
           LiveChat.track(
-            `${payment.origin || ''}_payment_${payment.asset}_${
+            `${payment.origin || 'unknown'}_payment_${payment.asset}_${
+              result.error ? 'error' : 'created'
+            }`,
+            {
+              amount,
+            },
+          );
+
+          LiveChat.track(
+            `payment_${payment.asset}_${
               result.error ? 'error' : 'created'
             }`,
             {

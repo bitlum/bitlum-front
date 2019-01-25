@@ -54,12 +54,21 @@ configure({
 });
 
 if (process.env.NODE_ENV === 'production') {
-  const userData = stores.accounts.get.data;
-  LiveChat.boot({
-    email: userData && userData.email,
-    user_id: userData && userData.auid,
-    created_at: userData && userData.createdAt,
+  const accountData = stores.accounts.get.data;
+  const settingsData = stores.settings.get.data;
+  const dataToSend = {
+    email: accountData && accountData.email,
+    user_id: accountData && accountData.auid,
+    created_at: accountData && accountData.createdAt,
+    permission_handleLinks_granted:
+      settingsData && settingsData.content_script_permissions === 'granted',
+  };
+
+  Object.keys((accountData && accountData.balances) || {}).forEach(asset => {
+    dataToSend[`${asset}_balance`] = accountData.balances[asset].available;
   });
+
+  LiveChat.boot(dataToSend);
 }
 
 class App extends Component {

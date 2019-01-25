@@ -503,23 +503,23 @@ const wallets = {
 
 const vendors = {
   randomVendors: (() =>
-    [
-      { name: 'Shark', iconUrl: vendorShark },
-      { name: 'Bear', iconUrl: vendorBear },
-      { name: 'Bird', iconUrl: vendorBird },
-      { name: 'Dog', iconUrl: vendorDog },
-      { name: 'Cat', iconUrl: vendorCat },
-      { name: 'Lion', iconUrl: vendorLion },
-      { name: 'Frog', iconUrl: vendorFrog },
-      { name: 'Chicken', iconUrl: vendorChicken },
-      { name: 'Elephant', iconUrl: vendorElephant },
-      { name: 'Fish', iconUrl: vendorFish },
-      { name: 'Gorilla', iconUrl: vendorGorilla },
-      { name: 'Horse', iconUrl: vendorHorse },
-      { name: 'Penguin', iconUrl: vendorPenguin },
-      { name: 'Squirrel', iconUrl: vendorSquirrel },
-    ]
-      .map(character =>
+    [].concat(
+      ...[
+        { name: 'Shark', iconUrl: vendorShark },
+        { name: 'Bear', iconUrl: vendorBear },
+        { name: 'Bird', iconUrl: vendorBird },
+        { name: 'Dog', iconUrl: vendorDog },
+        { name: 'Cat', iconUrl: vendorCat },
+        { name: 'Lion', iconUrl: vendorLion },
+        { name: 'Frog', iconUrl: vendorFrog },
+        { name: 'Chicken', iconUrl: vendorChicken },
+        { name: 'Elephant', iconUrl: vendorElephant },
+        { name: 'Fish', iconUrl: vendorFish },
+        { name: 'Gorilla', iconUrl: vendorGorilla },
+        { name: 'Horse', iconUrl: vendorHorse },
+        { name: 'Penguin', iconUrl: vendorPenguin },
+        { name: 'Squirrel', iconUrl: vendorSquirrel },
+      ].map(character =>
         [
           { color: '#e57373', name: 'Red' },
           { color: '#F06292', name: 'Pink' },
@@ -544,8 +544,8 @@ const vendors = {
           ...color,
           name: `${color.name} ${character.name}`,
         })),
-      )
-      .flat())(),
+      ),
+    ))(),
   generateUnique(usedNames) {
     const unusedVendors = this.randomVendors.filter(vendor => !usedNames.includes(vendor.name));
     return unusedVendors[Math.floor(Math.random() * unusedVendors.length)];

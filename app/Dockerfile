@@ -1,5 +1,5 @@
 ###############################################################################
-# Stage #1.0: Common builder image
+# Stage 1.0: Image used to develop and build application
 ###############################################################################
 
 FROM node:10-alpine as base
@@ -30,7 +30,7 @@ COPY . .
 ENV NODE_PATH ./src/:$NODE_PATH 
 
 ###############################################################################
-# Stage #1.1: Image ready to start development server
+# Stage 1.1: Image ready to start development server
 ###############################################################################
 
 FROM base as development
@@ -38,17 +38,23 @@ FROM base as development
 CMD ["npm", "start"]
 
 ###############################################################################
-# Stage #1.2: Image that ready to build production bundle
+# Stage 1.2: Image that ready to build production bundle
 ###############################################################################
 
 FROM base as builder
 
+RUN apk add --no-cache zip
+
 RUN npm run build
 
-CMD rm -rf /opt/app/build-prod/*; cp -r /opt/app/build/. /opt/app/build-prod/
+WORKDIR /opt/app/build/
+
+CMD rm -rf /opt/app/build-prod/*; \
+    zip -r build .; \
+    cp -r . /opt/app/build-prod/;
 
 ###############################################################################
-# Stage #2: Bundled build with server image
+# Stage 2: Image used to serve end  application through http
 ###############################################################################
 
 FROM nginx:alpine

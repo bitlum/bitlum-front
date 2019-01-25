@@ -34,6 +34,17 @@ class Wrapper extends React.Component {
       }
     }
 
+    if (!payment.origin) {
+      try {
+        const clipboardPayment = JSON.parse(localStorage.getItem('latestCopiedWuid'));
+        if (clipboardPayment.wuid === payment.wuid) {
+          payment.origin = clipboardPayment.origin;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
     vendors.get.run(payment.vuid, { origin: payment.origin });
 
     if (!accounts.get.data) {

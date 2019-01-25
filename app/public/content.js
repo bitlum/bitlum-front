@@ -90,7 +90,7 @@
     );
   };
 
-  const eventListener = e => {
+  const clickListener = e => {
     const wuid = (wuidParsers[window.location.hostname] || wuidParsers.default)(e);
     if (wuid) {
       e.preventDefault();
@@ -98,7 +98,14 @@
     }
   };
 
-  document.addEventListener('mousedown', eventListener);
-  document.addEventListener('click', eventListener);
-  document.addEventListener('mouseup', eventListener);
+  document.addEventListener('mousedown', clickListener);
+  document.addEventListener('click', clickListener);
+  document.addEventListener('mouseup', clickListener);
+
+  const clipboardListener = e => {
+    const origin = window.location.hostname;
+    chrome.runtime.sendMessage({ type: 'clipboardEvent',origin });
+  };
+  document.addEventListener('copy', clipboardListener);
+  document.addEventListener('cut', clipboardListener);
 })();

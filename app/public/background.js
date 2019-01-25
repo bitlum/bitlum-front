@@ -181,7 +181,9 @@ const paymentsFetcher = setInterval(async () => {
         Notifications.create(
           'newPayment',
           latestIncoming,
-          `Payment ${latestIncoming.status === 'completed' ? 'received' : 'pending'} from ${vendor.name}`,
+          `Payment ${latestIncoming.status === 'completed' ? 'received' : 'pending'} from ${
+            vendor.name
+          }`,
           latestIncoming.description || 'No description',
           'assets/icon48.png',
         );
@@ -189,23 +191,6 @@ const paymentsFetcher = setInterval(async () => {
     }
   }
 }, 5000);
-
-const getClipboardData = () => {
-  const clipBoardInput = document.createElement('input');
-  clipBoardInput.style = 'position: absolute;';
-  document.body.appendChild(clipBoardInput);
-  clipBoardInput.focus();
-  document.execCommand('paste');
-  const clipboardValue = clipBoardInput.value;
-  document.body.removeChild(clipBoardInput);
-  return clipboardValue;
-};
-
-// let previousClipboardWuid;
-// const clipboardChecker = setInterval(() => {
-//   const currentClipboard = getClipboardData();
-
-// }, 1000);
 
 chrome.webRequest.onCompleted.addListener(
   details => {
@@ -224,3 +209,29 @@ chrome.webRequest.onCompleted.addListener(
   },
   { urls: ['http://*/*', 'https://*/*'] },
 );
+
+const getClipboardData = () => {
+  const clipBoardInput = document.createElement('input');
+  clipBoardInput.style = 'position: absolute;';
+  document.body.appendChild(clipBoardInput);
+  clipBoardInput.focus();
+  document.execCommand('paste');
+  const clipboardValue = clipBoardInput.value;
+  document.body.removeChild(clipBoardInput);
+  return clipboardValue;
+};
+
+// let previousClipboardWuid;
+// const clipboardChecker = setInterval(() => {
+//   const currentClipboard = getClipboardData();
+
+// }, 1000);
+
+chrome.runtime.onMessage.addListener(req => {
+  if (req.type === 'clipboardEvent') {
+    localStorage.setItem(
+      'latestCopiedWuid',
+      JSON.stringify({ wuid: getClipboardData(), origin: req.origin }),
+    );
+  }
+});

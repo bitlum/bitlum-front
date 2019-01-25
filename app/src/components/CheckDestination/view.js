@@ -84,7 +84,10 @@ export class CheckDestination extends Component {
               )}
             </Message>
           )}
-        <A href="https://zigzag.io" target="_blank">
+        <A
+          href="https://zigzag.io?utm_source=integration&utm_medium=bitlumwallet&utm_campaign=withdrawLink"
+          target="_blank"
+        >
           Withdraw here to other assets in 5 seconds
         </A>
         <P>

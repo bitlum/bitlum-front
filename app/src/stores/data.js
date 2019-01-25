@@ -355,6 +355,7 @@ const payments = {
       if (result.error && result.error.code.match('^401.*$')) {
         accounts.authenticate.cleanup();
       }
+      return result;
     },
     fetchOptions: {
       url: getApiUrl`/payments/send`,

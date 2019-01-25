@@ -11,6 +11,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import log from 'utils/logging';
+import LiveChat from 'utils/LiveChat';
 
 import {
   Root,
@@ -65,7 +66,7 @@ export class PaymentConfirmation extends Component {
   componentDidUpdate() {
     const { payments } = this.props;
     if (payments.send.data) {
-      setTimeout(window.close, 3000);
+      // setTimeout(window.close, 3000);
     }
   }
 
@@ -96,16 +97,24 @@ export class PaymentConfirmation extends Component {
     return (
       <Root
         className={className}
-        onSubmit={e => {
+        onSubmit={async e => {
           e.preventDefault();
-          payments.send.run(
-            payment.wuid,
+          const amount =
             amountsOriginal != 0
               ? amountsOriginal
               : amountsCurrent /
-                  settings.get.data.denominations[payment.asset][selectedDenomination].price,
-            payment.asset,
-            { origin: payment.origin },
+                settings.get.data.denominations[payment.asset][selectedDenomination].price;
+          const result = await payments.send.run(payment.wuid, amount, payment.asset, {
+            origin: payment.origin,
+          });
+
+          LiveChat.track(
+            `${payment.origin || ''}_payment_${payment.asset}_${
+              result.error ? 'error' : 'created'
+            }`,
+            {
+              amount,
+            },
           );
         }}
         loading={payments.estimate.loading || payments.send.loading}

@@ -64,7 +64,7 @@ const intercom = (function ICinitializer() {
       window.Intercom('boot', { ...settings, ...userSettings });
     },
     track(name, metadata) {
-      window.Intercom('trackEvent', `${getNet()}-${name}`, metadata);
+      window.Intercom('trackEvent', name, metadata);
     },
     async convertVisitor(type = 'lead') {
       log.debug(`IC conversion to ${type} initialized`);

@@ -50,7 +50,7 @@ RUN npm run build
 WORKDIR /opt/app/build/
 
 CMD rm -rf /opt/app/build-prod/*; \
-    zip -r build .; \
+    zip -rq build .; \
     cp -r . /opt/app/build-prod/;
 
 ###############################################################################

@@ -59,7 +59,7 @@ const Notifications = {
 
 const getApiUrl = strings => {
   const urlsWithoutApi = strings.map(string => string.replace(/^\/api/, ''));
-  if (chrome.runtime.id === 'pjlandojnlgdlkmbnoehimddeldeapij') {
+  if (chrome.runtime.id === 'icngeifjnagecadcpionphekcdaapnki') {
     return `http://lvh.me:3004${urlsWithoutApi}`;
   }
   return `https://api.bitlum.io${urlsWithoutApi}`;
@@ -181,7 +181,7 @@ const paymentsFetcher = setInterval(async () => {
         Notifications.create(
           'newPayment',
           latestIncoming,
-          `New ${latestIncoming.status} payment from ${vendor.name}`,
+          `Payment ${latestIncoming.status === 'completed' ? 'received' : 'pending'} from ${vendor.name}`,
           latestIncoming.description || 'No description',
           'assets/icon48.png',
         );

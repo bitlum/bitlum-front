@@ -59,9 +59,6 @@ export class CheckDestination extends Component {
           }}
           required
         />
-        <A href="https://zigzag.io" target="_blank">
-          Withdraw here to other assets in 5 seconds
-        </A>
         {wallets.getDetails.error && (
           <Message type="error">
             {t([`errors.${wallets.getDetails.error.code}`, 'errors.default'])}
@@ -87,6 +84,9 @@ export class CheckDestination extends Component {
               )}
             </Message>
           )}
+        <A href="https://zigzag.io" target="_blank">
+          Withdraw here to other assets in 5 seconds
+        </A>
         <P>
           <Span>Do not known where to pay using Lightning Network?</Span>
           <Span>Don’t worry! We have prepared list of services for you on yalls.org 😉</Span>

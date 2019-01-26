@@ -245,7 +245,8 @@ const Payments = ({ settings, payments, accounts, t }) => {
             </A>
           </P>
           <CloseIcon
-            onClick={() => {
+            onClick={(e) => {
+              e.target.parentNode.remove();
               settings.set.run('content_script_permissions', 'skipped');
             }}
           />

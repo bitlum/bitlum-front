@@ -97,7 +97,8 @@ export class ReceivePayment extends Component {
               )}
         </Message>
 
-        {receive.type === 'lightning' && !payments.receive.data ? (
+        {receive.type === 'lightning' &&
+        (!payments.receive.data || payments.receive.data.type !== 'lightning') ? (
           <AmountInputWraper>
             {settings.get.data.denominations[receive.asset][selectedDenomination].sign}
             <AmountInput
@@ -148,20 +149,22 @@ export class ReceivePayment extends Component {
             </SwitchDenomination>
           </AmountInputWraper>
         ) : null}
-        {payments.receive.data && [
-          <QRcode key="recaiveQR" value={payments.receive.data.wuid || ''} size={220} />,
-          <P>
-            <Span>{payments.receive.data.wuid}</Span>
-            <CopyButton data={payments.receive.data.wuid} />
-          </P>,
-        ]}
+        {payments.receive.data &&
+          payments.receive.data.type === receive.type && [
+            <QRcode key="recaiveQR" value={payments.receive.data.wuid || ''} size={220} />,
+            <P>
+              <Span>{payments.receive.data.wuid}</Span>
+              <CopyButton data={payments.receive.data.wuid} />
+            </P>,
+          ]}
         {payments.receive.error && (
           <Message type="error">
             {t([`errors.${payments.receive.error.code}`, 'errors.default'])}
           </Message>
         )}
         <Footer>
-          {receive.type === 'lightning' && !payments.receive.data ? (
+          {receive.type === 'lightning' &&
+          (!payments.receive.data || payments.receive.data.type !== 'lightning') ? (
             <Button primary type="submit">
               Generate invoice to receive{'\n '}
               {amountsCurrent == 0

@@ -56,6 +56,7 @@ export default {
     '404RAC00': 'Account {{email}} does not exists',
     '500MCO12': 'Account {{email}} already exists<1>Login instead?</1>',
     '403RPA03': 'Receive is disabled because you reached maximum beta balance of {{maxBalanceBTC}} BTC',
+    '422MWA00': 'Invoice is already expired',
     default: 'Oops, something went wrong',
   },
   account: {

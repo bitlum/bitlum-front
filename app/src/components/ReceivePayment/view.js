@@ -40,8 +40,8 @@ export class ReceivePayment extends Component {
   //   payments.receive.run(receive.type, null, receive.asset);
   // }
   state = {
-    amountsCurrent: 0,
-    amountsPrevious: 0,
+    amountsCurrent: undefined,
+    amountsPrevious: undefined,
     amountChanged: false,
     selectedDenomination: 'main',
     denominationPairs: {
@@ -80,7 +80,7 @@ export class ReceivePayment extends Component {
           e.preventDefault();
           payments.receive.run(
             receive.type,
-            amountsCurrent /
+            (amountsCurrent || 0) /
               settings.get.data.denominations[receive.asset][selectedDenomination].price,
             receive.asset,
           );
@@ -102,10 +102,11 @@ export class ReceivePayment extends Component {
           <AmountInputWraper>
             {settings.get.data.denominations[receive.asset][selectedDenomination].sign}
             <AmountInput
-              length={amountsCurrent.toString().length}
+              length={(amountsCurrent || '').toString().length}
               ref={input => input && input.focus()}
               id="sendAmount"
               type="number"
+              placeholder="0"
               step={
                 1 /
                 10 **
@@ -116,28 +117,28 @@ export class ReceivePayment extends Component {
               onChange={e => {
                 this.setState({ amountsCurrent: e.target.value, amountChanged: true });
               }}
-              required
             />
             <SwitchDenomination
               primary
               onClick={e => {
                 e.preventDefault();
+                const convertedAmount = settings.get.data.denominations[receive.asset][
+                  denominationPairs[selectedDenomination]
+                ].round(
+                  ((amountsCurrent || 0) /
+                    settings.get.data.denominations[receive.asset][selectedDenomination]
+                      .price) *
+                    settings.get.data.denominations[receive.asset][
+                      denominationPairs[selectedDenomination]
+                    ].price,
+                );
                 this.setState({
                   amountChanged: false,
                   selectedDenomination: denominationPairs[selectedDenomination],
                   amountsPrevious: amountsCurrent,
                   amountsCurrent: !amountChanged
                     ? amountsPrevious
-                    : settings.get.data.denominations[receive.asset][
-                        denominationPairs[selectedDenomination]
-                      ].round(
-                        (amountsCurrent /
-                          settings.get.data.denominations[receive.asset][selectedDenomination]
-                            .price) *
-                          settings.get.data.denominations[receive.asset][
-                            denominationPairs[selectedDenomination]
-                          ].price,
-                      ),
+                    : convertedAmount === 0 ? undefined : convertedAmount ,
                 });
               }}
             >
@@ -167,7 +168,7 @@ export class ReceivePayment extends Component {
           (!payments.receive.data || payments.receive.data.type !== 'lightning') ? (
             <Button primary type="submit">
               Generate invoice to receive{'\n '}
-              {amountsCurrent == 0
+              {!amountsCurrent
                 ? 'any amount'
                 : `${settings.get.data.denominations[receive.asset][selectedDenomination].stringify(
                     amountsCurrent,

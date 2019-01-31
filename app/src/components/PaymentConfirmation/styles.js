@@ -181,7 +181,7 @@ export const AmountInput = styled.input`
   max-width: 7em;
   min-width: 2.2em;
   &::placeholder {
-    padding-left: 0.9em;
+    padding-left: 0.6em;
   }
   width: ${({ length }) => `${(length || 0) * 1}em`};
 `;

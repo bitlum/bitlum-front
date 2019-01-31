@@ -44,8 +44,10 @@ export class PaymentConfirmation extends Component {
   state = {
     amountsOriginal: this.props.payment.amount,
     amountsCurrent:
-      this.props.payment.amount *
-      this.props.settings.get.data.denominations[this.props.payment.asset].main.price,
+      this.props.payment.amount != 0
+        ? this.props.payment.amount *
+          this.props.settings.get.data.denominations[this.props.payment.asset].main.price
+        : undefined,
     amountsPrevious: undefined,
     selectedDenomination: 'main',
     denominationPairs: {
@@ -88,7 +90,7 @@ export class PaymentConfirmation extends Component {
               asset: payment.asset,
               fees: payments.estimate.error.fees,
               amount:
-                amountsCurrent /
+                (amountsCurrent || 0) /
                 settings.get.data.denominations[payment.asset][selectedDenomination].price,
             }),
         )) ||
@@ -102,7 +104,7 @@ export class PaymentConfirmation extends Component {
           const amount =
             amountsOriginal != 0
               ? amountsOriginal
-              : amountsCurrent /
+              : (amountsCurrent || 0) /
                 settings.get.data.denominations[payment.asset][selectedDenomination].price;
           const result = await payments.send.run(payment.wuid, amount, payment.asset, {
             origin: payment.origin,
@@ -117,14 +119,9 @@ export class PaymentConfirmation extends Component {
             },
           );
 
-          LiveChat.track(
-            `payment_${payment.asset}_${
-              result.error ? 'error' : 'created'
-            }`,
-            {
-              amount,
-            },
-          );
+          LiveChat.track(`payment_${payment.asset}_${result.error ? 'error' : 'created'}`, {
+            amount,
+          });
         }}
         loading={payments.estimate.loading || payments.send.loading}
       >
@@ -171,7 +168,8 @@ export class PaymentConfirmation extends Component {
           {settings.get.data.denominations[payment.asset][selectedDenomination].sign}
           <AmountInput
             ref={input => input && input.focus()}
-            length={amountsCurrent.toString().length}
+            length={(amountsCurrent || '').toString().length}
+            placeholder="0"
             id="sendAmount"
             type="number"
             step={
@@ -180,11 +178,7 @@ export class PaymentConfirmation extends Component {
                 settings.get.data.denominations[payment.asset][selectedDenomination].precisionMax
             }
             min="0"
-            value={
-              payment.amount != 0
-                ? denominations && denominations[selectedDenomination].amount
-                : amountsCurrent
-            }
+            value={amountsCurrent}
             disabled={payment.amount != 0}
             onChange={e => {
               if (!payments.estimate.loading) {
@@ -204,11 +198,12 @@ export class PaymentConfirmation extends Component {
             disabled={!denominations}
             onClick={e => {
               e.preventDefault();
+              const convertedAmount = settings.get.data.denominations[payment.asset][
+                denominationPairs[selectedDenomination]
+              ].round(denominations[denominationPairs[selectedDenomination]].amount);
               this.setState({
                 selectedDenomination: denominationPairs[selectedDenomination],
-                amountsCurrent: settings.get.data.denominations[payment.asset][
-                  denominationPairs[selectedDenomination]
-                ].round(denominations[denominationPairs[selectedDenomination]].amount),
+                amountsCurrent: convertedAmount === 0 ? undefined : convertedAmount,
               });
             }}
           >

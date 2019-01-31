@@ -76,11 +76,12 @@ export class PaymentConfirmation extends Component {
     const { payment, payments, vendors, settings, accounts, className, t } = this.props;
     const {
       amountsOriginal,
-      amountsCurrent,
       amountsPrevious,
       denominationPairs,
       selectedDenomination,
     } = this.state;
+
+    let { amountsCurrent } = this.state;
 
     const { denominations } =
       ((payments.estimate.data || (payments.estimate.error && payments.estimate.error.fees)) &&
@@ -95,6 +96,10 @@ export class PaymentConfirmation extends Component {
             }),
         )) ||
       {};
+
+    if (payment.amount != 0) {
+      amountsCurrent = denominations && denominations[selectedDenomination].amount;
+    }
 
     return (
       <Root

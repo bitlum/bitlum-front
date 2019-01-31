@@ -226,12 +226,24 @@ const getClipboardData = () => {
 //   const currentClipboard = getClipboardData();
 
 // }, 1000);
-
+const latestPaymentRequests = {};
 chrome.runtime.onMessage.addListener(req => {
   if (req.type === 'clipboardEvent') {
     localStorage.setItem(
       'latestCopiedWuid',
       JSON.stringify({ wuid: getClipboardData(), origin: req.origin }),
     );
+  }
+  if (req.type === 'newPayment') {
+    if (new Date() - (latestPaymentRequests[req.payment.wuid] || 0) >= 500) {
+      latestPaymentRequests[req.payment.wuid] = new Date().getTime();
+      window.open(
+        `chrome-extension://${chrome.runtime.id}/index.html#/payments/check?wallet=${JSON.stringify(
+          req.payment,
+        )}&nopopup=true`,
+        '_blank',
+        'width=450,height=700,titlebar=0,menubar=0,location=0',
+      );
+    }
   }
 });

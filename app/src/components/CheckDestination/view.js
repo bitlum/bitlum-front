@@ -43,6 +43,7 @@ export class CheckDestination extends Component {
         <P>Destination</P>
 
         <Input
+          autoFocus
           id="sendAddress"
           type="text"
           placeholder="Paste lightning invoice or bitcoin address"

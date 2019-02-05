@@ -68,7 +68,7 @@ export class PaymentConfirmation extends Component {
   componentDidUpdate() {
     const { payments } = this.props;
     if (payments.send.data) {
-      // setTimeout(window.close, 3000);
+      setTimeout(window.close, 3000);
     }
   }
 

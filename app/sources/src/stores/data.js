@@ -611,6 +611,6 @@ vendors.get = createNewStore({
   },
 });
 
-export { payments, accounts, wallets, settings, vendors };
+export { payments, accounts, wallets, settings, vendors, getApiUrl };
 
-export default { payments, accounts, wallets, settings, vendors };
+export default { payments, accounts, wallets, settings, vendors, getApiUrl };

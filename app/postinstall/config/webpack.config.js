@@ -513,7 +513,7 @@ module.exports = function(webpackEnv) {
             // #MODIFIED
             inject: true,
             filename: 'background.html',
-            excludeChunks: [ 'app' ],
+            chunks: [ 'background' ],
           },
           isEnvProduction
             ? {

@@ -7,10 +7,9 @@ services:
       context: ./app
       target: development
     volumes:
-      - ./build-watch:/opt/app/build-watch:delegated
-      - ./app/src:/opt/app/src:delegated
-      - ./app/public:/opt/app/public:delegated
-      - ./app/package.json:/opt/app/package.json
+      - ./build-watch:/opt/app/dist:delegated
+      - ./app/sources/src:/opt/app/src:delegated
+      - ./app/sources/public:/opt/app/public:delegated
     ports:
       - "3005:3000"
     environment:

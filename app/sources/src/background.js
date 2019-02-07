@@ -160,7 +160,7 @@ const paymentsFetcher = setInterval(async () => {
     console.log(e);
   }
   if (authData) {
-    const result = await this.fetch(getApiUrl`/api/payments`, {
+    const result = await fetch(getApiUrl`/api/payments`, {
       headers: {
         Authorization: `Bearer ${authData.token}`,
       },

@@ -1,4 +1,5 @@
 .git
+.eslintrc
 *Dockerfile*
 *docker-compose*
 /docs

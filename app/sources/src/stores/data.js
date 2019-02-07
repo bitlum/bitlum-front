@@ -49,45 +49,52 @@ function round(number, precision, precisionMax) {
   return rounded;
 }
 
+const denominations = {
+  BTC: {
+    USD: {
+      price: 4000,
+      sign: 'USD',
+      precision: 2,
+      precisionMax: 5,
+      round(number) {
+        return round(number, this.precision, this.precisionMax);
+      },
+      stringify(number, { omitDirection = false, omitSign = false } = {}) {
+        return `${omitDirection ? '' : number === 0 ? '' : number > 0 ? '+ ' : '- '}${
+          omitSign ? '' : `${this.sign} `
+        }${this.round(Math.abs(number))
+          .toFixed(this.precisionMax || 1)
+          .replace(/0+$/, '')
+          .replace(/\.$/, '')}`;
+      },
+    },
+    SAT: {
+      price: 10 ** 8,
+      sign: 'SAT',
+      precision: 0,
+      precisionMax: 0,
+      round(number) {
+        return round(number, this.precision, this.precisionMax);
+      },
+      stringify(number, { omitDirection = false, omitSign = false } = {}) {
+        return `${omitDirection ? '' : number === 0 ? '' : number > 0 ? '+ ' : '- '}${
+          omitSign ? '' : `${this.sign} `
+        }${this.round(Math.abs(number))
+          .toFixed(this.precisionMax || 1)
+          .replace(/0+$/, '')
+          .replace(/\.$/, '')}`;
+      },
+    },
+  },
+};
+
 const settings = {
   default: {
     content_script_permissions: undefined,
     denominations: {
       BTC: {
-        main: {
-          price: 4000,
-          sign: 'USD',
-          precision: 2,
-          precisionMax: 5,
-          round(number) {
-            return round(number, this.precision, this.precisionMax);
-          },
-          stringify(number, { omitDirection = false, omitSign = false } = {}) {
-            return `${omitDirection ? '' : number === 0 ? '' : number > 0 ? '+ ' : '- '}${
-              omitSign ? '' : `${this.sign} `
-            }${this.round(Math.abs(number))
-              .toFixed(this.precisionMax || 1)
-              .replace(/0+$/, '')
-              .replace(/\.$/, '')}`;
-          },
-        },
-        additional: {
-          price: 10 ** 8,
-          sign: 'SAT',
-          precision: 0,
-          precisionMax: 0,
-          round(number) {
-            return round(number, this.precision, this.precisionMax);
-          },
-          stringify(number, { omitDirection = false, omitSign = false } = {}) {
-            return `${omitDirection ? '' : number === 0 ? '' : number > 0 ? '+ ' : '- '}${
-              omitSign ? '' : `${this.sign} `
-            }${this.round(Math.abs(number))
-              .toFixed(this.precisionMax || 1)
-              .replace(/0+$/, '')
-              .replace(/\.$/, '')}`;
-          },
-        },
+        main: denominations.BTC.USD,
+        additional: denominations.BTC.SAT,
       },
     },
   },
@@ -106,6 +113,19 @@ settings.get = createNewStore({
       return undefined;
     }
   })(),
+  async run() {
+    try {
+      const savedSettings = {
+        ...JSON.parse(localStorage.getItem('settings')),
+        denominations: settings.default.denominations,
+      };
+      this.updateData(savedSettings);
+    } catch (error) {
+      const message = `Unable to read settings from local storage (${error.message})`;
+      log.error(message);
+      this.updateError({ error: { message, code: 500 } });
+    }
+  },
 });
 
 settings.set = createNewStore({

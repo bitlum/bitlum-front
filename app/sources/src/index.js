@@ -33,7 +33,7 @@ import stores from 'stores';
 
 import Login from 'scenes/Login';
 import Signup from 'scenes/Signup';
-import Landing from 'scenes/Landing';
+import Settings from 'scenes/Settings';
 import Payments from 'scenes/Payments';
 import Payment from 'scenes/Payment';
 import Check from 'scenes/Check';
@@ -103,7 +103,7 @@ class App extends Component {
 
   render() {
     // eslint-disable-next-line
-    const { accounts, ui, t } = this.props;
+    const { accounts } = this.props;
 
     return (
       <Root>
@@ -125,6 +125,7 @@ class App extends Component {
                 <Route path="/payments/confirm" component={Confirm} />
                 <Route path="/payments/:puid" component={Payment} />
                 <Route path="/payments" component={Payments} />
+                <Route path="/settings" component={Settings} />
                 <Route
                   path="/signout"
                   render={() => {

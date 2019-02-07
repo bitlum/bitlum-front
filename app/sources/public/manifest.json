@@ -27,7 +27,7 @@
   },
   "icons": { "16": "assets/icon16.png", "48": "assets/icon48.png", "128": "assets/icon128.png" },
   "background": {
-    "scripts": ["background.js"],
+    "page": "background.html",
     "persistent": true
   },
   "permissions": [
@@ -48,5 +48,5 @@
     "matches": ["*://*.bitlum.io/*"],
     "ids": ["*"]
   },
-  "content_security_policy": "script-src 'self' 'sha256-GgRxrVOKNdB4LrRsVPDSbzvfdV4UqglmviH9GoBJ5jk=' https://*.intercomcdn.com https://*.intercom.io https://www.google-analytics.com  https://*.heapanalytics.com; object-src 'self';img-src * 'self' data:; style-src * 'unsafe-inline';"
+  "content_security_policy": "script-src 'self' 'sha256-Cs13Vap5vNf7DSdQsVsb9lHdJqP6vzGUTBt2O5hehsM=' 'sha256-Jjv+cu/ZdTgyRK5NUgDwA3j/P71Pf4FHbyIchs2UPYY=' https://*.intercomcdn.com https://*.intercom.io https://www.google-analytics.com  https://*.heapanalytics.com; object-src 'self';img-src * 'self' data:; style-src * 'unsafe-inline';"
 }

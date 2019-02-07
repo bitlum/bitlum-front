@@ -78,6 +78,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
             }}
           />
           <Support className="openIntercom" />
+          <NavLink to="/settings">SE</NavLink>
         </Header>
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
@@ -106,6 +107,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
             }}
           />
           <Support className="openIntercom" />
+          <NavLink to="/settings">SE</NavLink>
         </Header>
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
@@ -134,6 +136,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
             }}
           />
           <Support className="openIntercom" />
+          <NavLink to="/settings">SE</NavLink>
         </Header>
         {accounts.get.data &&
         accounts.get.data.restrictions.unconfirmed &&
@@ -146,7 +149,8 @@ const Payments = ({ settings, payments, accounts, t }) => {
             />
             We sent confirmation link to
             <Span>{accounts.get.data.email}</Span>
-            To get your 0.5$ bonus please confirm your email <A class="openIntercom">and then contact us</A>
+            To get your 0.5$ bonus please confirm your email{' '}
+            <A class="openIntercom">and then contact us</A>
             {`\nIf you can't find email, check spam or contact us`}
           </Message>
         ) : null}
@@ -198,6 +202,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
           }}
         />
         <Support className="openIntercom" />
+        <NavLink to="/settings">SE</NavLink>
       </Header>
       {accounts.get.data &&
       accounts.get.data.restrictions.unconfirmed &&
@@ -245,7 +250,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
             </A>
           </P>
           <CloseIcon
-            onClick={(e) => {
+            onClick={e => {
               e.target.parentNode.remove();
               settings.set.run('content_script_permissions', 'skipped');
             }}

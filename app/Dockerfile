@@ -4,30 +4,50 @@
 
 FROM node:10-alpine as base
 
+WORKDIR /opt/app
+
+# -----------------------------------------------------------------------------
+# Run preinstall scripts
+# -----------------------------------------------------------------------------
+
+COPY .dockerignore preinstal[l] preinstall/
+RUN if npm run | grep -q preinstall ; then \
+      npm run preinstall ; \ 
+    fi
+
 # -----------------------------------------------------------------------------
 # Install dependencies
 # -----------------------------------------------------------------------------
 
-WORKDIR /opt
-
-COPY package* ./
+COPY package* .
 
 RUN npm install --quiet && \
     npm cache clean --force
-ENV PATH /opt/node_modules/.bin:$PATH
-ENV NODE_PATH /opt/node_modules/:$NODE_PATH
+ENV PATH=/opt/app/node_modules/.bin:$PATH
+ENV NODE_PATH=/opt/app/node_modules/:$NODE_PATH
+
+# -----------------------------------------------------------------------------
+# Run postinstall scripts
+# -----------------------------------------------------------------------------
+
+COPY .dockerignore postinstal[l] postinstall/
+RUN if npm run | grep -q postinstall ; then \
+      npm run postinstall ; \ 
+    fi
 
 # -----------------------------------------------------------------------------
 # Copy source code to build
 # -----------------------------------------------------------------------------
 
-WORKDIR /opt/app
-
-COPY . .
-
-# Weird trick to make react see absolute path to src in imports
-
+COPY sources .
+# Make react see absolute path to src in imports
 ENV NODE_PATH ./src/:$NODE_PATH 
+
+# -----------------------------------------------------------------------------
+# Stop container for exit (useful for debug)
+# -----------------------------------------------------------------------------
+
+CMD exec /bin/sh -c "trap : TERM INT; (while true; do sleep 1000; done) & wait"
 
 ###############################################################################
 # Stage 1.1: Image ready to start development server

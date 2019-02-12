@@ -15,7 +15,8 @@ import isYesteray from 'date-fns/is_yesterday';
 
 import NavLink from 'react-router-dom';
 
-import log from 'utils/logging';
+import logger from 'utils/logging';
+const log = logger();
 
 import {
   Root,
@@ -33,7 +34,7 @@ import {
   Button,
   A,
 } from './styles';
-import { payments } from '../../stores/data';
+import { payments } from '../../stores';
 
 // -----------------------------------------------------------------------------
 // Code

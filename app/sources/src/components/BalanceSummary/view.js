@@ -10,20 +10,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import log from 'utils/logging';
+import logger from 'utils/logging';
+
+import receiveIcon from 'assets/icons/plus-circle.svg';
 
 import { Root, Main, Additional, Receive, Send, Img, Span } from './styles';
 
-import receiveIcon from 'assets/icons/plus-circle.svg';
+const log = logger();
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
 export const BalanceSummary = ({ accounts, className, appearance = 'normal', denomination, t }) => {
-  if (
-    !accounts.get.data && accounts.get.loading
-  ) {
+
+  if (!accounts.get.data && accounts.get.loading) {
     return (
       <Root className={className} appearance={appearance}>
         <Span>Loading balance info...</Span>

@@ -10,7 +10,8 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 
-import log from 'utils/logging';
+import logger from 'utils/logging';
+const log = logger();
 import GA from 'utils/GA';
 
 import view from './view';
@@ -67,6 +68,10 @@ class Wrapper extends React.Component {
 
     vendors.get.run(payment.vuid, { origin: payment.origin });
 
+    if (payment) {
+      payments.estimate.run(payment);
+    }
+
     if (!accounts.get.data) {
       accounts.get.run();
     }
@@ -78,7 +83,7 @@ class Wrapper extends React.Component {
 
   componentWillUnmount() {
     const { vendors } = this.props;
-    vendors.get.cleanup();
+    vendors.get.cleanup('all');
     clearInterval(this.polling);
   }
 
@@ -100,4 +105,4 @@ class Wrapper extends React.Component {
 
 Wrapper.propTypes = {};
 
-export default inject('payments', 'vendors', 'accounts', 'settings', 'wallets')(observer(Wrapper));
+export default inject('payments', 'vendors', 'accounts')(observer(Wrapper));

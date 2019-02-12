@@ -10,7 +10,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import log from 'utils/logging';
+import logger from 'utils/logging';
+const log = logger();
 
 import { Root, SettingsItem, P, Img, Span } from './styles';
 
@@ -27,11 +28,11 @@ export const SettingsForm = ({ className, settings, t }) => {
         }}
       >
         <Span>Main denomination</Span>
-        <Span>{settings.get.data.denominations.BTC.main.sign}</Span>
+        <Span>{settings.get.data.denominations_BTC_main}</Span>
       </SettingsItem>
       <SettingsItem
         onClick={() => {
-          console.log('changed');
+          settings.set.run({ denominations_BTC_main: 'SAT' });
         }}
       >
         <Span>Recieve with alt-coins</Span>

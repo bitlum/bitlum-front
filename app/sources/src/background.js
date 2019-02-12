@@ -7,9 +7,12 @@
 // Dependencies
 // -----------------------------------------------------------------------------
 
-import log from 'utils/logging';
+import logger from 'utils/logging';
+const log = logger();
 
-import { vendors, getApiUrl } from 'stores';
+import { vendors, accounts, getApiUrl } from 'stores';
+
+import { configureDevtool } from 'mobx-react-devtools';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -61,48 +64,54 @@ const Notifications = {
   },
 };
 
-const paymentsFetcher = setInterval(async () => {
-  let authData;
-  // let accountData;
-  try {
-    authData = JSON.parse(localStorage.getItem('authData'));
-    // accountData = JSON.parse(localStorage.getItem('accountData'));
-  } catch (e) {
-    console.log(e);
-  }
-  if (authData) {
-    const result = await fetch(getApiUrl`/payments`, {
-      headers: {
-        Authorization: `Bearer ${authData.token}`,
-      },
-    }).then(res => res.json());
+window.accounts = accounts;
 
-    if (result.data) {
-      const latestIncoming = result.data.find(payment => payment.direction === 'incoming');
-      if (latestIncoming) {
-        let vendor;
-        if (latestIncoming.vendorName) {
-          vendor = {
-            name: latestIncoming.vendorName,
-            iconUrl: latestIncoming.vendorIcon,
-          };
-        } else {
-          vendor = vendors.getRandom(latestIncoming.vuid)[0];
-        }
-        console.log(vendor.iconUrl);
-        Notifications.create(
-          'newPayment',
-          latestIncoming,
-          `Payment ${latestIncoming.status === 'completed' ? 'received' : 'pending'} from ${
-            vendor.name
-          }`,
-          latestIncoming.description || 'No description',
-          vendor.iconUrl || 'assets/icon48.png',
-        );
-      }
-    }
-  }
-}, 5000);
+
+accounts.get.run();
+
+
+// const paymentsFetcher = setInterval(async () => {
+//   let authData;
+//   // let accountData;
+//   try {
+//     authData = JSON.parse(localStorage.getItem('authData'));
+//     // accountData = JSON.parse(localStorage.getItem('accountData'));
+//   } catch (e) {
+//     console.log(e);
+//   }
+//   if (authData) {
+//     const result = await fetch(getApiUrl`/payments`, {
+//       headers: {
+//         Authorization: `Bearer ${authData.token}`,
+//       },
+//     }).then(res => res.json());
+
+//     if (result.data) {
+//       const latestIncoming = result.data.find(payment => payment.direction === 'incoming');
+//       if (latestIncoming) {
+//         let vendor;
+//         if (latestIncoming.vendorName) {
+//           vendor = {
+//             name: latestIncoming.vendorName,
+//             iconUrl: latestIncoming.vendorIcon,
+//           };
+//         } else {
+//           vendor = vendors.getRandom(latestIncoming.vuid)[0];
+//         }
+//         console.log(vendor.iconUrl);
+//         Notifications.create(
+//           'newPayment',
+//           latestIncoming,
+//           `Payment ${latestIncoming.status === 'completed' ? 'received' : 'pending'} from ${
+//             vendor.name
+//           }`,
+//           latestIncoming.description || 'No description',
+//           vendor.iconUrl || 'assets/icon48.png',
+//         );
+//       }
+//     }
+//   }
+// }, 5000);
 
 window.chrome.webRequest.onCompleted.addListener(
   details => {
@@ -113,7 +122,10 @@ window.chrome.webRequest.onCompleted.addListener(
       granted => {
         if (granted) {
           if (details.tabId >= 0) {
-            window.chrome.tabs.executeScript(details.tabId, { file: 'content.js', allFrames: true });
+            window.chrome.tabs.executeScript(details.tabId, {
+              file: 'content.js',
+              allFrames: true,
+            });
           }
         }
       },
@@ -150,12 +162,22 @@ window.chrome.runtime.onMessage.addListener(req => {
     if (new Date() - (latestPaymentRequests[req.payment.wuid] || 0) >= 500) {
       latestPaymentRequests[req.payment.wuid] = new Date().getTime();
       window.open(
-        `chrome-extension://${window.chrome.runtime.id}/index.html#/payments/check?wallet=${JSON.stringify(
-          req.payment,
-        )}&nopopup=true`,
+        `chrome-extension://${
+          window.chrome.runtime.id
+        }/index.html#/payments/check?wallet=${JSON.stringify(req.payment)}&nopopup=true`,
         '_blank',
         'width=450,height=700,titlebar=0,menubar=0,location=0',
       );
     }
   }
 });
+if (process.env.NODE_ENV === 'development') {
+  // Any configurations are optional
+  configureDevtool({
+    // Turn on logging changes button programmatically:
+    logEnabled: true,
+    // Log only changes of type `reaction`
+    // (only affects top-level messages in console, not inside groups)
+    logFilter: change => change.type === 'action',
+  });
+}

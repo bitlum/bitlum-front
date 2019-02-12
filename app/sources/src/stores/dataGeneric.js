@@ -7,134 +7,355 @@
 // Dependencies
 // -----------------------------------------------------------------------------
 
-import { decorate, action, observable } from 'mobx';
+import { decorate, action, observable, runInAction } from 'mobx';
 
-import log from 'utils/logging';
+import logger from 'utils/logging';
+const log = logger();
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
-const fetchData = (url, options) =>
+const fetchOnline = (url, options) =>
   fetch(url, options)
     .then(res => res.json())
     .catch(error => {
       log.error(error);
       return {
-        error: { message: 'Error occuried during data fetching', code: error.code || '500000000' },
+        error: { message: 'Error occuried during data fetching', code: error.code || '500___000' },
       };
     });
 
-const localstorageWrapper = {
-  get(name) {
-    try {
-      return JSON.parse(localStorage.getItem(name));
-    } catch (error) {
-      log.error(`Unable to read ${name} from local storage (${error.message})`);
-      return undefined;
-    }
-  },
-  set(name, data) {
-    try {
-      localStorage.setItem(name, JSON.stringify(data));
-    } catch (error) {
-      log.error(`Unable to save auth data to local storage (${error.message})`);
-    }
-  },
+const getLocal = (name, options) => {
+  const updatedAt = localStorage.getItem(`${name}_updatedAt`) || -Infinity;
+  if (new Date() - updatedAt > options.localLifetime) {
+    return {
+      error: {
+        message: `Locally stored ${name} is outdated`,
+        code: '500___000',
+      },
+    };
+  }
+  try {
+    return JSON.parse(localStorage.getItem(name)) || undefined;
+  } catch (error) {
+    log.error(error);
+    return {
+      error: {
+        message: `Unable to read ${name} from local storage (${error.message})`,
+        code: error.code || '500___000',
+      },
+    };
+  }
+};
+
+const setLocal = (name, options) => {
+  try {
+    localStorage.setItem(name, JSON.stringify(options.body));
+    localStorage.setItem(`${name}_updatedAt`, new Date().getTime());
+    return options.body;
+  } catch (error) {
+    log.error(error);
+    return {
+      error: {
+        message: `Unable to save ${name} to local storage (${error.message})`,
+        code: error.code || '500___000',
+      },
+    };
+  }
+};
+
+const cleanupLocal = name => {
+  localStorage.removeItem(name);
+  localStorage.removeItem(`${name}_updatedAt`);
+};
+
+function round(number, precision, precisionMax) {
+  const rounded =
+    (Math.sign(number) * Math.round(Math.abs(number) * 10 ** precision)) / 10 ** precision;
+
+  if (Number.isInteger(rounded) && precision < precisionMax) {
+    return round(number, precision + 1, precisionMax);
+  }
+
+  return rounded;
+}
+
+const getApiUrl = string => {
+  if (process.env.NODE_ENV === 'development') {
+    return `http://lvh.me:3004${string}`;
+  }
+  return `https://api.bitlum.io${string}`;
 };
 
 const GenericApiStore = {
-  fetchOptions: { url: '/api' },
-
-  fetch: fetchData,
-
-  parseData: data => data,
-
-  sideEffect: () => {},
+  fetchOptionsDefault: {
+    url: '/api',
+    localOnly: false,
+    localFirst: false,
+    localLifetime: Infinity,
+    preserveDataOnError: false,
+    preventRefetch: true,
+  },
 
   loading: undefined,
 
-  startedAt: undefined,
+  startedAt: -Infinity,
 
-  finishedAt: undefined,
+  finishedAt: -Infinity,
+
+  dataUpdatedAt: -Infinity,
+
+  errorUpdatedAtAt: -Infinity,
+
+  latestOnlineFetchAt: -Infinity,
 
   data: undefined,
 
-  dataCache: undefined,
-
   error: undefined,
 
-  loadingStart() {
-    this.loading = true;
-    this.startedAt = new Date().getTime();
+  fetch: fetchOnline,
+
+  getLocal,
+
+  setLocal,
+
+  cleanupLocal,
+
+  init() {
+    return this;
   },
 
-  loadingFinish() {
-    this.loading = false;
-    this.finishedAt = new Date().getTime();
+  setProperties(properties = {}) {
+    runInAction(`Manual set property invoked (${this.name}): ${properties}`, () => {
+      Object.assign(this, properties);
+    });
   },
 
-  updateData(data) {
-    if (!this.data || !data) {
-      this.data = data;
-    } else {
-      Object.assign(this.data, data);
+  parseData(data, options) {
+    return data;
+  },
+
+  parseError(error, options) {
+    return error;
+  },
+
+  onStart(options) {},
+
+  onFinish(data, error, options) {},
+
+  onData(data, options) {},
+
+  onError(error, options) {},
+
+  async onErrorDefault(error, data, options) {
+    log.error({ error: { message: `${this.name}: ${error.message}`, code: error.code } });
+    runInAction(`onErrorDefault (${this.name})`, () => {
+      if (this.error) {
+        Object.assign(this.error, error);
+      } else {
+        this.error = error;
+      }
+      this.errorUpdatedAt = new Date().getTime();
+    });
+
+    if (options.localFirst) {
+      await this.setLocal(options.localName || this.name, { body: { error } });
+    }
+
+    await this.onError(error, options);
+
+    if (data === undefined && !this.preserveDataOnError) {
+      await this.cleanup('data');
     }
   },
 
-  updateError(error) {
-    if (!this.error || !error) {
-      this.error = error;
-    } else {
-      Object.assign(this.error, error);
+  async onDataDefault(data, error, options) {
+    runInAction(`onDataDefault (${this.name})`, () => {
+      if (this.data) {
+        Object.assign(this.data, data);
+      } else {
+        this.data = data;
+      }
+      this.dataUpdatedAt = new Date().getTime();
+    });
+
+    if (options.localFirst && options.fetchedOnline) {
+      await this.setLocal(options.localName || this.name, { body: { data } });
+    }
+
+    await this.onData(data, options);
+
+    if (error === undefined) {
+      await this.cleanup('error');
     }
   },
 
-  cleanup() {
-    this.updateData(undefined);
-    this.updateError(undefined);
+  async cleanup(name) {
+    runInAction(`cleanup (${this.name})`, async () => {
+      if (name === 'all') {
+        this.data = undefined;
+        this.error = undefined;
+        this.loading = undefined;
+        this.startedAt = undefined;
+        this.finishedAt = undefined;
+        let options = this.fetchOptionsDefault;
+        if (typeof this.fetchOptions === 'function') {
+          options = {
+            ...options,
+            ...(await this.fetchOptions()),
+          };
+        } else {
+          options = {
+            ...options,
+            ...this.fetchOptions,
+          };
+        }
+        this.cleanupLocal(
+          { ...this.fetchOptionsDefault, ...this.fetchOptions }.localName || this.name,
+        );
+      } else if (this[name] !== undefined) {
+        this[name] = undefined;
+      } else {
+        log.trace(`Field ${name} for ${this.name} is already undefined`);
+      }
+    });
+
+    await this.onCleanup(name);
   },
+
+  onCleanup() {},
 
   async run() {
     return this.startFetching();
   },
 
-  async startFetching(options = {}) {
-    if (this.loading) {
+  async startFetching(passedOptions = {}) {
+    let options = this.fetchOptionsDefault;
+    if (typeof this.fetchOptions === 'function') {
+      options = {
+        ...options,
+        ...(await this.fetchOptions(passedOptions)),
+        ...passedOptions,
+      };
+    } else {
+      options = {
+        ...options,
+        ...this.fetchOptions,
+        ...passedOptions,
+      };
+    }
+
+    if (this.loading && options.preventRefetch) {
       log.debug(`${this.name} is already loading`);
       return { loading: true };
     }
-    const parsedOptions = {
-      ...this.fetchOptions,
-      ...options,
-    };
-    if (parsedOptions.body && typeof options.body !== 'string') {
+    let errorParsed;
+    if (options.body && typeof passedOptions.body !== 'string' && !options.localOnly) {
       try {
-        parsedOptions.body = JSON.stringify(parsedOptions.body);
+        options.body = JSON.stringify(options.body);
       } catch (err) {
-        log.error(err);
-        const error = { message: `Failed to stringify request body, ${options.body}`, code: 500 };
-        this.updateError(error);
-        return error;
+        const error = {
+          message: `Failed to stringify request body, ${passedOptions.body}`,
+          code: '500___000',
+        };
+        errorParsed = await this.parseError(error, options);
+        await this.onErrorDefault(errorParsed, undefined, options);
+        return errorParsed;
       }
-      if (!parsedOptions.headers) parsedOptions.headers = {};
-      parsedOptions.headers['Content-Type'] = 'application/json; charset=utf-8';
+      if (!options.headers) options.headers = {};
+      options.headers['Content-Type'] = 'application/json; charset=utf-8';
     }
-    this.loadingStart();
-    const response = await this.fetch(parsedOptions.url, parsedOptions);
-    let dataParsed = response.data;
-    if (dataParsed) {
+
+    runInAction(`onStartDefault (${this.name})`, () => {
+      this.loading = true;
+      this.startedAt = new Date().getTime();
+    });
+
+    await this.onStart(options);
+
+    let response;
+    let fetchedOnline;
+    if (options.localOnly) {
+      if (options.method === 'POST') {
+        response = await this.setLocal(options.localName || this.name, options);
+      } else {
+        response = await this.getLocal(options.localName || this.name, options);
+        if (response === undefined) {
+          log.debug(
+            `No local value found for ${this.name} (name ${options.localName ||
+              this.name} usedn). Trying to get default value`,
+          );
+          if (options.defaultValue !== undefined) {
+            log.debug(`Returning default value for ${this.name}`);
+            response = options.defaultValue;
+          } else {
+            const error = {
+              message: `No local value found and no default value passed ${this.name}`,
+              code: '500___000',
+            };
+            errorParsed = await this.parseError(error, options);
+            await this.onErrorDefault(errorParsed, undefined, options);
+            return errorParsed;
+          }
+        } else {
+          log.debug(`Local value will be used for ${this.name}`);
+        }
+      }
+    } else {
+      if (options.localFirst) {
+        response = await this.getLocal(options.localName || this.name, options);
+        if (response && response.data) {
+          log.debug(`${options.url} returned from local storage`);
+        } else {
+          log.debug(
+            `No local value found for ${this.name} (name ${options.localName ||
+              this.name} usedn). Trying to fetch value from server`,
+          );
+        }
+      }
+      if (response === undefined || response.error !== undefined) {
+        response = await this.fetch(getApiUrl(options.url), options);
+        fetchedOnline = true;
+      }
+    }
+
+    let dataParsed;
+    if (response.data) {
       dataParsed = await this.parseData(response.data, options);
-      this.sideEffect(dataParsed);
+      if (dataParsed.error) {
+        errorParsed = await this.parseError(dataParsed.error, options);
+        await this.onErrorDefault(errorParsed, undefined, options);
+      } else {
+        if (response.error) {
+          errorParsed = await this.parseError(response.error, options);
+        }
+        await this.onDataDefault(dataParsed, errorParsed, { fetchedOnline, ...options });
+      }
     }
-    this.updateData(dataParsed);
-    this.updateError(response.error);
-    this.loadingFinish();
+
+    if (response.error) {
+      errorParsed = await this.parseError(response.error, options);
+      await this.onErrorDefault(errorParsed, response.data, options);
+    }
+
+    if (response.error === undefined && response.data === undefined) {
+      await this.cleanup('data');
+      await this.cleanup('error');
+    }
+
+    await this.onFinish(dataParsed, errorParsed, options);
+
+    runInAction(`onFinishDefault (${this.name})`, () => {
+      this.loading = false;
+      this.finishedAt = new Date().getTime();
+    });
+
     return response;
   },
 };
 
-export function createNewStore(store) {
+function createDataFetcher(store) {
   const newStore = Object.defineProperties(
     { ...GenericApiStore },
     Object.getOwnPropertyDescriptors(store),
@@ -143,12 +364,18 @@ export function createNewStore(store) {
     loading: observable,
     error: observable,
     data: observable,
-    loadingStart: action(`Loading started (${newStore.name})`),
-    loadingFinish: action(`Loading finished (${newStore.name})`),
-    updateError: action(`Error updated (${newStore.name})`),
-    updateData: action(`Data updated (${newStore.name})`),
+    onStart: action(`onStart (${newStore.name})`),
+    onFinish: action(`onFinish (${newStore.name})`),
+    onError: action(`onError (${newStore.name})`),
+    onData: action(`onData (${newStore.name})`),
+    onCleanup: action(`onCleanup (${newStore.name})`),
   });
+
+  newStore.init();
+
   return newStore;
 }
 
-export default createNewStore;
+export { round, createDataFetcher, getApiUrl };
+
+export default createDataFetcher;

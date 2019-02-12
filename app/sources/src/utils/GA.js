@@ -7,7 +7,8 @@
 // Dependencies
 // -----------------------------------------------------------------------------
 
-import log from 'utils/logging';
+import logger from 'utils/logging';
+const log = logger();
 
 // -----------------------------------------------------------------------------
 // Code

@@ -1,5 +1,5 @@
 /**
- * Log toolkit
+ * Setup logging utilities
  *
  */
 
@@ -7,58 +7,102 @@
 // Dependencies
 // -----------------------------------------------------------------------------
 
+const loglevel = require('loglevel');
+
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
-const log = new Proxy(
-  {
-    level: 'warn',
-    levels: ['debug', 'info', 'warn', 'error'],
-    levelColors: {
-      debug: '#9E9E9E',
-      info: '#03A9F4',
-      warn: '#FF9800',
-      error: '#FF3D00',
-    },
-    traceType: 'off',
-  },
-  {
-    get(settings, prop) {
-      if (settings.levels.includes(prop)) {
-        const invokedLevel = prop;
-        return (...args) => {
-          const messages = [];
-          args.forEach(arg => {
-            if (typeof arg === 'string') {
-              messages.push(`%c${arg}`, `color:${settings.levelColors[invokedLevel]}`);
-            } else {
-              messages.push(arg);
-            }
-          });
+const colors = {
+  trace: '',
+  debug: '\x1b[90m',
+  info: '\x1b[94m',
+  warn: '\x1b[93m',
+  error: '\x1b[91m',
+};
 
-          if (settings.levels.indexOf(invokedLevel) >= settings.levels.indexOf(settings.level)) {
-            console.log(...messages);
-          }
-          if (settings.traceType === 'full') {
-            console.trace();
-          }
-          if (settings.traceType === 'part') {
-            console.log(new Error().stack.split('\n')[2]);
-          }
-        };
+const originalFactory = loglevel.methodFactory;
+loglevel.methodFactory = (methodName, logLevel, loggerName) => {
+  const rawMethod = originalFactory(methodName, logLevel, loggerName);
+  return message => {
+    // Getting stacktrace
+    const err = new Error();
+    const callerLine = err.stack.split('\n')[2];
+    let invokeLocation = callerLine.match(/\(\/.*\)/);
+    if (invokeLocation) {
+      // Removing () brackets around line and replace core folder
+      // where app is stored inside Docker container
+      invokeLocation = invokeLocation[0].slice(1, -1).replace('/opt/app', '');
+    } else {
+      invokeLocation = '';
+    }
+
+    let prefix = '';
+    if (process.env.NODE_ENV === 'development') {
+      prefix = `${colors[methodName]}[${new Date()
+        .toTimeString()
+        .replace(
+          /.*(\d{2}:\d{2}:\d{2}).*/,
+          '$1',
+        )}] ${methodName.toUpperCase()}(${loggerName})[${invokeLocation}]:\x1b[0m`;
+    } else {
+      prefix = `${methodName.toUpperCase()}(${loggerName})[${invokeLocation}]:`;
+    }
+
+    if (message === undefined) {
+      return rawMethod(prefix, message);
+    }
+    let formattedMessage = message;
+
+    if (message.stack && process.env.NODE_ENV === 'production') {
+      formattedMessage = `${message.stack.replace(/\n/g, '')}`;
+    }
+
+    if (methodName === 'error') {
+      let errorObject = message.error || message;
+      if (typeof errorObject === 'string' || errorObject instanceof String) {
+        formattedMessage = errorObject;
+      } else {
+        const stackWithoutMessage =
+          (errorObject.stack &&
+            errorObject.stack
+              .split('\n')
+              .slice(1)
+              .join('\n')) ||
+          '';
+
+        const stack =
+          process.env.NODE_ENV === 'production'
+            ? stackWithoutMessage.replace(/\n/g, '')
+            : `\n${stackWithoutMessage}`;
+        if (errorObject instanceof Error) {
+          // In case someone stringifyed error object as you can in Bull queue
+          try {
+            errorObject = JSON.parse(errorObject.message);
+            errorObject = errorObject.error || errorObject;
+          } catch (e) {}
+        }
+        formattedMessage = `${errorObject.message} (${errorObject.code || 0}) ${stack}`;
       }
-      return settings[prop];
-    },
-    set(settings, prop, value) {
-      settings[prop] = value; // eslint-disable-line
-      return true;
-    },
-  },
-);
+    }
+
+    return rawMethod(prefix, formattedMessage);
+  };
+};
 
 if (process.env.NODE_ENV === 'development') {
-  log.level = 'debug';
+  loglevel.setDefaultLevel(loglevel.levels.DEBUG);
+  loglevel.setLevel(loglevel.levels.DEBUG);
+}
+if (process.env.NODE_ENV === 'production') {
+  loglevel.setDefaultLevel(loglevel.levels.INFO);
+  loglevel.setLevel(loglevel.levels.INFO);
+}
+if (process.env.NODE_ENV === 'test') {
+  loglevel.setDefaultLevel(loglevel.levels.SILENT);
+  loglevel.setLevel(loglevel.levels.SILENT);
 }
 
-export default log;
+const internalLogger = loglevel.getLogger('Logger');
+
+export default name => ({ ...loglevel.getLogger(name || 'general') });

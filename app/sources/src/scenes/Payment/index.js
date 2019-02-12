@@ -32,7 +32,7 @@ class Wrapper extends React.Component {
 
   componentWillUnmount() {
     const { payments } = this.props;
-    payments.getById.cleanup();
+    payments.getById.cleanup('all');
   }
 
   render() {

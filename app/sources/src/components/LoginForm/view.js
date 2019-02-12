@@ -10,7 +10,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import log from 'utils/logging';
+import logger from 'utils/logging';
+const log = logger();
 
 import { Root, Input, Button, Message } from './styles';
 

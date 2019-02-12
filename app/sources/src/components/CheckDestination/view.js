@@ -11,7 +11,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import GA from 'utils/GA';
-import log from 'utils/logging';
+import logger from 'utils/logging';
+const log = logger();
 
 import { Root, Input, Button, Message, P, Span, A, DestinationInfo, AmountInput } from './styles';
 
@@ -22,7 +23,7 @@ import { Root, Input, Button, Message, P, Span, A, DestinationInfo, AmountInput 
 export class CheckDestination extends Component {
   componentWillUnmount() {
     const { wallets } = this.props;
-    wallets.getDetails.cleanup();
+    wallets.getDetails.cleanup('all');
   }
 
   render() {

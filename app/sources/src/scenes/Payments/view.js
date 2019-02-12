@@ -74,7 +74,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
           </NavLink>
           <LogOut
             onClick={() => {
-              accounts.authenticate.cleanup();
+              accounts.authenticate.cleanup('all');
             }}
           />
           <Support className="openIntercom" />
@@ -103,7 +103,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
           </NavLink>
           <LogOut
             onClick={() => {
-              accounts.authenticate.cleanup();
+              accounts.authenticate.cleanup('all');
             }}
           />
           <Support className="openIntercom" />
@@ -132,7 +132,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
           </NavLink>
           <LogOut
             onClick={() => {
-              accounts.authenticate.cleanup();
+              accounts.authenticate.cleanup('all');
             }}
           />
           <Support className="openIntercom" />
@@ -144,13 +144,13 @@ const Payments = ({ settings, payments, accounts, t }) => {
           <Message type="warn">
             <CloseIcon
               onClick={() => {
-                settings.set.run('email_confirmation_skipped', true);
+                settings.set.run({ email_confirmation_skipped: true });
               }}
             />
             We sent confirmation link to
             <Span>{accounts.get.data.email}</Span>
             To get your 0.5$ bonus please confirm your email{' '}
-            <A class="openIntercom">and then contact us</A>
+            <A className="openIntercom">and then contact us</A>
             {`\nIf you can't find email, check spam or contact us`}
           </Message>
         ) : null}
@@ -198,7 +198,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
         </NavLink>
         <LogOut
           onClick={() => {
-            accounts.authenticate.cleanup();
+            accounts.authenticate.cleanup('all');
           }}
         />
         <Support className="openIntercom" />
@@ -210,7 +210,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
         <Message type="warn">
           <CloseIcon
             onClick={() => {
-              settings.set.run('email_confirmation_skipped', true);
+              settings.set.run({ email_confirmation_skipped: true });
             }}
           />
           We sent confirmation link to
@@ -231,7 +231,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
                   origins: ['<all_urls>'],
                 },
                 granted => {
-                  settings.set.run('content_script_permissions', granted ? 'granted' : 'denied');
+                  settings.set.run({ content_script_permissions: granted ? 'granted' : 'denied' });
                 },
               );
             }}
@@ -251,8 +251,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
           </P>
           <CloseIcon
             onClick={e => {
-              e.target.parentNode.remove();
-              settings.set.run('content_script_permissions', 'skipped');
+              settings.set.run({ content_script_permissions: 'skipped' });
             }}
           />
         </Permissions>

@@ -7,14 +7,32 @@
 // Dependencies
 // -----------------------------------------------------------------------------
 
-import * as dataStores from './data';
-import * as uiStores from './ui';
+import accounts from './accounts';
+import payments from './payments';
+import wallets from './wallets';
+import vendors from './vendors';
+import settings from './settings';
+import denominations from './denominations';
+import * as dataGeneric from './dataGeneric';
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
-export * from './data';
-export * from './ui';
+const init = async () => {
+  await settings.get.run();
+  await accounts.authenticate.run();
+};
 
-export default { ...dataStores, ...uiStores };
+export { accounts, payments, wallets, settings, vendors, denominations, init };
+
+export default {
+  accounts,
+  payments,
+  wallets,
+  settings,
+  vendors,
+  denominations,
+  init,
+  ...dataGeneric,
+};

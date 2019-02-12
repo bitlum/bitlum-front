@@ -10,7 +10,8 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 
-import log from 'utils/logging';
+import logger from 'utils/logging';
+const log = logger();
 
 import view from './view';
 
@@ -20,7 +21,7 @@ import view from './view';
 
 class Wrapper extends React.Component {
   async componentDidMount() {
-    const { payments } = this.props;
+    const { payments, denominations } = this.props;
     const query = window.location.hash.match(/\?(.*)/);
 
     let receive;
@@ -36,11 +37,13 @@ class Wrapper extends React.Component {
     if (receive.type.match('blockchain')) {
       payments.receive.run(receive.type, null, receive.asset);
     }
+
+    denominations.get.run();
   }
 
   componentWillUnmount() {
     const { payments } = this.props;
-    payments.receive.cleanup();
+    payments.receive.cleanup('all');
   }
 
   render() {
@@ -62,4 +65,4 @@ class Wrapper extends React.Component {
 
 Wrapper.propTypes = {};
 
-export default inject('payments')(observer(Wrapper));
+export default inject('payments', 'denominations')(observer(Wrapper));

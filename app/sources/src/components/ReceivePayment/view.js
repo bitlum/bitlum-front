@@ -10,7 +10,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import log from 'utils/logging';
+import logger from 'utils/logging';
 
 import {
   Root,
@@ -30,15 +30,13 @@ import {
   Footer,
 } from './styles';
 
+const log = logger();
+
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
 export class ReceivePayment extends Component {
-  // componentDidUpdate(prevProps, prevState) {
-  //   const { payments, receive } = this.props;
-  //   payments.receive.run(receive.type, null, receive.asset);
-  // }
   state = {
     amountsCurrent: undefined,
     amountsPrevious: undefined,
@@ -52,11 +50,11 @@ export class ReceivePayment extends Component {
 
   componentWillUnmount() {
     const { payments } = this.props;
-    payments.receive.cleanup();
+    payments.receive.cleanup('all');
   }
 
   render() {
-    const { payments, settings, history, receive, className, t } = this.props;
+    const { payments, denominations, history, receive, className, t } = this.props;
     const {
       selectedDenomination,
       denominationPairs,
@@ -73,6 +71,14 @@ export class ReceivePayment extends Component {
       );
     }
 
+    if (!denominations.get.data || denominations.get.loading) {
+      return (
+        <Root className={className}>
+          <P>Loading...</P>
+        </Root>
+      );
+    }
+
     return (
       <Root
         className={className}
@@ -81,7 +87,7 @@ export class ReceivePayment extends Component {
           payments.receive.run(
             receive.type,
             (amountsCurrent || 0) /
-              settings.get.data.denominations[receive.asset][selectedDenomination].price,
+            denominations.get.data[receive.asset][selectedDenomination].price,
             receive.asset,
           );
         }}
@@ -100,7 +106,7 @@ export class ReceivePayment extends Component {
         {receive.type === 'lightning' &&
         (!payments.receive.data || payments.receive.data.type !== 'lightning') ? (
           <AmountInputWraper>
-            {settings.get.data.denominations[receive.asset][selectedDenomination].sign}
+            {denominations.get.data[receive.asset][selectedDenomination].sign}
             <AmountInput
               length={(amountsCurrent || '').toString().length}
               ref={input => input && input.focus()}
@@ -110,7 +116,7 @@ export class ReceivePayment extends Component {
               step={
                 1 /
                 10 **
-                  settings.get.data.denominations[receive.asset][selectedDenomination].precisionMax
+                  denominations.get.data[receive.asset][selectedDenomination].precisionMax
               }
               value={amountsCurrent}
               min="0"
@@ -122,13 +128,13 @@ export class ReceivePayment extends Component {
               primary
               onClick={e => {
                 e.preventDefault();
-                const convertedAmount = settings.get.data.denominations[receive.asset][
+                const convertedAmount = denominations.get.data[receive.asset][
                   denominationPairs[selectedDenomination]
                 ].round(
                   ((amountsCurrent || 0) /
-                    settings.get.data.denominations[receive.asset][selectedDenomination]
+                    denominations.get.data[receive.asset][selectedDenomination]
                       .price) *
-                    settings.get.data.denominations[receive.asset][
+                    denominations.get.data[receive.asset][
                       denominationPairs[selectedDenomination]
                     ].price,
                 );
@@ -143,7 +149,7 @@ export class ReceivePayment extends Component {
               }}
             >
               {
-                settings.get.data.denominations[receive.asset][
+                denominations.get.data[receive.asset][
                   denominationPairs[selectedDenomination]
                 ].sign
               }
@@ -170,7 +176,7 @@ export class ReceivePayment extends Component {
               Generate invoice to receive{'\n '}
               {!amountsCurrent
                 ? 'any amount'
-                : `${settings.get.data.denominations[receive.asset][selectedDenomination].stringify(
+                : `${denominations.get.data[receive.asset][selectedDenomination].stringify(
                     amountsCurrent,
                     { omitDirection: true },
                   )}`}

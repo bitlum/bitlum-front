@@ -13,7 +13,8 @@ import formatDate from 'date-fns/format';
 
 import NavLink from 'react-router-dom';
 
-import log from 'utils/logging';
+import logger from 'utils/logging';
+const log = logger();
 
 import { Root, P, AmountAdditional, AmountMain, Description, Amount, Time, Info } from './styles';
 

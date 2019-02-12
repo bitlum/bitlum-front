@@ -10,7 +10,8 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 
-import log from 'utils/logging';
+import logger from 'utils/logging';
+const log = logger();
 import GA from 'utils/GA';
 
 import view from './view';
@@ -47,7 +48,7 @@ class Wrapper extends React.Component {
 
   componentWillUnmount() {
     const { wallets } = this.props;
-    wallets.getDetails.cleanup();
+    wallets.getDetails.cleanup('all');
     clearInterval(this.polling);
   }
 

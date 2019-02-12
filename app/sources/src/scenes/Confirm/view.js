@@ -9,7 +9,8 @@
 
 import React from 'react';
 
-import log from 'utils/logging';
+import logger from 'utils/logging';
+const log = logger();
 
 import { Root, Header, BackButton, P, PaymentConfirmation, Support } from './styles';
 
@@ -17,7 +18,7 @@ import { Root, Header, BackButton, P, PaymentConfirmation, Support } from './sty
 // Code
 // -----------------------------------------------------------------------------
 
-const Confirm = ({ payments, vendors, payment, accounts, settings }) => {
+const Confirm = ({ payments, vendors, payment, accounts }) => {
   return (
     <Root>
       <Header>
@@ -31,7 +32,6 @@ const Confirm = ({ payments, vendors, payment, accounts, settings }) => {
           payments={payments}
           vendors={vendors}
           accounts={accounts}
-          settings={settings}
         />
       ) : (
         <P>No payment provided to confirm</P>

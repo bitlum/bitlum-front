@@ -26,7 +26,8 @@ import { I18nextProvider, withNamespaces } from 'react-i18next';
 import GA from 'utils/GA';
 import HA from 'utils/HA';
 import LiveChat from 'utils/LiveChat';
-import log from 'utils/logging';
+import logger from 'utils/logging';
+const log = logger();
 import i18nConfig from 'locales';
 
 import stores from 'stores';
@@ -53,28 +54,10 @@ configure({
   enforceActions: 'observed',
 });
 
-if (process.env.NODE_ENV === 'production') {
-  const accountData = stores.accounts.get.data;
-  const settingsData = stores.settings.get.data;
-  const dataToSend = {
-    email: accountData && accountData.email,
-    user_id: accountData && accountData.auid,
-    created_at: accountData && accountData.createdAt,
-    permission_handleLinks_granted:
-      settingsData && settingsData.content_script_permissions === 'granted',
-  };
-
-  Object.keys((accountData && accountData.balances) || {}).forEach(asset => {
-    dataToSend[`${asset}_balance`] = accountData.balances[asset].available;
-  });
-
-  LiveChat.boot(dataToSend);
-}
-
 class App extends Component {
   componentWillMount() {
     // eslint-disable-next-line
-    const { history } = this.props;
+    const { history, accounts } = this.props;
     GA({ type: 'pageview', page: window.location.pathname });
     const query = window.location.hash.match(/\?(.*)/);
     if (!query || (query && !new URLSearchParams(query[0]).get('nopopup'))) {
@@ -95,6 +78,8 @@ class App extends Component {
       }
       GA({ type: 'pageview', page });
     });
+
+    accounts.authenticate.run();
   }
 
   componentWillUnmount() {
@@ -109,7 +94,7 @@ class App extends Component {
       <Root>
         <GlobalStyles />
         <Main>
-          {!accounts.authenticate.isAuthenticated ? (
+          {!accounts.authenticate.data ? (
             <Switch>
               <Route exact path="/" component={Login} />
               <Route path="/login" component={Login} />
@@ -129,7 +114,7 @@ class App extends Component {
                 <Route
                   path="/signout"
                   render={() => {
-                    accounts.authenticate.cleanup();
+                    accounts.authenticate.cleanup('all');
                     return null;
                   }}
                 />
@@ -143,18 +128,38 @@ class App extends Component {
   }
 }
 
-const AppWrap = withRouter(withNamespaces()(inject('accounts', 'ui')(observer(App))));
+const AppWrap = withRouter(withNamespaces()(inject('accounts')(observer(App))));
 
-ReactDOM.render(
-  <Provider {...stores}>
-    <I18nextProvider i18n={i18nConfig}>
-      <Router>
-        <AppWrap />
-      </Router>
-    </I18nextProvider>
-  </Provider>,
-  document.getElementById('root'),
-);
+(async () => {
+  await stores.init();
+  if (process.env.NODE_ENV === 'production') {
+    const accountData = stores.accounts.get.data;
+    const settingsData = stores.settings.get.data;
+    const dataToSend = {
+      email: accountData && accountData.email,
+      user_id: accountData && accountData.auid,
+      created_at: accountData && accountData.createdAt,
+      permission_handleLinks_granted:
+        settingsData && settingsData.content_script_permissions === 'granted',
+    };
+  
+    Object.keys((accountData && accountData.balances) || {}).forEach(asset => {
+      dataToSend[`${asset}_balance`] = accountData.balances[asset].available;
+    });
+  
+    // LiveChat.boot(dataToSend);
+  }
+  ReactDOM.render(
+    <Provider {...stores}>
+      <I18nextProvider i18n={i18nConfig}>
+        <Router>
+          <AppWrap />
+        </Router>
+      </I18nextProvider>
+    </Provider>,
+    document.getElementById('root'),
+  );
+})();
 
 if (process.env.NODE_ENV === 'development') {
   window.stores = stores;

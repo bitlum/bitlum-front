@@ -10,7 +10,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import log from 'utils/logging';
+import logger from 'utils/logging';
+const log = logger();
 import LiveChat from 'utils/LiveChat';
 
 import {
@@ -43,62 +44,69 @@ import {
 export class PaymentConfirmation extends Component {
   state = {
     amountsOriginal: this.props.payment.amount,
-    amountsCurrent:
-      this.props.payment.amount != 0
-        ? this.props.payment.amount *
-          this.props.settings.get.data.denominations[this.props.payment.asset].main.price
-        : undefined,
     amountsPrevious: undefined,
+    amountsCurrent: undefined,
     selectedDenomination: 'main',
     denominationPairs: {
       main: 'additional',
       additional: 'main',
     },
   };
-  componentWillMount() {
+
+  componentDidMount() {
     const { payments, payment } = this.props;
     payments.estimate.run(payment.wuid, payment.amount, payment.asset);
   }
+
   componentWillUnmount() {
     const { payments } = this.props;
-    payments.send.cleanup();
-    payments.estimate.cleanup();
+    payments.send.cleanup('all');
+    payments.estimate.cleanup('all');
   }
 
-  componentDidUpdate() {
-    const { payments } = this.props;
-    if (payments.send.data) {
-      setTimeout(window.close, 3000);
+  static getDerivedStateFromProps(props, state) {
+    const denominations =
+      (props.payments.estimate.data && props.payments.estimate.data.denominations) ||
+      (props.payments.estimate.error && props.payments.estimate.error.denominations);
+
+    if (!denominations || !props.payment || props.payment.amount == '0') {
+      return null;
     }
+
+    return {
+      amountsCurrent:
+        props.payment && props.payment.amount != 0
+          ? denominations[state.selectedDenomination].amount
+          : undefined,
+    };
   }
 
   render() {
-    const { payment, payments, vendors, settings, accounts, className, t } = this.props;
+    const { payment, payments, vendors, accounts, className, t } = this.props;
     const {
       amountsOriginal,
       amountsPrevious,
+      amountsCurrent,
       denominationPairs,
       selectedDenomination,
     } = this.state;
 
-    let { amountsCurrent } = this.state;
+    if (
+      (!payments.estimate.data && !payments.estimate.error && !payments.send.data && !payments.send.error) ||
+      payments.estimate.loading ||
+      payments.send.loading
+    ) {
+      return <Root className={className} loading />;
+    }
 
-    const { denominations } =
-      ((payments.estimate.data || (payments.estimate.error && payments.estimate.error.fees)) &&
-        payments.calcDenominations(
-          payments.estimate.data ||
-            (payments.estimate.error && {
-              asset: payment.asset,
-              fees: payments.estimate.error.fees,
-              amount:
-                (amountsCurrent || 0) /
-                settings.get.data.denominations[payment.asset][selectedDenomination].price,
-            }),
-        )) ||
-      {};
+    const denominations =
+    (payments.estimate.data && payments.estimate.data.denominations) ||
+    (payments.estimate.error && payments.estimate.error.denominations);
 
-    if (payment.amount != 0) {
-      amountsCurrent = denominations && denominations[selectedDenomination].amount;
+
+    let closeTimeout;
+    if (payments.send.data) {
+      closeTimeout = setTimeout(window.close, 3000);
     }
 
     return (
@@ -110,23 +118,23 @@ export class PaymentConfirmation extends Component {
             amountsOriginal != 0
               ? amountsOriginal
               : (amountsCurrent || 0) /
-                settings.get.data.denominations[payment.asset][selectedDenomination].price;
+                denominations[selectedDenomination].price;
           const result = await payments.send.run(payment.wuid, amount, payment.asset, {
             origin: payment.origin,
           });
 
-          LiveChat.track(
-            `${payment.origin || 'unknown'}_payment_${payment.asset}_${
-              result.error ? 'error' : 'created'
-            }`,
-            {
-              amount,
-            },
-          );
+          // LiveChat.track(
+          //   `${payment.origin || 'unknown'}_payment_${payment.asset}_${
+          //     result.error ? 'error' : 'created'
+          //   }`,
+          //   {
+          //     amount,
+          //   },
+          // );
 
-          LiveChat.track(`payment_${payment.asset}_${result.error ? 'error' : 'created'}`, {
-            amount,
-          });
+          // LiveChat.track(`payment_${payment.asset}_${result.error ? 'error' : 'created'}`, {
+          //   amount,
+          // });
         }}
         loading={payments.estimate.loading || payments.send.loading}
       >
@@ -141,6 +149,7 @@ export class PaymentConfirmation extends Component {
               className={payments.send.data.status === 'failed' ? 'openIntercom' : ''}
               onClick={e => {
                 if (payments.send.data.status === 'pending') {
+                  clearTimeout(closeTimeout);
                   window.location.hash = '';
                 }
               }}
@@ -170,18 +179,14 @@ export class PaymentConfirmation extends Component {
           </Vendor>
         )}
         <AmountInputWraper>
-          {settings.get.data.denominations[payment.asset][selectedDenomination].sign}
+          {denominations[selectedDenomination].sign}
           <AmountInput
             ref={input => input && input.focus()}
             length={(amountsCurrent || '').toString().length}
             placeholder="0"
             id="sendAmount"
             type="number"
-            step={
-              1 /
-              10 **
-                settings.get.data.denominations[payment.asset][selectedDenomination].precisionMax
-            }
+            step={1 / 10 ** denominations[selectedDenomination].precisionMax}
             min="0"
             value={amountsCurrent}
             disabled={payment.amount != 0}
@@ -190,8 +195,7 @@ export class PaymentConfirmation extends Component {
                 this.setState({ amountsCurrent: e.target.value });
                 payments.estimate.run(
                   payment.wuid,
-                  e.target.value /
-                    settings.get.data.denominations[payment.asset][selectedDenomination].price,
+                  e.target.value / denominations[selectedDenomination].price,
                   payment.asset,
                 );
               }
@@ -203,16 +207,20 @@ export class PaymentConfirmation extends Component {
             disabled={!denominations}
             onClick={e => {
               e.preventDefault();
-              const convertedAmount = settings.get.data.denominations[payment.asset][
+              const convertedAmount = denominations[
                 denominationPairs[selectedDenomination]
-              ].round(denominations[denominationPairs[selectedDenomination]].amount);
+              ].round(
+                denominations[denominationPairs[selectedDenomination]]
+                  .amount,
+              );
               this.setState({
                 selectedDenomination: denominationPairs[selectedDenomination],
                 amountsCurrent: convertedAmount === 0 ? undefined : convertedAmount,
               });
             }}
           >
-            {denominations && denominations[denominationPairs[selectedDenomination]].sign}
+            {denominations &&
+              denominations[denominationPairs[selectedDenomination]].sign}
           </SwitchDenomination>
         </AmountInputWraper>
         <BalanceSummary
@@ -244,14 +252,18 @@ export class PaymentConfirmation extends Component {
           <Span>Fee</Span>
           <Span>
             {denominations &&
-              denominations[selectedDenomination].toString({ omitDirection: true }).fees}
+              denominations[selectedDenomination].toString({
+                omitDirection: true,
+              }).fees}
           </Span>
         </Fees>
         <Submit primary type="submit" disabled={payments.estimate.error}>
           <Span>Pay</Span>
           <Span>
             {denominations &&
-              denominations[selectedDenomination].toString({ omitDirection: true }).total}
+              denominations[selectedDenomination].toString({
+                omitDirection: true,
+              }).total}
           </Span>
         </Submit>
       </Root>

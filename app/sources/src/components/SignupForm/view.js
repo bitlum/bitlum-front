@@ -11,7 +11,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Trans } from 'react-i18next';
 
-import log from 'utils/logging';
+import logger from 'utils/logging';
+const log = logger();
 
 import { Root, Input, Button, Message, A, P } from './styles';
 

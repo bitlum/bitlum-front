@@ -25,7 +25,7 @@ class Wrapper extends React.Component {
 
   componentWillUnmount() {
     const { payments } = this.props;
-    payments.receive.cleanup();
+    payments.receive.cleanup('all');
   }
 
   render() {

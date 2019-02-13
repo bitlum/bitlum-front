@@ -153,6 +153,8 @@ payments.get = createDataFetcher({
   async fetchOptions() {
     return {
       url: '/payments',
+      localFirst: true,
+      preserveDataOnError: true,
       headers: {
         Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
       },
@@ -178,13 +180,6 @@ payments.get = createDataFetcher({
         };
       }),
     );
-  },
-  async run() {
-    return this.startFetching({
-      headers: {
-        Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
-      },
-    });
   },
   onError(error) {
     if (error.code.match('^401.*$')) {

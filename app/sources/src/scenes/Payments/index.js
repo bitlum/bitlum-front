@@ -21,7 +21,7 @@ class Wrapper extends React.Component {
   componentDidMount() {
     const { payments, accounts } = this.props;
 
-    accounts.get.run();    
+    accounts.get.run();
     payments.get.run();
 
     this.polling = setInterval(() => {

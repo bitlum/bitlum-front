@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import React from 'react';
-import { List } from 'react-virtualized';
+import { List, AutoSizer } from 'react-virtualized';
 import { NavLink } from 'react-router-dom';
 import formatDate from 'date-fns/format';
 import isSameDay from 'date-fns/is_same_day';
@@ -42,6 +42,8 @@ import {
   CloseIcon,
 } from './styles';
 
+import { observer } from 'mobx-react';
+
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
@@ -57,6 +59,59 @@ const getSeparatorText = date => {
   }
   return distance;
 };
+
+const ListGroups = observer(({ payments }) => {
+  const paymentsGrouped = {};
+  payments.get.data.forEach(payment => {
+    const dayOfPayment = new Date(
+      payment.status === 'pending' ? '01-01-9999' : payment.updatedAt,
+    ).setHours(0, 0, 0, 0);
+    if (
+      !paymentsGrouped[`${dayOfPayment}_${payment.vuid}_${payment.vendorName}_${payment.status}`]
+    ) {
+      paymentsGrouped[`${dayOfPayment}_${payment.vuid}_${payment.vendorName}_${payment.status}`] = [
+        payment,
+      ];
+    } else {
+      paymentsGrouped[
+        `${dayOfPayment}_${payment.vuid}_${payment.vendorName}_${payment.status}`
+      ].push(payment);
+    }
+  });
+  const paymentGroupsList = Object.entries(paymentsGrouped)
+    .sort((p, c) => c[0].split('_')[0] - p[0].split('_')[0])
+    .map((paymentsGroup, index, self) => {
+      const result = [
+        <PaymentsGroup
+          key={paymentsGroup[0]}
+          status={paymentsGroup[1][0].status}
+          vendorName={paymentsGroup[1][0].vendorName}
+          vendorIcon={paymentsGroup[1][0].vendorIcon}
+          vendorColor={paymentsGroup[1][0].vendorColor}
+          payments={paymentsGroup[1]}
+        />,
+      ];
+      const currentGroupDate = new Date(Number(paymentsGroup[0].split('_')[0]));
+
+      if (index === 0 && currentGroupDate.getFullYear() !== 9999) {
+        result.unshift(
+          <Separator key={currentGroupDate}>{getSeparatorText(currentGroupDate)}</Separator>,
+        );
+      }
+
+      if (index === 0 && currentGroupDate.getFullYear() === 9999) {
+        result.unshift(<Separator key={currentGroupDate}>Pending</Separator>);
+      }
+
+      const nextGroupDate = self[index + 1] && new Date(Number(self[index + 1][0].split('_')[0]));
+
+      if (nextGroupDate && !isSameDay(currentGroupDate, nextGroupDate)) {
+        result.push(<Separator key={nextGroupDate}>{getSeparatorText(nextGroupDate)}</Separator>);
+      }
+      return result;
+    });
+  return paymentGroupsList;
+});
 
 // eslint-disable-next-line
 const Payments = ({ settings, payments, accounts, t }) => {
@@ -158,24 +213,6 @@ const Payments = ({ settings, payments, accounts, t }) => {
     );
   }
 
-  const paymentsGrouped = {};
-  payments.get.data.forEach(payment => {
-    const dayOfPayment = new Date(
-      payment.status === 'pending' ? '01-01-9999' : payment.updatedAt,
-    ).setHours(0, 0, 0, 0);
-    if (
-      !paymentsGrouped[`${dayOfPayment}_${payment.vuid}_${payment.vendorName}_${payment.status}`]
-    ) {
-      paymentsGrouped[`${dayOfPayment}_${payment.vuid}_${payment.vendorName}_${payment.status}`] = [
-        payment,
-      ];
-    } else {
-      paymentsGrouped[
-        `${dayOfPayment}_${payment.vuid}_${payment.vendorName}_${payment.status}`
-      ].push(payment);
-    }
-  });
-
   return (
     <Root>
       <Header>
@@ -248,41 +285,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
         <LegendItem type="completed">Completed</LegendItem>
         <LegendItem type="failed">Failed</LegendItem>
       </Legend> */}
-      {Object.entries(paymentsGrouped)
-        .sort((p, c) => c[0].split('_')[0] - p[0].split('_')[0])
-        .map((paymentsGroup, index, self) => {
-          const result = [
-            <PaymentsGroup
-              key={paymentsGroup[0]}
-              status={paymentsGroup[1][0].status}
-              vendorName={paymentsGroup[1][0].vendorName}
-              vendorIcon={paymentsGroup[1][0].vendorIcon}
-              vendorColor={paymentsGroup[1][0].vendorColor}
-              payments={paymentsGroup[1]}
-            />,
-          ];
-          const currentGroupDate = new Date(Number(paymentsGroup[0].split('_')[0]));
-
-          if (index === 0 && currentGroupDate.getFullYear() !== 9999) {
-            result.unshift(
-              <Separator key={currentGroupDate}>{getSeparatorText(currentGroupDate)}</Separator>,
-            );
-          }
-
-          if (index === 0 && currentGroupDate.getFullYear() === 9999) {
-            result.unshift(<Separator key={currentGroupDate}>Pending</Separator>);
-          }
-
-          const nextGroupDate =
-            self[index + 1] && new Date(Number(self[index + 1][0].split('_')[0]));
-
-          if (nextGroupDate && !isSameDay(currentGroupDate, nextGroupDate)) {
-            result.push(
-              <Separator key={nextGroupDate}>{getSeparatorText(nextGroupDate)}</Separator>,
-            );
-          }
-          return result;
-        })}
+      <ListGroups payments={payments} />
     </Root>
   );
 };

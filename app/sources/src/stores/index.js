@@ -22,6 +22,9 @@ import * as dataGeneric from './dataGeneric';
 const init = async () => {
   await settings.get.init();
   await accounts.authenticate.run();
+  if (accounts.authenticate.error) {
+    await accounts.authenticate.cleanup('all');
+  }
 };
 
 export { accounts, payments, wallets, settings, vendors, denominations, init };

@@ -9,7 +9,7 @@
 
 import logger from 'utils/logging';
 
-import { vendors, accounts, getApiUrl } from 'stores';
+import stores from 'stores';
 
 import { configureDevtool } from 'mobx-react-devtools';
 
@@ -64,55 +64,6 @@ const Notifications = {
     }).catch(err => ({ error: { message: err.message, code: 400 } }));
   },
 };
-
-window.accounts = accounts;
-
-
-accounts.get.run();
-
-
-// const paymentsFetcher = setInterval(async () => {
-//   let authData;
-//   // let accountData;
-//   try {
-//     authData = JSON.parse(localStorage.getItem('authData'));
-//     // accountData = JSON.parse(localStorage.getItem('accountData'));
-//   } catch (e) {
-//     console.log(e);
-//   }
-//   if (authData) {
-//     const result = await fetch(getApiUrl`/payments`, {
-//       headers: {
-//         Authorization: `Bearer ${authData.token}`,
-//       },
-//     }).then(res => res.json());
-
-//     if (result.data) {
-//       const latestIncoming = result.data.find(payment => payment.direction === 'incoming');
-//       if (latestIncoming) {
-//         let vendor;
-//         if (latestIncoming.vendorName) {
-//           vendor = {
-//             name: latestIncoming.vendorName,
-//             iconUrl: latestIncoming.vendorIcon,
-//           };
-//         } else {
-//           vendor = vendors.getRandom(latestIncoming.vuid)[0];
-//         }
-//         console.log(vendor.iconUrl);
-//         Notifications.create(
-//           'newPayment',
-//           latestIncoming,
-//           `Payment ${latestIncoming.status === 'completed' ? 'received' : 'pending'} from ${
-//             vendor.name
-//           }`,
-//           latestIncoming.description || 'No description',
-//           vendor.iconUrl || 'assets/icon48.png',
-//         );
-//       }
-//     }
-//   }
-// }, 5000);
 
 window.chrome.webRequest.onCompleted.addListener(
   details => {
@@ -172,11 +123,39 @@ window.chrome.runtime.onMessage.addListener(req => {
     }
   }
 });
+
+(async () => {
+  await stores.init();
+  const { accounts, payments } = stores;
+  const paymentsFetcher = setInterval(async () => {
+    if (accounts.authenticate.data) {
+      await payments.get.run({ localLifetime: 0 });
+      if (payments.get.data) {
+        const latestIncoming = payments.get.data.find(payment => payment.direction === 'incoming');
+        if (latestIncoming) {
+          Notifications.create(
+            'newPayment',
+            latestIncoming,
+            `New ${
+              latestIncoming.denominations.main.toString({ omitDirection: true }).total
+            } payment from ${latestIncoming.vendorName}!`,
+            latestIncoming.description || 'No description',
+            latestIncoming.vendorIcon || 'assets/icon48.png',
+          );
+        }
+      }
+    }
+  }, 3000);
+  const accountsFetcher = setInterval(async () => {
+    if (accounts.authenticate.data) {
+      accounts.get.run({ localLifetime: 0 });
+    }
+  }, 3000);
+})();
+
 if (process.env.NODE_ENV === 'development') {
   // Any configurations are optional
   configureDevtool({
-    // Turn on logging changes button programmatically:
-    logEnabled: true,
     // Log only changes of type `reaction`
     // (only affects top-level messages in console, not inside groups)
     logFilter: change => change.type === 'action',

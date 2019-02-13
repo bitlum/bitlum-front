@@ -80,8 +80,6 @@ class App extends Component {
       }
       GA({ type: 'pageview', page });
     });
-
-    accounts.authenticate.run();
   }
 
   componentWillUnmount() {

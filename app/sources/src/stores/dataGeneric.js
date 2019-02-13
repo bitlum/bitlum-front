@@ -30,12 +30,12 @@ const fetchOnline = (url, options) =>
 const getLocal = (name, options) => {
   const updatedAt = localStorage.getItem(`${name}_updatedAt`) || -Infinity;
   if (new Date() - updatedAt > options.localLifetime) {
-    return {
-      error: {
-        message: `Locally stored ${name} is outdated`,
-        code: '500___000',
-      },
+    const error = {
+      message: `Locally stored ${name} is outdated`,
+      code: '500___000',
     };
+    log.debug(error.message);
+    return { error };
   }
   try {
     return JSON.parse(localStorage.getItem(name)) || undefined;
@@ -227,8 +227,8 @@ const GenericApiStore = {
 
   onCleanup() {},
 
-  async run() {
-    return this.startFetching();
+  async run(passedOptions) {
+    return this.startFetching(passedOptions);
   },
 
   async startFetching(passedOptions = {}) {
@@ -284,7 +284,7 @@ const GenericApiStore = {
         response = await this.getLocal(options.localName || this.name, options);
         if (response === undefined) {
           log.debug(
-            `No local value found for ${this.name} (name ${options.localName ||
+            `No local value exists for ${this.name} (name ${options.localName ||
               this.name} usedn). Trying to get default value`,
           );
           if (options.defaultValue !== undefined) {
@@ -306,18 +306,23 @@ const GenericApiStore = {
     } else {
       if (options.localFirst) {
         response = await this.getLocal(options.localName || this.name, options);
-        if (response && response.data) {
-          log.debug(`${options.url} returned from local storage`);
-        } else {
+        if (response === undefined) {
+          log.debug(
+            `No local value found for ${this.name} (name ${options.localName || this.name} used).`,
+          );
+        } else if (response.error) {
           log.debug(
             `No local value found for ${this.name} (name ${options.localName ||
-              this.name} usedn). Trying to fetch value from server`,
+              this.name} used). Reason: ${response.error.message}`,
           );
         }
       }
       if (response === undefined || response.error !== undefined) {
+        log.debug(`Trying to fetch ${this.name} online`);
         response = await this.fetch(getApiUrl(options.url), options);
         fetchedOnline = true;
+      } else {
+        log.debug(`${options.url} returned from local storage, online fetch skipped`);
       }
     }
 

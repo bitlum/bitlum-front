@@ -95,12 +95,14 @@ accounts.authenticate = createDataFetcher({
   async run(email, password) {
     return this.startFetching({ body: { email, password } });
   },
-  onCleanup() {
-    // LiveChat.endSession();
-    accounts.get.cleanup('all');
-    Object.keys(payments).forEach(
-      method => payments[method].cleanup && payments[method].cleanup('all'),
-    );
+  onCleanup(name) {
+    if (name === 'all') {
+      accounts.get.cleanup('all');
+      Object.keys(payments).forEach(
+        method => payments[method].cleanup && payments[method].cleanup('all'),
+      );
+      // LiveChat.endSession();
+    }
   },
 });
 
@@ -134,6 +136,7 @@ accounts.get = createDataFetcher({
   async fetchOptions() {
     return {
       url: '/accounts',
+      localFirst: true,
       preserveDataOnError: true,
       headers: {
         Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,

@@ -11,9 +11,10 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 
 import logger from 'utils/logging';
-const log = logger();
 
 import view from './view';
+
+const log = logger();
 
 // -----------------------------------------------------------------------------
 // Code

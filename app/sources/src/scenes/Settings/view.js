@@ -30,7 +30,7 @@ import {
 // -----------------------------------------------------------------------------
 
 // eslint-disable-next-line
-const SettingsScene = ({ history, settings, t }) => {
+const SettingsScene = ({ history, settings, accounts, denominations, t }) => {
   if (settings.get.error || (!settings.get.data && !settings.get.loading)) {
     return (
       <Root>
@@ -71,7 +71,7 @@ const SettingsScene = ({ history, settings, t }) => {
         <P>Settings</P>
         <Support className="openIntercom" />
       </Header>
-      <SettingsForm {...settings.get.data} />
+      <SettingsForm settings={settings} denominations={denominations} accounts={accounts} />
     </Root>
   );
 };

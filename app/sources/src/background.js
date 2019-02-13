@@ -8,11 +8,12 @@
 // -----------------------------------------------------------------------------
 
 import logger from 'utils/logging';
-const log = logger();
 
 import { vendors, accounts, getApiUrl } from 'stores';
 
 import { configureDevtool } from 'mobx-react-devtools';
+
+const log = logger();
 
 // -----------------------------------------------------------------------------
 // Code

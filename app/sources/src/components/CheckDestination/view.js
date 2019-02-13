@@ -12,9 +12,10 @@ import PropTypes from 'prop-types';
 
 import GA from 'utils/GA';
 import logger from 'utils/logging';
-const log = logger();
 
 import { Root, Input, Button, Message, P, Span, A, DestinationInfo, AmountInput } from './styles';
+
+const log = logger();
 
 // -----------------------------------------------------------------------------
 // Code

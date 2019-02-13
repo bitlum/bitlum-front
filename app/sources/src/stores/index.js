@@ -20,7 +20,7 @@ import * as dataGeneric from './dataGeneric';
 // -----------------------------------------------------------------------------
 
 const init = async () => {
-  await settings.get.run();
+  await settings.get.init();
   await accounts.authenticate.run();
 };
 

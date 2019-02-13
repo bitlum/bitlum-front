@@ -38,6 +38,7 @@ import {
   Span,
   Permissions,
   A,
+  Settings,
   CloseIcon,
 } from './styles';
 
@@ -72,13 +73,8 @@ const Payments = ({ settings, payments, accounts, t }) => {
           <NavLink to="/">
             <Logo />
           </NavLink>
-          <LogOut
-            onClick={() => {
-              accounts.authenticate.cleanup('all');
-            }}
-          />
+          <Settings to="/settings" />
           <Support className="openIntercom" />
-          <NavLink to="/settings">SE</NavLink>
         </Header>
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
@@ -101,13 +97,8 @@ const Payments = ({ settings, payments, accounts, t }) => {
           <NavLink to="/">
             <Logo />
           </NavLink>
-          <LogOut
-            onClick={() => {
-              accounts.authenticate.cleanup('all');
-            }}
-          />
+          <Settings to="/settings" />
           <Support className="openIntercom" />
-          <NavLink to="/settings">SE</NavLink>
         </Header>
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
@@ -130,13 +121,8 @@ const Payments = ({ settings, payments, accounts, t }) => {
           <NavLink to="/">
             <Logo />
           </NavLink>
-          <LogOut
-            onClick={() => {
-              accounts.authenticate.cleanup('all');
-            }}
-          />
+          <Settings to="/settings" />
           <Support className="openIntercom" />
-          <NavLink to="/settings">SE</NavLink>
         </Header>
         {accounts.get.data &&
         accounts.get.data.restrictions.unconfirmed &&
@@ -196,13 +182,8 @@ const Payments = ({ settings, payments, accounts, t }) => {
         <NavLink to="/">
           <Logo />
         </NavLink>
-        <LogOut
-          onClick={() => {
-            accounts.authenticate.cleanup('all');
-          }}
-        />
+        <Settings to="/settings" />
         <Support className="openIntercom" />
-        <NavLink to="/settings">SE</NavLink>
       </Header>
       {accounts.get.data &&
       accounts.get.data.restrictions.unconfirmed &&
@@ -258,7 +239,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
       ) : null}
       <BalanceSummary key="BalanceSummary" accounts={accounts} />
       {/* <HeaderSecondary>Payments</HeaderSecondary> */}
-      <PayButton to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
+      <PayButton autoFocus to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
         {/* <Img src={newPaymentIcon} /> */}
         <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
       </PayButton>

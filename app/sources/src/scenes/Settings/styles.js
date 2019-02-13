@@ -33,7 +33,6 @@ export const Header = styled(HeaderRaw)`
 
 export const SettingsForm = styled(SettingsFormRaw)`
   margin-top: var(--sizing__header_heigh);
-  background: blue;
 `;
 
 export const EmptyIcon = styled(EmptyIconRaw)`

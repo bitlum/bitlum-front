@@ -12,9 +12,10 @@ import PropTypes from 'prop-types';
 import { Trans } from 'react-i18next';
 
 import logger from 'utils/logging';
-const log = logger();
 
 import { Root, Input, Button, Message, A, P } from './styles';
+
+const log = logger();
 
 // -----------------------------------------------------------------------------
 // Code

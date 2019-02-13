@@ -9,6 +9,8 @@
 
 import logger from 'utils/logging';
 
+import { denominations } from 'stores';
+
 import { createDataFetcher, round } from './dataGeneric';
 
 const log = logger();
@@ -32,11 +34,31 @@ settings.get = createDataFetcher({
     localOnly: true,
     defaultValue: { data: settings.default },
   },
+  init() {
+    return new Promise(resolve => {
+      window.chrome.permissions.contains(
+        {
+          permissions: ['tabs'],
+          origins: ['<all_urls>'],
+        },
+        async granted => {
+          await settings.get.run();
+          if (!settings.get.content_script_permissions && granted) {
+            await settings.set.run({ content_script_permissions: 'granted' });
+          }
+          resolve();
+        },
+      );
+    });
+  },
   parseData(localSettings) {
     return {
       ...settings.default,
       ...localSettings,
     };
+  },
+  onData() {
+    denominations.get.run();
   },
 });
 

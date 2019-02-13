@@ -9,6 +9,7 @@
 
 import getNet from 'utils/cryptonetChecker';
 import logger from 'utils/logging';
+
 const log = logger();
 
 // -----------------------------------------------------------------------------

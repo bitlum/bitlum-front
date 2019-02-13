@@ -27,7 +27,7 @@ import GA from 'utils/GA';
 import HA from 'utils/HA';
 import LiveChat from 'utils/LiveChat';
 import logger from 'utils/logging';
-const log = logger();
+
 import i18nConfig from 'locales';
 
 import stores from 'stores';
@@ -43,6 +43,8 @@ import Receive from 'scenes/Receive';
 import Select from 'scenes/Select';
 
 import { Global as GlobalStyles, Root, Footer, Main } from './styles';
+
+const log = logger();
 
 // -----------------------------------------------------------------------------
 // Code

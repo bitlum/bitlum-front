@@ -11,13 +11,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import logger from 'utils/logging';
-const log = logger();
 
 import { Root, AssetItem, P, Img, Span } from './styles';
 
 import iconOnchain from 'assets/icons/assets/btc.svg';
 import iconOffchain from 'assets/icons/assets/lightning.svg';
 import iconAltcoins from 'assets/icons/assets/altcoins.svg';
+
+const log = logger();
 
 // -----------------------------------------------------------------------------
 // Code

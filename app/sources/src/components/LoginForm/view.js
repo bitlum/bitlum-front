@@ -11,9 +11,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import logger from 'utils/logging';
-const log = logger();
 
 import { Root, Input, Button, Message } from './styles';
+
+const log = logger();
 
 // -----------------------------------------------------------------------------
 // Code

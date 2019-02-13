@@ -10,6 +10,7 @@
 import { decorate, action, observable, runInAction } from 'mobx';
 
 import logger from 'utils/logging';
+
 const log = logger();
 
 // -----------------------------------------------------------------------------
@@ -370,8 +371,6 @@ function createDataFetcher(store) {
     onData: action(`onData (${newStore.name})`),
     onCleanup: action(`onCleanup (${newStore.name})`),
   });
-
-  newStore.init();
 
   return newStore;
 }

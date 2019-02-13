@@ -10,9 +10,10 @@
 import React from 'react';
 
 import logger from 'utils/logging';
-const log = logger();
 
 import { Root, Header, BackButton, P, CheckDestination, Support } from './styles';
+
+const log = logger();
 
 // -----------------------------------------------------------------------------
 // Code

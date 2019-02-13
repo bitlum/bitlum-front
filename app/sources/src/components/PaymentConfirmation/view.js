@@ -11,7 +11,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import logger from 'utils/logging';
-const log = logger();
+
 import LiveChat from 'utils/LiveChat';
 
 import {
@@ -36,6 +36,8 @@ import {
   AmountInputWraper,
   BalanceSummary,
 } from './styles';
+
+const log = logger();
 
 // -----------------------------------------------------------------------------
 // Code
@@ -92,9 +94,7 @@ export class PaymentConfirmation extends Component {
     } = this.state;
 
     if (
-      (!payments.estimate.data && !payments.estimate.error && !payments.send.data && !payments.send.error) ||
-      payments.estimate.loading ||
-      payments.send.loading
+      (!payments.estimate.data && !payments.estimate.error && !payments.send.data && !payments.send.error)
     ) {
       return <Root className={className} loading />;
     }

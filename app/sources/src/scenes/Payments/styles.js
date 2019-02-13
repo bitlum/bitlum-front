@@ -27,7 +27,7 @@ import BalanceSummaryRaw from 'components/BalanceSummary';
 import PaymentsGroupRaw from 'components/PaymentsGroup';
 
 import LogoFull from 'assets/img/logo/full.png';
-import logoutIcon from 'assets/icons/log-out.svg';
+import settingsIcon from 'assets/icons/settings.svg';
 import { ReactComponent as EmptyIconRaw } from 'assets/icons/paper.svg';
 import { ReactComponent as ErrorIconRaw } from 'assets/icons/x-circle.svg';
 import { ReactComponent as CloseIconRaw } from 'assets/icons/x-circle.svg';
@@ -84,18 +84,19 @@ export const PayButton = styled(NavLink)`
   }
 `;
 
-export const Support = styled(SupportRaw)`
-  margin-right: 1.3em;
-  margin-left: 0;
-`;
-export const LogOut = styled.a`
-  background: url(${logoutIcon});
+export const Settings = styled(NavLink)`
+  background: url(${settingsIcon});
   background-repeat: no-repeat;
   background-size: contain;
   margin-left: auto;
   margin-right: 1em;
   height: 2.5rem;
   width: 2.5rem;
+`;
+
+export const Support = styled(SupportRaw)`
+  margin-right: 1.3em;
+  margin-left: 0;
 `;
 
 export const Separator = styled(P)`
@@ -137,6 +138,9 @@ export const Header = styled(HeaderRaw)`
   & ${Logo} {
     margin: 1em;
     margin-left: 1.5em;
+  }
+  & > *:nth-child(2) {
+    margin-left: auto;
   }
 `;
 

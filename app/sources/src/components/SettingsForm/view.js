@@ -11,32 +11,81 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import logger from 'utils/logging';
-const log = logger();
 
-import { Root, SettingsItem, P, Img, Span } from './styles';
+import { Root, SettingsItem, P, Img, Span, Select } from './styles';
+
+const log = logger();
 
 // -----------------------------------------------------------------------------
 // Code
 // -----------------------------------------------------------------------------
 
-export const SettingsForm = ({ className, settings, t }) => {
+export const SettingsForm = ({ className, settings, accounts, denominations, t }) => {
+  const denominationsAvailable = Object.keys(denominations.get.data.BTC)
+    .map(
+      denomination =>
+        !denomination.match(/(main|additional)/) && {
+          value: denomination,
+          label: denominations.get.data.BTC[denomination].sign,
+        },
+    )
+    .filter(denomination => denomination);
+
   return (
     <Root className={className}>
-      <SettingsItem
-        onClick={() => {
-          console.log('changed');
-        }}
-      >
-        <Span>Main denomination</Span>
-        <Span>{settings.get.data.denominations_BTC_main}</Span>
+      <SettingsItem>
+        <Span>Main currency</Span>
+        <Select
+          options={denominationsAvailable}
+          hideSelectedOptions
+          isSearchable={false}
+          isClearable={false}
+          value={denominationsAvailable.filter(
+            denomination => denomination.value === settings.get.data.denominations_BTC_main,
+          )}
+          onChange={data => {
+            settings.set.run({ denominations_BTC_main: data.value });
+          }}
+        />
       </SettingsItem>
+      <SettingsItem>
+        <Span>Alternative currency</Span>
+        <Select
+          options={denominationsAvailable}
+          hideSelectedOptions
+          isSearchable={false}
+          isClearable={false}
+          value={denominationsAvailable.filter(
+            denomination => denomination.value === settings.get.data.denominations_BTC_additional,
+          )}
+          onChange={data => {
+            settings.set.run({ denominations_BTC_additional: data.value });
+          }}
+        />
+      </SettingsItem>
+      {settings.get.data.content_script_permissions !== 'granted' && (
+        <SettingsItem
+          onClick={() => {
+            window.chrome.permissions.request(
+              {
+                permissions: ['tabs'],
+                origins: ['<all_urls>'],
+              },
+              granted => {
+                settings.set.run({ content_script_permissions: granted ? 'granted' : 'denied' });
+              },
+            );
+          }}
+        >
+          <Span>Automate copy-paste of invoices</Span>
+        </SettingsItem>
+      )}
       <SettingsItem
         onClick={() => {
-          settings.set.run({ denominations_BTC_main: 'SAT' });
+          accounts.authenticate.cleanup('all');
         }}
       >
-        <Span>Recieve with alt-coins</Span>
-        <Span>ON</Span>
+        Log out
       </SettingsItem>
     </Root>
   );

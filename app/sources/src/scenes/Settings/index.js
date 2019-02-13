@@ -20,9 +20,13 @@ import view from './view';
 
 class Wrapper extends React.Component {
   componentDidMount() {
-    const { settings } = this.props;
-
-    settings.get.run();
+    const { settings, denominations } = this.props;
+    if (settings.get.data) {
+      settings.get.run();
+    }
+    if (denominations.get.data) {
+      denominations.get.run();
+    }
   }
 
   render() {
@@ -32,4 +36,4 @@ class Wrapper extends React.Component {
 
 Wrapper.propTypes = {};
 
-export default withNamespaces()(inject('settings')(withRouter(Wrapper)));
+export default withNamespaces()(inject('settings', 'denominations', 'accounts')(withRouter(Wrapper)));

@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 
 import logger from 'utils/logging';
 
-import { Root, SettingsItem, P, Img, Span, Select } from './styles';
+import { Root, SettingsItem, P, Button, Span, Select } from './styles';
 
 const log = logger();
 
@@ -77,7 +77,7 @@ export const SettingsForm = ({ className, settings, accounts, denominations, t }
             );
           }}
         >
-          <Span>Automate copy-paste of invoices</Span>
+          <Button link>Automate copy-paste of invoices</Button>
         </SettingsItem>
       )}
       <SettingsItem
@@ -85,7 +85,7 @@ export const SettingsForm = ({ className, settings, accounts, denominations, t }
           accounts.authenticate.cleanup('all');
         }}
       >
-        Log out
+        <Button link>Log out</Button>
       </SettingsItem>
     </Root>
   );

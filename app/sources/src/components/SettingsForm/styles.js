@@ -12,7 +12,7 @@ import SelectRaw from 'react-select';
 
 import { withLoader } from 'components/common';
 
-import { Img, Span, P } from 'components/common';
+import { Img, Span, P, Button } from 'components/common';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -42,6 +42,7 @@ export const SettingsItem = styled.div`
   }
   & > *:last-child:not(:first-child) {
     margin-left: auto;
+    cursor: pointer;
   }
 
   & ${Span} {

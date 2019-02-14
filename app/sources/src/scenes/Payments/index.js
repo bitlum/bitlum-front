@@ -7,7 +7,7 @@
 // Dependencies
 // -----------------------------------------------------------------------------
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { observer, inject, PropTypes } from 'mobx-react';
 import { withNamespaces } from 'react-i18next';
 
@@ -17,27 +17,25 @@ import view from './view';
 // Code
 // -----------------------------------------------------------------------------
 
-class Wrapper extends React.Component {
-  componentDidMount() {
-    const { payments, accounts } = this.props;
+const Wrapper = props => {
+  const { payments, accounts } = props;
 
+  useEffect(() => {
     accounts.get.run();
     payments.get.run();
 
-    this.polling = setInterval(() => {
+    const polling = setInterval(() => {
       payments.get.run();
       accounts.get.run();
     }, 3000);
-  }
 
-  componentWillUnmount() {
-    clearInterval(this.polling);
-  }
+    return () => {
+      clearInterval(polling);
+    };
+  });
 
-  render() {
-    return React.createElement(observer(view), this.props);
-  }
-}
+  return React.createElement(observer(view), props);
+};
 
 Wrapper.propTypes = {
   // payments: PropTypes.observableObject.isRequired,

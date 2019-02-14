@@ -7,7 +7,7 @@
 // Dependencies
 // -----------------------------------------------------------------------------
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { List, AutoSizer } from 'react-virtualized';
 import { NavLink } from 'react-router-dom';
 import formatDate from 'date-fns/format';
@@ -121,6 +121,10 @@ const Payments = ({ settings, payments, accounts, t }) => {
       .map(asset => accounts.get.data.balances[asset].available)
       .reduce((p, c) => p + Number(c), 0);
 
+  // useEffect(() => {
+  //   document.getElementById('payButton').focus();
+  // });
+
   if (payments.get.error) {
     return (
       <Root empty>
@@ -133,7 +137,10 @@ const Payments = ({ settings, payments, accounts, t }) => {
         </Header>
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
-        <PayButton to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
+        <PayButton
+          id="payButton"
+          to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
+        >
           {/* <Img src={newPaymentIcon} /> */}
           <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
         </PayButton>
@@ -157,7 +164,10 @@ const Payments = ({ settings, payments, accounts, t }) => {
         </Header>
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
-        <PayButton to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
+        <PayButton
+          id="payButton"
+          to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
+        >
           {/* <Img src={newPaymentIcon} /> */}
           <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
         </PayButton>
@@ -197,7 +207,10 @@ const Payments = ({ settings, payments, accounts, t }) => {
         ) : null}
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
-        <PayButton to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
+        <PayButton
+          id="payButton"
+          to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
+        >
           {/* <Img src={newPaymentIcon} /> */}
           <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
         </PayButton>
@@ -276,7 +289,11 @@ const Payments = ({ settings, payments, accounts, t }) => {
       ) : null}
       <BalanceSummary key="BalanceSummary" accounts={accounts} />
       {/* <HeaderSecondary>Payments</HeaderSecondary> */}
-      <PayButton autoFocus to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}>
+      <PayButton
+        id="payButton"
+        to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
+      >
+      {document.getElementById('payButton') && document.getElementById('payButton').focus()}
         {/* <Img src={newPaymentIcon} /> */}
         <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
       </PayButton>

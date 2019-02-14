@@ -76,6 +76,7 @@ export const PaymentDetails = ({
   vendorColor,
   vendorName,
   updatedAt,
+  origin,
   t,
 }) => {
   return (
@@ -85,7 +86,14 @@ export const PaymentDetails = ({
           <Img src={vendorIcon} />
           <P>
             <Span>
-              {`${direction === 'incoming' ? 'Received from' : 'Sent to'}`} {vendorName}
+              {`${direction === 'incoming' ? 'Received from' : 'Sent to'}`}{' '}
+              {origin ? (
+                <A href={`http://${origin}`} target="_blank">
+                  {vendorName}
+                </A>
+              ) : (
+                vendorName
+              )}
             </Span>
             <Span>{`${getDate(updatedAt)}`}</Span>
           </P>

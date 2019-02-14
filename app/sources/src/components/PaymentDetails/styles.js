@@ -27,6 +27,11 @@ import { ReactComponent as CopyIcon } from 'assets/icons/copy.svg';
 
 export * from 'components/common';
 
+export const A = styled.a`
+  color: var(--colors__text_info);
+  text-decoration: underline;
+`;
+
 export const CopyButton = styled(({ data, className }) => (
   <CopyButtonRaw className={className} copyData={data}>
     <CopyIcon />

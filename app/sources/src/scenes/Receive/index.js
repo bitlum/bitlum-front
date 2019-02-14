@@ -7,7 +7,7 @@
 // Dependencies
 // -----------------------------------------------------------------------------
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { observer, inject } from 'mobx-react';
 
 import logger from 'utils/logging';
@@ -20,9 +20,10 @@ const log = logger();
 // Code
 // -----------------------------------------------------------------------------
 
-class Wrapper extends React.Component {
-  async componentDidMount() {
-    const { payments, denominations } = this.props;
+const Wrapper = props => {
+  const { payments, denominations } = props;
+
+  useEffect(() => {
     const query = window.location.hash.match(/\?(.*)/);
 
     let receive;
@@ -40,30 +41,33 @@ class Wrapper extends React.Component {
     }
 
     denominations.get.run();
-  }
 
-  componentWillUnmount() {
-    const { payments } = this.props;
-    payments.receive.cleanup('all');
-  }
+    const polling = setInterval(() => {
+      payments.get.run();
+    }, 3000);
 
-  render() {
-    const query = window.location.hash.match(/\?(.*)/);
+    return () => {
+      clearInterval(polling);
+      payments.receive.cleanup('all');
+    };
+  });
 
-    let receive;
-    if (query) {
-      receive = new URLSearchParams(query[0]).get('receive');
-      try {
-        receive = JSON.parse(receive);
-      } catch (error) {
-        log.error(error);
-        receive = undefined;
-      }
+  const query = window.location.hash.match(/\?(.*)/);
+
+  let receive;
+  if (query) {
+    receive = new URLSearchParams(query[0]).get('receive');
+    try {
+      receive = JSON.parse(receive);
+    } catch (error) {
+      log.error(error);
+      receive = undefined;
     }
-    return React.createElement(observer(view), { ...this.props, receive });
   }
-}
+
+  return React.createElement(observer(view), { ...props, receive });
+};
 
 Wrapper.propTypes = {};
 
-export default inject('payments', 'denominations')(observer(Wrapper));
+export default inject('payments', 'denominations')(Wrapper);

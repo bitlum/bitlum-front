@@ -22,6 +22,7 @@ import {
 } from 'components/common';
 
 import { ReactComponent as CopyIcon } from 'assets/icons/copy.svg';
+import completedIcon from 'assets/icons/check-circle.svg';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -161,6 +162,36 @@ export const AmountInputWraper = styled.div`
       rgba(213, 210, 210, 0) 100%
     );
   }
+`;
+
+export const SendResult = styled.div`
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  background: var(--colors__bg_bright);
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  z-index: 10;
+  & > ${P} {
+    font: var(--fonts__header_bold);
+    color: var(--colors__bg_completed);
+  }
+`;
+
+export const SendResultIcon = styled.div`
+  background-image: url(${completedIcon});
+  height: 8em;
+  width: 8em;
+  background-color: var(--colors__bg_completed);
+  background-repeat: no-repeat;
+  border-radius: 50%;
+  background-size: 60%;
+  background-position: center;
+  margin-top: 6em;
+  margin-bottom: 2em;
 `;
 
 export const Root = withLoader(styled(Form)`

@@ -28,6 +28,8 @@ import {
   AmountInput,
   SwitchDenomination,
   Footer,
+  SendResult,
+  SendResultIcon,
 } from './styles';
 
 const log = logger();
@@ -79,6 +81,12 @@ export class ReceivePayment extends Component {
       );
     }
 
+    const isReceived =
+      receive.type === 'lightning' &&
+      payments.receive.data &&
+      payments.get.data &&
+      payments.get.data.find(payment => payment.receipt === payments.receive.data.wuid);
+
     return (
       <Root
         className={className}
@@ -87,7 +95,7 @@ export class ReceivePayment extends Component {
           payments.receive.run(
             receive.type,
             (amountsCurrent || 0) /
-            denominations.get.data[receive.asset][selectedDenomination].price,
+              denominations.get.data[receive.asset][selectedDenomination].price,
             receive.asset,
           );
         }}
@@ -114,9 +122,7 @@ export class ReceivePayment extends Component {
               type="number"
               placeholder="0"
               step={
-                1 /
-                10 **
-                  denominations.get.data[receive.asset][selectedDenomination].precisionMax
+                1 / 10 ** denominations.get.data[receive.asset][selectedDenomination].precisionMax
               }
               value={amountsCurrent}
               min="0"
@@ -132,11 +138,9 @@ export class ReceivePayment extends Component {
                   denominationPairs[selectedDenomination]
                 ].round(
                   ((amountsCurrent || 0) /
-                    denominations.get.data[receive.asset][selectedDenomination]
-                      .price) *
-                    denominations.get.data[receive.asset][
-                      denominationPairs[selectedDenomination]
-                    ].price,
+                    denominations.get.data[receive.asset][selectedDenomination].price) *
+                    denominations.get.data[receive.asset][denominationPairs[selectedDenomination]]
+                      .price,
                 );
                 this.setState({
                   amountChanged: false,
@@ -144,26 +148,32 @@ export class ReceivePayment extends Component {
                   amountsPrevious: amountsCurrent,
                   amountsCurrent: !amountChanged
                     ? amountsPrevious
-                    : convertedAmount === 0 ? undefined : convertedAmount ,
+                    : convertedAmount === 0
+                    ? undefined
+                    : convertedAmount,
                 });
               }}
             >
-              {
-                denominations.get.data[receive.asset][
-                  denominationPairs[selectedDenomination]
-                ].sign
-              }
+              {denominations.get.data[receive.asset][denominationPairs[selectedDenomination]].sign}
             </SwitchDenomination>
           </AmountInputWraper>
         ) : null}
         {payments.receive.data &&
-          payments.receive.data.type === receive.type && [
-            <QRcode key="recaiveQR" value={payments.receive.data.wuid || ''} size={220} />,
-            <P>
-              <Span>{payments.receive.data.wuid}</Span>
-              <CopyButton data={payments.receive.data.wuid} />
-            </P>,
-          ]}
+          payments.receive.data.type === receive.type &&
+          (isReceived ? (
+            <SendResult>
+              <SendResultIcon />
+              <P>Payment received!</P>
+            </SendResult>
+          ) : (
+            [
+              <QRcode key="recaiveQR" value={payments.receive.data.wuid || ''} size={220} />,
+              <P>
+                <Span>{payments.receive.data.wuid}</Span>
+                <CopyButton data={payments.receive.data.wuid} />
+              </P>,
+            ]
+          ))}
         {payments.receive.error && (
           <Message type="error">
             {t([`errors.${payments.receive.error.code}`, 'errors.default'])}
@@ -186,11 +196,15 @@ export class ReceivePayment extends Component {
               primary
               onClick={e => {
                 e.preventDefault();
-                history.push('/payments');
+                isReceived
+                  ? history.push(`/payments/${isReceived.puid}`)
+                  : history.push('/payments');
               }}
             >
-              <Span>After you will send payment you will see it in the payment list</Span>
-              <Span>Go to payments list</Span>
+              {!isReceived && (
+                <Span>After you will send payment you will see it in the payment list</Span>
+              )}
+              <Span>{isReceived ? 'Go to payment details' : 'Go to payments list'}</Span>
             </P>
           )}
         </Footer>

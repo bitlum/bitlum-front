@@ -1,3 +1,5 @@
+import React from 'react';
+import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import supportIcon from 'assets/icons/message-square.svg';
 
@@ -21,7 +23,31 @@ export const A = styled.a``;
 export const Span = styled.span``;
 export const Div = styled.div``;
 export const Pre = styled.pre``;
-export const Tip = styled.div`
+
+export const Tip = styled(({ className, id, children, ...rest } = {}) => (
+  <Span data-tip="React-tooltip" data-for={id} className={className}>
+    <ReactTooltip id={id} effect="solid">
+      {children}
+    </ReactTooltip>
+  </Span>
+))`
+  white-space: pre-wrap;
+  text-align: center;
+  &:before {
+    cursor: pointer;
+    display: block;
+    content: '?';
+    background-color: var(--colors__bg_dark);
+    text-align: center;
+    border-radius: 50%;
+    font-size: 0.8em;
+    font-weight: 500;
+    width: 1.3em;
+    height: 1.3em;
+  }
+`;
+
+export const Tip2 = styled.div`
   position: absolute;
   width: 0;
   height: 0;
@@ -33,8 +59,8 @@ export const Tip = styled.div`
     height: 1em;
   }
   &:hover {
-   width: fit-content;
-   height: initial;
+    width: fit-content;
+    height: initial;
   }
 `;
 

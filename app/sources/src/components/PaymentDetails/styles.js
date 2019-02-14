@@ -112,6 +112,9 @@ export const DetailsItem = styled.div`
   width: 100%;
   justify-content: space-between;
   margin-bottom: 1em;
+  & ${Tip} {
+    margin-right: 0.5em;
+  }
   & ${P} {
     font-size: 0.8em;
     display: flex;
@@ -124,6 +127,9 @@ export const DetailsItem = styled.div`
     font-size: 0.8em;
     align-items: flex-start;
     min-width: 8em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 
   &:not(:last-child) {

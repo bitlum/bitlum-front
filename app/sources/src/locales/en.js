@@ -55,9 +55,15 @@ export default {
     '401MAC01': 'Wrong password for account {{email}}',
     '404RAC00': 'Account {{email}} does not exists',
     '500MCO12': 'Account {{email}} already exists<1>Login instead?</1>',
-    '403RPA03': 'Receive is disabled because you reached maximum beta balance of {{maxBalanceBTC}} BTC',
+    '403RPA03':
+      'Receive is disabled because you reached maximum beta balance of {{maxBalanceBTC}} BTC',
     '422MWA00': 'Invoice is already expired',
+    '403RPA01':
+      'You do not have enough balance to pay {{amountString}} with {{feeString}} payment fees',
     default: 'Oops, something went wrong',
+  },
+  tips: {
+    fees: 'We are charging fixed 0.5% fee\nfor all payments you send',
   },
   account: {
     id: 'Account ID',

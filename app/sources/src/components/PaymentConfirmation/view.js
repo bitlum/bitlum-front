@@ -9,6 +9,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ReactTooltip from 'react-tooltip';
 
 import logger from 'utils/logging';
 
@@ -28,6 +29,7 @@ import {
   Submit,
   Message,
   P,
+  Tip,
   Done,
   Img,
   Span,
@@ -94,15 +96,17 @@ export class PaymentConfirmation extends Component {
     } = this.state;
 
     if (
-      (!payments.estimate.data && !payments.estimate.error && !payments.send.data && !payments.send.error)
+      !payments.estimate.data &&
+      !payments.estimate.error &&
+      !payments.send.data &&
+      !payments.send.error
     ) {
       return <Root className={className} loading />;
     }
 
     const denominations =
-    (payments.estimate.data && payments.estimate.data.denominations) ||
-    (payments.estimate.error && payments.estimate.error.denominations);
-
+      (payments.estimate.data && payments.estimate.data.denominations) ||
+      (payments.estimate.error && payments.estimate.error.denominations);
 
     let closeTimeout;
     if (payments.send.data) {
@@ -117,8 +121,7 @@ export class PaymentConfirmation extends Component {
           const amount =
             amountsOriginal != 0
               ? amountsOriginal
-              : (amountsCurrent || 0) /
-                denominations[selectedDenomination].price;
+              : (amountsCurrent || 0) / denominations[selectedDenomination].price;
           const result = await payments.send.run(payment.wuid, amount, payment.asset, {
             origin: payment.origin,
           });
@@ -207,11 +210,8 @@ export class PaymentConfirmation extends Component {
             disabled={!denominations}
             onClick={e => {
               e.preventDefault();
-              const convertedAmount = denominations[
-                denominationPairs[selectedDenomination]
-              ].round(
-                denominations[denominationPairs[selectedDenomination]]
-                  .amount,
+              const convertedAmount = denominations[denominationPairs[selectedDenomination]].round(
+                denominations[denominationPairs[selectedDenomination]].amount,
               );
               this.setState({
                 selectedDenomination: denominationPairs[selectedDenomination],
@@ -219,8 +219,7 @@ export class PaymentConfirmation extends Component {
               });
             }}
           >
-            {denominations &&
-              denominations[denominationPairs[selectedDenomination]].sign}
+            {denominations && denominations[denominationPairs[selectedDenomination]].sign}
           </SwitchDenomination>
         </AmountInputWraper>
         <BalanceSummary
@@ -232,10 +231,18 @@ export class PaymentConfirmation extends Component {
         {false && <Message type="error"> {{}.message} </Message>}
         {payments.estimate.error && (
           <Message type="error">
-            {' '}
-            {payments.estimate.error.code === '403RPA01'
-              ? 'You do not have enough balance'
-              : t([`errors.${payments.estimate.error.code}`, 'errors.default'])}{' '}
+            {t([`errors.${payments.estimate.error.code}`, 'errors.default'], {
+              amountString:
+                denominations &&
+                denominations[selectedDenomination].toString({
+                  omitDirection: true,
+                }).amount,
+              feeString:
+                denominations &&
+                denominations[selectedDenomination].toString({
+                  omitDirection: true,
+                }).fees,
+            })}
           </Message>
         )}
         {payments.send.error && (
@@ -249,7 +256,10 @@ export class PaymentConfirmation extends Component {
           </Description>
         ) : null}
         <Fees>
-          <Span>Fee</Span>
+          <Span>
+            <Tip id="feesTooltip">{t([`tips.fees`])}</Tip>
+            Fee
+          </Span>
           <Span>
             {denominations &&
               denominations[selectedDenomination].toString({

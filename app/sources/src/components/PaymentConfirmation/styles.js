@@ -9,7 +9,7 @@
 
 import styled from 'styled-components';
 
-import { withLoader, Form, Span, P, Input, Img, Button } from 'components/common';
+import { withLoader, Form, Span, P, Input, Img, Button, Tip } from 'components/common';
 
 import BalanceSummaryRaw from 'components/BalanceSummary';
 
@@ -82,8 +82,13 @@ export const Fees = styled(P)`
   background: var(--colors__bg);
   padding: 1em 0;
   font-size: 0.8em;
-  & ${Span}:first-child {
+  & ${Tip} {
+    margin-right: 0.5em;
+  }
+  & > ${Span}:first-child {
+    display: flex;
     margin-bottom: 0.2em;
+    align-items: center;
   }
 `;
 

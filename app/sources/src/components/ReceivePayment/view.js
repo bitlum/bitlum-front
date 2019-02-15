@@ -43,6 +43,7 @@ export class ReceivePayment extends Component {
     amountsCurrent: undefined,
     amountsPrevious: undefined,
     amountChanged: false,
+    mountedAt: new Date().getTime(),
     selectedDenomination: 'main',
     denominationPairs: {
       main: 'additional',
@@ -63,6 +64,7 @@ export class ReceivePayment extends Component {
       amountsCurrent,
       amountsPrevious,
       amountChanged,
+      mountedAt,
     } = this.state;
 
     if (!receive) {
@@ -82,10 +84,11 @@ export class ReceivePayment extends Component {
     }
 
     const isReceived =
-      receive.type === 'lightning' &&
       payments.receive.data &&
       payments.get.data &&
-      payments.get.data.find(payment => payment.receipt === payments.receive.data.wuid);
+      payments.get.data.find(
+        payment => payment.receipt === payments.receive.data.wuid && payment.updatedAt >= mountedAt,
+      );
 
     return (
       <Root

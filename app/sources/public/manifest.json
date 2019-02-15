@@ -48,5 +48,5 @@
     "matches": ["*://*.bitlum.io/*"],
     "ids": ["*"]
   },
-  "content_security_policy": "script-src 'self' 'sha256-BTykR5EC7eIruGLX2ZnoTurMSmDsG/dmhaEuYfkZ0Lk=' 'sha256-qAcmzXQ8jmB7ddF3B7OWAJKIn2C00zGiCGj8W5dG+wo=' 'sha256-Cs13Vap5vNf7DSdQsVsb9lHdJqP6vzGUTBt2O5hehsM=' 'sha256-Jjv+cu/ZdTgyRK5NUgDwA3j/P71Pf4FHbyIchs2UPYY=' https://*.intercomcdn.com https://*.intercom.io https://www.google-analytics.com  https://*.heapanalytics.com; object-src 'self';img-src * 'self' data:; style-src * 'unsafe-inline';"
+  "content_security_policy": "script-src 'self' https://*.intercomcdn.com https://*.intercom.io https://www.google-analytics.com  https://*.heapanalytics.com; object-src 'self';img-src * 'self' data:; style-src * 'unsafe-inline';"
 }

@@ -97,36 +97,41 @@ const getClipboardData = () => {
   return clipboardValue;
 };
 
-// let previousClipboardWuid;
-// const clipboardChecker = setInterval(() => {
-//   const currentClipboard = getClipboardData();
-
-// }, 1000);
-const latestPaymentRequests = {};
-window.chrome.runtime.onMessage.addListener(req => {
-  if (req.type === 'clipboardEvent') {
-    localStorage.setItem(
-      'latestCopiedWuid',
-      JSON.stringify({ wuid: getClipboardData(), origin: req.origin }),
-    );
-  }
-  if (req.type === 'newPayment') {
-    if (new Date() - (latestPaymentRequests[req.payment.wuid] || 0) >= 500) {
-      latestPaymentRequests[req.payment.wuid] = new Date().getTime();
-      window.open(
-        `chrome-extension://${
-          window.chrome.runtime.id
-        }/index.html#/payments/check?wallet=${JSON.stringify(req.payment)}&nopopup=true`,
-        '_blank',
-        'width=450,height=700,titlebar=0,menubar=0,location=0',
-      );
-    }
-  }
-});
-
 (async () => {
   await stores.init();
   const { accounts, payments } = stores;
+
+  const latestPaymentRequests = {};
+
+  window.chrome.runtime.onMessage.addListener(req => {
+    if (req.type === 'clipboardEvent') {
+      localStorage.setItem(
+        'latestCopiedWuid',
+        JSON.stringify({ wuid: getClipboardData(), origin: req.origin }),
+      );
+    }
+    if (req.type === 'newPayment') {
+      if (new Date() - (latestPaymentRequests[req.payment.wuid] || 0) >= 500) {
+        latestPaymentRequests[req.payment.wuid] = new Date().getTime();
+        window.open(
+          `chrome-extension://${
+            window.chrome.runtime.id
+          }/index.html#/payments/check?wallet=${JSON.stringify(req.payment)}&nopopup=true`,
+          '_blank',
+          'width=450,height=700,titlebar=0,menubar=0,location=0',
+        );
+      }
+    }
+
+    if (req.type === 'authenticated') {
+      accounts.authenticate.run();
+    }
+
+    if (req.type === 'signedOut') {
+      accounts.authenticate.cleanup('all');
+    }
+  });
+
   const paymentsFetcher = setInterval(async () => {
     if (accounts.authenticate.data) {
       await payments.get.run({ localLifetime: 0 });

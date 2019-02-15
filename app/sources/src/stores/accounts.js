@@ -88,6 +88,7 @@ accounts.authenticate = createDataFetcher({
     //   user_id: data && data.auid,
     //   created_at: data && data.createdAt,
     // });
+    window.chrome.runtime.sendMessage({ type: 'authenticated', data });
     const options = await accounts.get.fetchOptions();
     const dataParsed = await accounts.get.parseData(data, options);
     accounts.get.onDataDefault(dataParsed, undefined, options);
@@ -97,6 +98,7 @@ accounts.authenticate = createDataFetcher({
   },
   onCleanup(name) {
     if (name === 'all') {
+      window.chrome.runtime.sendMessage({ type: 'signedOut' });
       accounts.get.cleanup('all');
       Object.keys(payments).forEach(
         method => payments[method].cleanup && payments[method].cleanup('all'),

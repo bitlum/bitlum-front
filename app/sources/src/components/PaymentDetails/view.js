@@ -114,7 +114,9 @@ export const PaymentDetails = ({
                 <DetailsItem align="right">
                   {/* <Tip>Temporary Fee tips</Tip> */}
                   <P>
-                    <Tip id="feesTooltip">{t([`tips.fees`])}</Tip>Fee
+                    <P>
+                      <Tip id="feesTooltip">{t([`tips.fees`])}</Tip>Fee
+                    </P>
                   </P>
                   <P>
                     <Span>{denominations.main.toString({ omitDirection: true }).fees}</Span>

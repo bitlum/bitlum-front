@@ -132,9 +132,13 @@ export const DetailsItem = styled.div`
     font-size: 0.8em;
     align-items: flex-start;
     min-width: 8em;
+  }
+
+  & ${P}:first-child ${P} {
     display: flex;
     flex-direction: row;
     align-items: center;
+    font-size: 1em;
   }
 
   &:not(:last-child) {

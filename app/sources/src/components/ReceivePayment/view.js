@@ -199,15 +199,15 @@ export class ReceivePayment extends Component {
               primary
               onClick={e => {
                 e.preventDefault();
-                isReceived
-                  ? history.push(`/payments/${isReceived.puid}`)
-                  : history.push('/payments');
+                // isReceived
+                //   ? history.push(`/payments/${isReceived.puid}`)
+                history.push('/payments');
               }}
             >
               {!isReceived && (
                 <Span>After you will send payment you will see it in the payment list</Span>
               )}
-              <Span>{isReceived ? 'Go to payment details' : 'Go to payments list'}</Span>
+              <Span>Go to payments list</Span>
             </P>
           )}
         </Footer>

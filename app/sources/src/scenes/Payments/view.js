@@ -343,8 +343,9 @@ const Payments = ({ settings, payments, accounts, t }) => {
         id="payButton"
         to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
       >
-      {document.getElementById('payButton') && document.getElementById('payButton').focus()}
-        {/* <Img src={newPaymentIcon} /> */}
+        {window.scrollY === 0 &&
+          document.getElementById('payButton') &&
+          document.getElementById('payButton').focus()}
         <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
       </PayButton>
       {/* <Legend>

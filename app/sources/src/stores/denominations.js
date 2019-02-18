@@ -78,9 +78,13 @@ denominations.get = createDataFetcher({
 
     Object.keys(allDenominations).forEach(asset => {
       allDenominations[asset].main =
-        allDenominations[asset][settings.get.data[`denominations_${asset}_main`]];
+        allDenominations[asset][
+          (settings.get.data || settings.default)[`denominations_${asset}_main`]
+        ];
       allDenominations[asset].additional =
-        allDenominations[asset][settings.get.data[`denominations_${asset}_additional`]];
+        allDenominations[asset][
+          (settings.get.data || settings.default)[`denominations_${asset}_additional`]
+        ];
     });
     return allDenominations;
   },

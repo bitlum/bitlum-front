@@ -43,7 +43,9 @@ settings.get = createDataFetcher({
         },
         async granted => {
           await settings.get.run();
-          if (!settings.get.content_script_permissions && granted) {
+          if (!settings.get.data) {
+            await settings.set.run(settings.default);
+          } else if (!settings.get.data.content_script_permissions && granted) {
             await settings.set.run({ content_script_permissions: 'granted' });
           }
           resolve();

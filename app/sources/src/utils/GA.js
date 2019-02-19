@@ -36,7 +36,7 @@ const analytics = (function GAinitializer() {
     window.ga('create', trackingId);
     // Remove failing protocol check. @see: http://stackoverflow.com/a/22152353/1958200
     window.chrome.cookies.getAll({ url: 'https://bitlum.io' }, cookies => {
-      ga('set', {
+      window.ga('set', {
         campaignName: (cookies.find(cookie => cookie.name === 'utm_campaign') || {}).value,
         campaignSource: (cookies.find(cookie => cookie.name === 'utm_source') || {}).value,
         campaignMedium: (cookies.find(cookie => cookie.name === 'utm_medium') || {}).value,

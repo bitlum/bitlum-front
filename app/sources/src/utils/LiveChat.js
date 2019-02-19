@@ -30,11 +30,11 @@ const intercom = (function ICinitializer() {
     ic('update', settings);
   } else {
     const d = document;
-    const i = function () {
+    const i = function() {
       i.c(arguments); // eslint-disable-line
     };
     i.q = [];
-    i.c = function (args) {
+    i.c = function(args) {
       i.q.push(args);
     };
     w.Intercom = i;
@@ -63,7 +63,14 @@ const intercom = (function ICinitializer() {
       window.Intercom('shutdown');
     },
     boot(userSettings) {
-      window.Intercom('boot', { ...settings, ...userSettings });
+      window.chrome.cookies.getAll({ url: 'https://bitlum.io' }, cookies => {
+        const utm = {
+          utm_campaign: (cookies.find(cookie => cookie.name === 'utm_campaign') || {}).value,
+          utm_source: (cookies.find(cookie => cookie.name === 'utm_source') || {}).value,
+          utm_medium: (cookies.find(cookie => cookie.name === 'utm_medium') || {}).value,
+        };
+        window.Intercom('boot', { ...settings, ...userSettings, ...utm });
+      });
     },
     track(name, metadata) {
       window.Intercom('trackEvent', name, metadata);
@@ -140,6 +147,6 @@ const intercom = (function ICinitializer() {
       })).json();
     },
   };
-}());
+})();
 
 export default intercom;

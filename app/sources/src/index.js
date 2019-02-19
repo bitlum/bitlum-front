@@ -142,12 +142,18 @@ const AppWrap = withRouter(withNamespaces()(inject('accounts')(observer(App))));
       permission_handleLinks_granted:
         settingsData && settingsData.content_script_permissions === 'granted',
     };
-  
+
     Object.keys((accountData && accountData.balances) || {}).forEach(asset => {
       dataToSend[`${asset}_balance`] = accountData.balances[asset].available;
     });
-  
-    // LiveChat.boot(dataToSend);
+
+    // GA({
+    //   type: 'set',
+    //   category: 'userId',
+    //   id: accountData && accountData.auid,
+    // });
+
+    LiveChat.boot(dataToSend);
   }
   ReactDOM.render(
     <Provider {...stores}>

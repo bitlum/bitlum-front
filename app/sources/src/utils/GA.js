@@ -15,15 +15,12 @@ const log = logger();
 // Code
 // -----------------------------------------------------------------------------
 
-const trackingId =
-  process.env.NODE_ENV !== 'production'
-    ? 'UA-84668833-16'
-      : 'UA-84668833-18';
+const trackingId = process.env.NODE_ENV !== 'production' ? 'UA-84668833-16' : 'UA-84668833-18';
 
 const analytics = (function GAinitializer() {
   window.ga =
     window.ga ||
-    function () {
+    function() {
       (window.ga.q = window.ga.q || []).push(arguments); // eslint-disable-line
     };
   window.ga.l = +new Date();
@@ -69,6 +66,8 @@ const analytics = (function GAinitializer() {
           revenue,
         });
         window.ga('ecommerce:send');
+      } else if (type === 'set') {
+        window.ga('set', category, id);
       } else {
         window.ga('send', {
           hitType: type,
@@ -83,15 +82,17 @@ const analytics = (function GAinitializer() {
           title: title !== '' ? title : page,
           page,
           hitCallback() {
-            log.debug(`GA: ${type} (${id || ''} ${price || ''} ${revenue || ''} ${category ||
+            log.debug(
+              `GA: ${type} (${id || ''} ${price || ''} ${revenue || ''} ${category ||
                 ''} ${action || ''} ${label || ''} ${page || ''} ${
-              title !== '' ? title : page
-            }) sent`);
+                title !== '' ? title : page
+              }) sent`,
+            );
           },
         });
       }
     };
-  }());
-}());
+  })();
+})();
 
 export default analytics;

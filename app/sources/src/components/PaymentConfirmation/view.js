@@ -126,18 +126,18 @@ export class PaymentConfirmation extends Component {
             origin: payment.origin,
           });
 
-          // LiveChat.track(
-          //   `${payment.origin || 'unknown'}_payment_${payment.asset}_${
-          //     result.error ? 'error' : 'created'
-          //   }`,
-          //   {
-          //     amount,
-          //   },
-          // );
+          LiveChat.track(
+            `${payment.origin || 'unknown'}_payment_${payment.asset}_${
+              result.error ? 'error' : 'created'
+            }`,
+            {
+              amount,
+            },
+          );
 
-          // LiveChat.track(`payment_${payment.asset}_${result.error ? 'error' : 'created'}`, {
-          //   amount,
-          // });
+          LiveChat.track(`payment_${payment.asset}_${result.error ? 'error' : 'created'}`, {
+            amount,
+          });
         }}
         loading={payments.estimate.loading || payments.send.loading}
       >

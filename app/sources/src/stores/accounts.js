@@ -11,6 +11,8 @@ import logger from 'utils/logging';
 
 import LiveChat from 'utils/LiveChat';
 
+import GA from 'utils/GA';
+
 import { denominations, payments } from 'stores';
 
 import { createDataFetcher, round } from './dataGeneric';
@@ -83,10 +85,15 @@ accounts.authenticate = createDataFetcher({
     localFirst: true,
   },
   async onData(data) {
-    // LiveChat.boot({
-    //   email: data && data.email,
-    //   user_id: data && data.auid,
-    //   created_at: data && data.createdAt,
+    LiveChat.boot({
+      email: data && data.email,
+      user_id: data && data.auid,
+      created_at: data && data.createdAt,
+    });
+    // GA({
+    //   type: 'set',
+    //   category: 'userId',
+    //   id: data && data.auid,
     // });
     window.chrome.runtime.sendMessage({ type: 'authenticated', data });
     const options = await accounts.get.fetchOptions();
@@ -103,7 +110,7 @@ accounts.authenticate = createDataFetcher({
       Object.keys(payments).forEach(
         method => payments[method].cleanup && payments[method].cleanup('all'),
       );
-      // LiveChat.endSession();
+      LiveChat.endSession();
     }
   },
 });

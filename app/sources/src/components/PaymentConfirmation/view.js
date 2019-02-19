@@ -14,6 +14,7 @@ import ReactTooltip from 'react-tooltip';
 import logger from 'utils/logging';
 
 import LiveChat from 'utils/LiveChat';
+import GA from 'utils/GA';
 
 import {
   Root,
@@ -137,6 +138,13 @@ export class PaymentConfirmation extends Component {
 
           LiveChat.track(`payment_${payment.asset}_${result.error ? 'error' : 'created'}`, {
             amount,
+          });
+
+          GA({
+            type: 'event',
+            category: 'payment',
+            action: result.error ? 'error' : 'completed',
+            label: payment.origin || 'unknown',
           });
         }}
         loading={payments.estimate.loading || payments.send.loading}

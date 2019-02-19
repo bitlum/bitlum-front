@@ -191,7 +191,8 @@ const Payments = ({ settings, payments, accounts, t }) => {
         </Header>
         {accounts.get.data &&
         accounts.get.data.restrictions.unconfirmed &&
-        accounts.get.data.restrictions.unconfirmed.value ? (
+        accounts.get.data.restrictions.unconfirmed.value &&
+        (!settings.get.data || !settings.get.data.email_confirmation_skipped) ? (
           <Message type="warn">
             <CloseIcon
               onClick={() => {
@@ -287,7 +288,8 @@ const Payments = ({ settings, payments, accounts, t }) => {
       </Header>
       {accounts.get.data &&
       accounts.get.data.restrictions.unconfirmed &&
-      accounts.get.data.restrictions.unconfirmed.value ? (
+      accounts.get.data.restrictions.unconfirmed.value &&
+      (!settings.get.data || !settings.get.data.email_confirmation_skipped) ? (
         <Message type="warn">
           <CloseIcon
             onClick={() => {

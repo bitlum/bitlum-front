@@ -224,6 +224,7 @@ export const Root = withLoader(styled.div`
   justify-content: center;
   margin-bottom: 1em;
   & > ${MessageRaw} {
+    position: relative;
     & ${Span} {
       font-weight: 500;
       padding: 0.5em 0;

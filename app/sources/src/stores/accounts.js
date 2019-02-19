@@ -125,10 +125,15 @@ accounts.signup = createDataFetcher({
       fetchedOnline: true,
     });
   },
-  async run(email, password, referralPassed) {
-    let referral = referralPassed;
-    if (!referral) referral = localStorage.getItem('referral') || email;
-    this.startFetching({ body: { email, password, referral } });
+  async run(email, password) {
+    return new Promise(resolve => {
+      window.chrome.cookies.get({ url: 'https://bitlum.io', name: 'referral' }, async cookie => {
+        const result = await this.startFetching({
+          body: { email, password, referral: (cookie && cookie.value) || undefined },
+        });
+        resolve(result);
+      });
+    });
   },
 });
 

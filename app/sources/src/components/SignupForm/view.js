@@ -52,14 +52,14 @@ export const SignupForm = ({ accounts, className, history, t, exists }) => (
       labelInvalid={t('auth.passwordInvalid')}
       required
     />
-    <P>Have you been invited by someone?</P>
+    {/* <P>Have you been invited by someone?</P>
     <Input
       id="signupReferral"
       type="text"
       placeholder="Email of person that invited you"
       labelValid="Email of person that invited you"
       labelInvalid="Email of person that invited you"
-    />
+    /> */}
 
     {accounts.signup.error && (
       <Message type="error">

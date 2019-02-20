@@ -161,32 +161,32 @@ const getClipboardData = () => {
 
 window.chrome.runtime.onInstalled.addListener(details => {
   if (details.reason === 'install') {
-    log.debug(`Extension install v${chrome.runtime.getManifest().version} recorded`);
+    log.debug(`Extension install v${window.chrome.runtime.getManifest().version} recorded`);
     const info = localStorage.getItem('installedV');
-    if (info === null || info !== chrome.runtime.getManifest().version) {
+    if (info === null || info !== window.chrome.runtime.getManifest().version) {
       GA({
         type: 'event',
         category: 'extension',
         action: 'install',
-        label: chrome.runtime.getManifest().version,
+        label: window.chrome.runtime.getManifest().version,
       });
       localStorage.setItem('installedAt', new Date().getTime());
       localStorage.setItem('updatedAt', new Date().getTime());
-      localStorage.setItem('installedV', chrome.runtime.getManifest().version);
-      localStorage.setItem('updatedV', chrome.runtime.getManifest().version);
+      localStorage.setItem('installedV', window.chrome.runtime.getManifest().version);
+      localStorage.setItem('updatedV', window.chrome.runtime.getManifest().version);
     }
   } else if (details.reason === 'update') {
     const info = localStorage.getItem('updatedV');
-    if (info === null || info !== chrome.runtime.getManifest().version) {
+    if (info === null || info !== window.chrome.runtime.getManifest().version) {
       GA({
         type: 'event',
         category: 'extension',
         action: 'update',
-        label: chrome.runtime.getManifest().version,
+        label: window.chrome.runtime.getManifest().version,
       });
       localStorage.setItem('updatedAt', new Date().getTime());
-      localStorage.setItem('updatedV', chrome.runtime.getManifest().version);
-      log.debug(`Extension update to v${chrome.runtime.getManifest().version} recorded`);
+      localStorage.setItem('updatedV', window.chrome.runtime.getManifest().version);
+      log.debug(`Extension update to v${window.chrome.runtime.getManifest().version} recorded`);
     }
   }
 });

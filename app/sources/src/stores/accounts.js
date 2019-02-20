@@ -85,11 +85,13 @@ accounts.authenticate = createDataFetcher({
     localFirst: true,
   },
   async onData(data) {
-    LiveChat.boot({
-      email: data && data.email,
-      user_id: data && data.auid,
-      created_at: data && data.createdAt,
-    });
+    if (process.env.NODE_ENV === 'production') {
+      LiveChat.boot({
+        email: data && data.email,
+        user_id: data && data.auid,
+        created_at: data && data.createdAt,
+      });
+    }
     // GA({
     //   type: 'set',
     //   category: 'userId',

@@ -133,6 +133,11 @@ accounts.signup = createDataFetcher({
       ...accounts.authenticate.fetchOptions,
       fetchedOnline: true,
     });
+    GA({
+      type: 'event',
+      category: 'extension',
+      action: 'signup',
+    });
   },
   async run(email, password) {
     return new Promise(resolve => {

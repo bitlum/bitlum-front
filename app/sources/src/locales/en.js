@@ -63,7 +63,10 @@ export default {
     default: 'Oops, something went wrong',
   },
   tips: {
-    fees: 'We are charging fixed 0.5% fee\nfor all payments you send',
+    fees: {
+      lightning: 'We are charging 0.5% fee\nfor all lightning payments you send',
+      blockchain: 'We are charging 0.5% fee\n+ fixed 0.00006 BTC fee\nfor all blockchain payments you send',
+    },
   },
   account: {
     id: 'Account ID',

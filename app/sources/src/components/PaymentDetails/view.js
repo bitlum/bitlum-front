@@ -115,7 +115,7 @@ export const PaymentDetails = ({
                   {/* <Tip>Temporary Fee tips</Tip> */}
                   <P>
                     <P>
-                      <Tip id="feesTooltip">{t([`tips.fees`])}</Tip>Fee
+                      <Tip id="feesTooltip">{t([`tips.fees.${type}`])}</Tip>Fee
                     </P>
                   </P>
                   <P>

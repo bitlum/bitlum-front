@@ -265,7 +265,7 @@ export class PaymentConfirmation extends Component {
         ) : null}
         <Fees>
           <Span>
-            <Tip id="feesTooltip">{t([`tips.fees`])}</Tip>
+            <Tip id="feesTooltip">{t([`tips.fees.${payment.type}`])}</Tip>
             Fee
           </Span>
           <Span>

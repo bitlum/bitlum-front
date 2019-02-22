@@ -21,6 +21,7 @@ import {
   Message as MessageRaw,
   withLoader,
   Support as SupportRaw,
+  ShareLink,
 } from 'components/common';
 
 import BalanceSummaryRaw from 'components/BalanceSummary';
@@ -223,6 +224,9 @@ export const Root = withLoader(styled.div`
   flex-direction: column;
   justify-content: center;
   margin-bottom: 1em;
+  & > ${ShareLink} {
+    margin: 0 4em;
+  }
   & > ${MessageRaw} {
     position: relative;
     & ${Span} {

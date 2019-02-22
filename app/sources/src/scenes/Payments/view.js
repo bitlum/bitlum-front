@@ -40,6 +40,7 @@ import {
   A,
   Settings,
   CloseIcon,
+  ShareLink,
 } from './styles';
 
 import { observer } from 'mobx-react';
@@ -201,9 +202,9 @@ const Payments = ({ settings, payments, accounts, t }) => {
             />
             We sent confirmation link to
             <Span>{accounts.get.data.email}</Span>
-            To get your 0.5$ bonus please confirm your email{' '}
-            <A className="openIntercom">and then contact us</A>
-            {`\nIf you can't find email, check spam or contact us`}
+            To get your $ bonus please confirm your email{'\n'}
+            {`\nIf you can't find email, check spam`}
+            <A className="openIntercom">or contact us</A>
           </Message>
         ) : null}
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
@@ -298,7 +299,9 @@ const Payments = ({ settings, payments, accounts, t }) => {
           />
           We sent confirmation link to
           <Span>{accounts.get.data.email}</Span>
-          {`To get your 0.5$ bonus please confirm your email\nIf you can't find it, check spam or contact us`}
+          To get your $ bonus please confirm your email{'\n'}
+          {`\nIf you can't find email, check spam`}
+          <A className="openIntercom">or contact us</A>
         </Message>
       ) : null}
       {settings.get.data &&
@@ -340,7 +343,6 @@ const Payments = ({ settings, payments, accounts, t }) => {
         </Permissions>
       ) : null}
       <BalanceSummary key="BalanceSummary" accounts={accounts} />
-      {/* <HeaderSecondary>Payments</HeaderSecondary> */}
       <PayButton
         id="payButton"
         to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
@@ -350,6 +352,9 @@ const Payments = ({ settings, payments, accounts, t }) => {
           document.getElementById('payButton').focus()}
         <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
       </PayButton>
+      {accounts.get.data && (
+        <ShareLink link={`https://bitlum.io/?utm_source=bitlumwallet&utm_medium=referall&utm_campaign=home-share-link&referral=${accounts.get.data.auid}`} />
+      )}
       {/* <Legend>
         <LegendItem type="pending">Pending</LegendItem>
         <LegendItem type="completed">Completed</LegendItem>

@@ -98,13 +98,33 @@ const getClipboardData = () => {
   return clipboardValue;
 };
 
+const setUninstallUrl = account => {
+  window.chrome.cookies.getAll({ url: 'https://bitlum.io' }, cookies => {
+    const utmParams = {
+      utm_campaign: (cookies.find(cookie => cookie.name === 'utm_campaign') || {}).value,
+      utm_source: (cookies.find(cookie => cookie.name === 'utm_source') || {}).value,
+      utm_medium: (cookies.find(cookie => cookie.name === 'utm_medium') || {}).value,
+    };
+    window.chrome.runtime.setUninstallURL(
+      `https://bitlum.io/uninstalled?${account ? `email=${account.email}` : ''}&${Object.entries(
+        utmParams,
+      )
+        .map(value => (value[1] !== undefined ? `${value[0]}=${value[1]}` : false))
+        .filter(i => i)
+        .join('&')}`,
+    );
+  });
+};
+
 (async () => {
   await stores.init();
   const { accounts, payments } = stores;
 
   const latestPaymentRequests = {};
 
-  window.chrome.runtime.onMessage.addListener(req => {
+  setUninstallUrl(accounts.get.data);
+
+  window.chrome.runtime.onMessage.addListener(async req => {
     if (req.type === 'clipboardEvent') {
       localStorage.setItem(
         'latestCopiedWuid',
@@ -125,19 +145,37 @@ const getClipboardData = () => {
     }
 
     if (req.type === 'authenticated') {
-      accounts.authenticate.run();
+      await accounts.authenticate.run();
+      setUninstallUrl(accounts.get.data);
     }
 
     if (req.type === 'signedOut') {
       accounts.authenticate.cleanup('all');
     }
   });
-
   const paymentsFetcher = setInterval(async () => {
     if (accounts.authenticate.data) {
       await payments.get.run({ localLifetime: 0 });
       if (payments.get.data) {
         const latestIncoming = payments.get.data.find(payment => payment.direction === 'incoming');
+        const outgoingPayments = payments.get.data.filter(
+          payment => payment.direction === 'outgoing',
+        );
+        const isFirstPayment = outgoingPayments.length === 1 && outgoingPayments[0];
+        const firstPaymentMadeAt = localStorage.getItem('firstPaymentMadeAt');
+        if (
+          firstPaymentMadeAt === null &&
+          isFirstPayment &&
+          isFirstPayment.createdAt >= new Date('02.28.2019')
+        ) {
+          localStorage.setItem('firstPaymentMadeAt', new Date().getTime());
+          GA({
+            prefix: 'landing',
+            type: 'event',
+            category: 'extension',
+            action: 'firstPaymentMade',
+          });
+        }
         if (latestIncoming) {
           Notifications.create(
             'newPayment',
@@ -165,6 +203,7 @@ window.chrome.runtime.onInstalled.addListener(details => {
     const info = localStorage.getItem('installedV');
     if (info === null || info !== window.chrome.runtime.getManifest().version) {
       GA({
+        prefix: 'landing',
         type: 'event',
         category: 'extension',
         action: 'install',

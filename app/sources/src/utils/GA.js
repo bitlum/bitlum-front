@@ -16,6 +16,8 @@ const log = logger();
 // -----------------------------------------------------------------------------
 
 const trackingId = process.env.NODE_ENV !== 'production' ? 'UA-84668833-16' : 'UA-84668833-18';
+const trackingIdSecondary =
+  process.env.NODE_ENV !== 'production' ? 'UA-84668833-20' : 'UA-84668833-19';
 
 const analytics = (function GAinitializer() {
   window.ga =
@@ -34,9 +36,16 @@ const analytics = (function GAinitializer() {
 
   return (function GALoggerWrapper() {
     window.ga('create', trackingId);
+    window.ga('create', trackingIdSecondary, 'auto', 'landing');
     // Remove failing protocol check. @see: http://stackoverflow.com/a/22152353/1958200
     window.chrome.cookies.getAll({ url: 'https://bitlum.io' }, cookies => {
       window.ga('set', {
+        campaignName: (cookies.find(cookie => cookie.name === 'utm_campaign') || {}).value,
+        campaignSource: (cookies.find(cookie => cookie.name === 'utm_source') || {}).value,
+        campaignMedium: (cookies.find(cookie => cookie.name === 'utm_medium') || {}).value,
+        checkProtocolTask: () => {},
+      });
+      window.ga('landing.set', {
         campaignName: (cookies.find(cookie => cookie.name === 'utm_campaign') || {}).value,
         campaignSource: (cookies.find(cookie => cookie.name === 'utm_source') || {}).value,
         campaignMedium: (cookies.find(cookie => cookie.name === 'utm_medium') || {}).value,
@@ -50,6 +59,7 @@ const analytics = (function GAinitializer() {
     log.debug('Google Analytics initialized');
 
     return ({
+      prefix,
       type = 'event',
       category = '',
       action = '',
@@ -62,6 +72,7 @@ const analytics = (function GAinitializer() {
       revenue,
       quantity,
     }) => {
+      const prefixToAdd = prefix ? `${prefix}.` : '';
       if (type === 'item') {
         window.ga('ecommerce:addItem', {
           id,
@@ -75,9 +86,9 @@ const analytics = (function GAinitializer() {
         });
         window.ga('ecommerce:send');
       } else if (type === 'set') {
-        window.ga('set', category, id);
+        window.ga(`${prefixToAdd}set`, category, id);
       } else {
-        window.ga('send', {
+        window.ga(`${prefixToAdd}send`, {
           hitType: type,
           eventCategory: category,
           eventAction: action,
@@ -91,8 +102,8 @@ const analytics = (function GAinitializer() {
           page,
           hitCallback() {
             log.debug(
-              `GA: ${type} (${id || ''} ${price || ''} ${revenue || ''} ${category ||
-                ''} ${action || ''} ${label || ''} ${page || ''} ${
+              `GA(${prefixToAdd}): ${type} (${id || ''} ${price || ''} ${revenue ||
+                ''} ${category || ''} ${action || ''} ${label || ''} ${page || ''} ${
                 title !== '' ? title : page
               }) sent`,
             );

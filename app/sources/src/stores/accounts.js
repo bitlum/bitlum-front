@@ -134,6 +134,7 @@ accounts.signup = createDataFetcher({
       fetchedOnline: true,
     });
     GA({
+      prefix: 'landing',
       type: 'event',
       category: 'extension',
       action: 'signup',

@@ -145,6 +145,7 @@ export class PaymentConfirmation extends Component {
             category: 'payment',
             action: result.error ? 'error' : 'completed',
             label: payment.origin || 'unknown',
+            value: payment.amount * 10 ** 8,
           });
         }}
         loading={payments.estimate.loading || payments.send.loading}

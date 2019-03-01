@@ -141,6 +141,7 @@ const AppWrap = withRouter(withNamespaces()(inject('accounts')(observer(App))));
       created_at: accountData && accountData.createdAt,
       permission_handleLinks_granted:
         settingsData && settingsData.content_script_permissions === 'granted',
+      extension_version: window.chrome.runtime.getManifest().version,
     };
 
     Object.keys((accountData && accountData.balances) || {}).forEach(asset => {

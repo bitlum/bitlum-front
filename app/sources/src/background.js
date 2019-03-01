@@ -157,16 +157,18 @@ const setUninstallUrl = account => {
     if (accounts.authenticate.data) {
       await payments.get.run({ localLifetime: 0 });
       if (payments.get.data) {
-        const latestIncoming = payments.get.data.find(payment => payment.direction === 'incoming');
-        const outgoingPayments = payments.get.data.filter(
-          payment => payment.direction === 'outgoing',
-        );
-        const isFirstPayment = outgoingPayments.length === 1 && outgoingPayments[0];
+        const incoming = payments.get.data.filter(payment => payment.direction === 'incoming');
+        const outgoing = payments.get.data.filter(payment => payment.direction === 'outgoing');
+        const latestIncoming = incoming[0];
+        const latestOutgoing = outgoing[0];
         const firstPaymentMadeAt = localStorage.getItem('firstPaymentMadeAt');
+        const firstDepositMadeAt = localStorage.getItem('firstDepositMadeAt');
+
         if (
           firstPaymentMadeAt === null &&
-          isFirstPayment &&
-          isFirstPayment.createdAt >= new Date('02.28.2019')
+          outgoing.length <= 3 &&
+          latestOutgoing &&
+          latestOutgoing.createdAt >= new Date('02.28.2019')
         ) {
           localStorage.setItem('firstPaymentMadeAt', new Date().getTime());
           GA({
@@ -176,6 +178,23 @@ const setUninstallUrl = account => {
             action: 'firstPaymentMade',
           });
         }
+
+        if (
+          firstDepositMadeAt === null &&
+          incoming.length <= 3 &&
+          latestIncoming &&
+          latestIncoming.createdAt >= new Date('02.28.2019') &&
+          latestIncoming.vuid !== 'bitlum'
+        ) {
+          localStorage.setItem('firstDepositMadeAt', new Date().getTime());
+          GA({
+            prefix: 'landing',
+            type: 'event',
+            category: 'extension',
+            action: 'firstDepositMade',
+          });
+        }
+
         if (latestIncoming) {
           Notifications.create(
             'newPayment',

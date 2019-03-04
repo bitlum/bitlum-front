@@ -74,10 +74,7 @@ class Wrapper extends React.Component {
       payments.estimate.run(payment);
     }
 
-    if (!accounts.get.data) {
-      accounts.get.run();
-    }
-
+    accounts.get.run();
     this.polling = setInterval(() => {
       accounts.get.run();
     }, 5000);

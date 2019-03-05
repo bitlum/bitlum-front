@@ -152,6 +152,14 @@ accounts.signup = createDataFetcher({
   },
 });
 
+accounts.sendRestoreLink = createDataFetcher({
+  name: 'AccountsSendRestoreLink',
+  fetchOptions: {
+    url: '/accounts/sendRestoreLink',
+    method: 'POST',
+  },
+});
+
 accounts.get = createDataFetcher({
   name: 'AccountsGet',
   parseData: accounts.parseData,

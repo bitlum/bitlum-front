@@ -42,7 +42,14 @@ const Login = ({ history }) => (
       <Span>Do not have an account yet?</Span>
       <Span>Register here!</Span>
     </A>
-    <Span className="openIntercom">Have any problems? Contact us!</Span>
+    <A
+      onClick={() => {
+        history.push(`/restore`);
+      }}
+    >
+      <Span>Forgot your password?</Span>
+    </A>
+    <Span className="openIntercom">Have any other problems? Contact us!</Span>
   </Root>
 );
 

@@ -34,6 +34,7 @@ import stores from 'stores';
 
 import Login from 'scenes/Login';
 import Signup from 'scenes/Signup';
+import Restore from 'scenes/Restore';
 import Settings from 'scenes/Settings';
 import Payments from 'scenes/Payments';
 import Payment from 'scenes/Payment';
@@ -99,6 +100,7 @@ class App extends Component {
               <Route exact path="/" component={Login} />
               <Route path="/login" component={Login} />
               <Route path="/signup" component={Signup} />
+              <Route path="/restore" component={Restore} />
               <Redirect to="/login" />
             </Switch>
           ) : (

@@ -28,6 +28,7 @@ export default {
     account: 'Account',
     send: 'Send',
     receive: 'Receive',
+    restore: 'Send reset email',
   },
   payments: {
     states: {
@@ -72,6 +73,7 @@ export default {
     id: 'Account ID',
     restrictions: 'Restrictions',
     balance: 'Balance',
+    restoreSent: 'Your reset link sent to {{email}}!',
   },
   auth: {
     email: 'Your email',

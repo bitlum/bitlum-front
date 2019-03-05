@@ -89,7 +89,7 @@ accounts.authenticate = createDataFetcher({
       LiveChat.boot({
         email: data && data.email,
         user_id: data && data.auid,
-        created_at: data && data.createdAt,
+        signed_up_at: data && parseInt(data.createdAt / 1000, 10),
       });
     }
     // GA({

@@ -138,7 +138,7 @@ const AppWrap = withRouter(withNamespaces()(inject('accounts')(observer(App))));
     const dataToSend = {
       email: accountData && accountData.email,
       user_id: accountData && accountData.auid,
-      created_at: accountData && accountData.createdAt,
+      signed_up_at: accountData && parseInt(accountData.createdAt / 1000, 10),
       permission_handleLinks_granted:
         settingsData && settingsData.content_script_permissions === 'granted',
       extension_version: window.chrome.runtime.getManifest().version,

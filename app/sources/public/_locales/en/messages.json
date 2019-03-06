@@ -1,8 +1,8 @@
 {
   "appName": {
-    "message": "Bitlum Dev Edition"
+    "message": "Bitlum Wallet"
   },
   "appDescription": {
-    "message": "Lightning Network mainnet web wallet. Fast, easy, no node install and synchronisation, 5 minute access."
+    "message": "Lightning Network mainnet web wallet. Fast, easy, no node install and synchronisation, 2 minute access."
   }
 }

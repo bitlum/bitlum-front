@@ -123,6 +123,34 @@
     },
   };
 
+  vendorHandlers['tippin.me'] = {
+    handleWuid: vendorHandlers.default.handleWuid,
+    events: {
+      mousedown: {
+        handle(e) {
+          const { target } = e;
+          const node =
+            target &&
+            target.parentElement.parentElement &&
+            Array.from(target.parentElement.parentElement.childNodes).find(
+              child => child.href && child.href.includes('lightning:'),
+            );
+          const handlerToDisable = document.querySelector('#qrcode-darker');
+          if (handlerToDisable) {
+            const clone = handlerToDisable.cloneNode(true);
+            clone.removeAttribute('onclick');
+            handlerToDisable.parentNode.replaceChild(clone, handlerToDisable);
+          }
+          if (node) {
+            const wuid = node.href.replace(/(lightning):/, '');
+            e.preventDefault();
+            vendorHandlers.default.handleWuid(wuid);
+          }
+        },
+      },
+    },
+  };
+
   vendorHandlers['www.twitch.tv'] = {
     handleWuid: vendorHandlers.default.handleWuid,
     events: {
@@ -193,6 +221,8 @@
           options.config,
         );
       }
+    } else if (['injected'].includes(type)) {
+      options.handle();
     } else {
       console.error(`Unknow event type "${type}"`);
     }

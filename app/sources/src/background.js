@@ -230,7 +230,7 @@ const setUninstallUrl = account => {
     await ui.getLiveChat.run();
     if (ui.getLiveChat.data.unread >= 1) {
       window.chrome.browserAction.setBadgeText({ text: `${ui.getLiveChat.data.unread}` });
-      chrome.browserAction.setBadgeBackgroundColor({ color: '#f00' });
+      window.chrome.browserAction.setBadgeBackgroundColor({ color: '#f00' });
     } else {
       window.chrome.browserAction.setBadgeText({ text: '' });
     }

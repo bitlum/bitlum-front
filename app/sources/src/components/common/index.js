@@ -126,6 +126,24 @@ export const Support = styled.a`
   margin-right: 1em;
   height: 2.5rem;
   width: 2.5rem;
+
+  &:after {
+    content: '${({ unreadCounter }) => unreadCounter}';
+    display: ${({ unreadCounter }) => (unreadCounter >= 1 ? 'flex' : 'none')};
+    justify-content: center;
+    align-items: center;
+    background-color: var(--colors__text_error);
+    font: var(--fonts__text_bold);
+    color: var(--colors__bg_bright);
+    font-size: 0.5em;
+    top: 2.9em;
+    right: 1em;
+    min-height: 1.7em;
+    min-width: 1.7em;
+    border-radius: 50%;
+    border: 0.25em solid var(--colors__bg_bright);
+    position: absolute;
+  }
 `;
 
 export * from './utils';

@@ -105,7 +105,7 @@ export const Global = createGlobalStyle`
   --colors__bg_ok: #35bb78;
   --colors__text_ok: #35bb78;
 
-  --colors__bg_error: rgba(244,5,102,0.11);
+  --colors__bg_error: #f7dde7;
   --colors__text_error: #F40566;
 
   --colors__bg_warn: #ffdfb2;

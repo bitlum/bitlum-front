@@ -9,6 +9,7 @@
 
 import logger from 'utils/logging';
 import GA from 'utils/GA';
+import LiveChat from 'utils/LiveChat';
 
 import stores from 'stores';
 
@@ -118,11 +119,17 @@ const setUninstallUrl = account => {
 
 (async () => {
   await stores.init();
-  const { accounts, payments } = stores;
+  const { accounts, payments, ui } = stores;
 
   const latestPaymentRequests = {};
 
   setUninstallUrl(accounts.get.data);
+
+  if (process.env.NODE_ENV === 'production') {
+    LiveChat.boot({
+      user_id: accounts.get.data && accounts.get.data.auid,
+    });
+  }
 
   window.chrome.runtime.onMessage.addListener(async req => {
     if (req.type === 'clipboardEvent') {
@@ -146,6 +153,9 @@ const setUninstallUrl = account => {
 
     if (req.type === 'authenticated') {
       await accounts.authenticate.run();
+      LiveChat.boot({
+        user_id: accounts.get.data && accounts.get.data.auid,
+      });
       setUninstallUrl(accounts.get.data);
     }
 
@@ -209,9 +219,20 @@ const setUninstallUrl = account => {
       }
     }
   }, 3000);
+
   const accountsFetcher = setInterval(async () => {
     if (accounts.authenticate.data) {
       accounts.get.run({ localLifetime: 0 });
+    }
+  }, 3000);
+
+  const chatUnreadChecker = setInterval(async () => {
+    await ui.getLiveChat.run();
+    if (ui.getLiveChat.data.unread >= 1) {
+      window.chrome.browserAction.setBadgeText({ text: `${ui.getLiveChat.data.unread}` });
+      chrome.browserAction.setBadgeBackgroundColor({ color: '#f00' });
+    } else {
+      window.chrome.browserAction.setBadgeText({ text: '' });
     }
   }, 3000);
 })();

@@ -18,11 +18,12 @@ import view from './view';
 // -----------------------------------------------------------------------------
 
 const Wrapper = props => {
-  const { payments, accounts } = props;
+  const { payments, accounts, ui } = props;
 
   useEffect(() => {
     accounts.get.run();
     payments.get.run();
+    ui.getLiveChat.run();
 
     const polling = setInterval(() => {
       payments.get.run();
@@ -41,4 +42,4 @@ Wrapper.propTypes = {
   // payments: PropTypes.observableObject.isRequired,
 };
 
-export default withNamespaces()(inject('payments', 'accounts', 'settings')(Wrapper));
+export default withNamespaces()(inject('payments', 'accounts', 'settings', 'ui')(Wrapper));

@@ -13,6 +13,7 @@ import wallets from './wallets';
 import vendors from './vendors';
 import settings from './settings';
 import denominations from './denominations';
+import ui from './ui';
 import * as dataGeneric from './dataGeneric';
 
 // -----------------------------------------------------------------------------
@@ -27,7 +28,7 @@ const init = async () => {
   }
 };
 
-export { accounts, payments, wallets, settings, vendors, denominations, init };
+export { accounts, payments, wallets, settings, vendors, denominations, ui, init };
 
 export default {
   accounts,
@@ -37,5 +38,6 @@ export default {
   vendors,
   denominations,
   init,
+  ui,
   ...dataGeneric,
 };

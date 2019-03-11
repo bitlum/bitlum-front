@@ -10,6 +10,8 @@
 import React, { useEffect } from 'react';
 import { List, AutoSizer } from 'react-virtualized';
 import { NavLink } from 'react-router-dom';
+import { observer } from 'mobx-react';
+
 import formatDate from 'date-fns/format';
 import isSameDay from 'date-fns/is_same_day';
 import isToday from 'date-fns/is_today';
@@ -42,8 +44,6 @@ import {
   CloseIcon,
   ShareLink,
 } from './styles';
-
-import { observer } from 'mobx-react';
 
 // -----------------------------------------------------------------------------
 // Code
@@ -115,12 +115,14 @@ const ListGroups = observer(({ payments }) => {
 });
 
 // eslint-disable-next-line
-const Payments = ({ settings, payments, accounts, t }) => {
+const Payments = ({ settings, payments, accounts, ui, t }) => {
   const totalBalance =
     accounts.get.data &&
     Object.keys(accounts.get.data.balances)
       .map(asset => accounts.get.data.balances[asset].available)
       .reduce((p, c) => p + Number(c), 0);
+
+  const LiveChatUnread = ui.getLiveChat.data.unread;
 
   // useEffect(() => {
   //   document.getElementById('payButton').focus();
@@ -134,7 +136,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
             <Logo />
           </NavLink>
           <Settings to="/settings" />
-          <Support className="openIntercom" />
+          <Support unreadCounter={LiveChatUnread} className="openIntercom" />
         </Header>
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
@@ -161,7 +163,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
             <Logo />
           </NavLink>
           <Settings to="/settings" />
-          <Support className="openIntercom" />
+          <Support unreadCounter={LiveChatUnread} className="openIntercom" />
         </Header>
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
@@ -188,7 +190,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
             <Logo />
           </NavLink>
           <Settings to="/settings" />
-          <Support className="openIntercom" />
+          <Support unreadCounter={LiveChatUnread} className="openIntercom" />
         </Header>
         {accounts.get.data &&
         accounts.get.data.restrictions.unconfirmed &&
@@ -285,7 +287,7 @@ const Payments = ({ settings, payments, accounts, t }) => {
           <Logo />
         </NavLink>
         <Settings to="/settings" />
-        <Support className="openIntercom" />
+        <Support unreadCounter={LiveChatUnread} className="openIntercom" />
       </Header>
       {accounts.get.data &&
       accounts.get.data.restrictions.unconfirmed &&

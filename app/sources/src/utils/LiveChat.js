@@ -7,7 +7,7 @@
 // Dependencies
 // -----------------------------------------------------------------------------
 
-import getNet from 'utils/cryptonetChecker';
+import { ui } from 'stores';
 import logger from 'utils/logging';
 
 const log = logger();
@@ -70,6 +70,10 @@ const intercom = (function ICinitializer() {
           utm_medium: (cookies.find(cookie => cookie.name === 'utm_medium') || {}).value,
         };
         window.Intercom('boot', { ...settings, ...userSettings, ...utm });
+      });
+      const that = this;
+      window.Intercom('onUnreadCountChange', function(unreadCount) {
+        ui.setLiveChat.run({ unread: unreadCount });
       });
     },
     track(name, metadata) {

@@ -350,12 +350,17 @@ const Payments = ({ settings, payments, accounts, ui, t }) => {
         to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
       >
         {window.scrollY === 0 &&
+          document.querySelector('.intercom-messenger-frame') === null &&
           document.getElementById('payButton') &&
           document.getElementById('payButton').focus()}
         <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
       </PayButton>
       {accounts.get.data && (
-        <ShareLink link={`https://bitlum.io/?utm_source=bitlumwallet&utm_medium=referall&utm_campaign=home-share-link&referral=${accounts.get.data.auid}`} />
+        <ShareLink
+          link={`https://bitlum.io/?utm_source=bitlumwallet&utm_medium=referall&utm_campaign=home-share-link&referral=${
+            accounts.get.data.auid
+          }`}
+        />
       )}
       {/* <Legend>
         <LegendItem type="pending">Pending</LegendItem>

@@ -9,7 +9,7 @@
 
 import styled from 'styled-components';
 
-import { withLoader, Form, Span, P, Input, Img, Button, Tip } from 'components/common';
+import { withLoader, Form, Span, P, Input, Img, Button, Tip, Loader } from 'components/common';
 
 import BalanceSummaryRaw from 'components/BalanceSummary';
 
@@ -59,6 +59,10 @@ export const Submit = withLoader(styled(Button)`
     font: var(--fonts__text);
     font-size: 1em;
   }
+  & ${Loader} {
+    margin-bottom: -0.12em;
+    margin-left: 0.5em;
+  }
 `);
 
 export const SwitchDenomination = styled(Button)`
@@ -85,10 +89,16 @@ export const Fees = withLoader(styled(P)`
   & ${Tip} {
     margin-right: 0.5em;
   }
-  & > ${Span}:first-child {
+  & ${Loader} {
+    margin-bottom: -0.05em;
+    margin-left: 0.5em;
+  }
+  & > ${Span} {
     display: flex;
-    margin-bottom: 0.2em;
     align-items: center;
+  }
+  & > ${Span}:first-child {
+    margin-bottom: 0.2em;
   }
 `);
 
@@ -107,7 +117,7 @@ export const Description = styled(P)`
     position: absolute;
     bottom: 0;
     display: block;
-    height: 0.05em;
+    height: 0.06em;
     width: 50%;
     background: var(--colors__bg_dark);
   }

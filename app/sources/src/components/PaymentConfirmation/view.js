@@ -38,6 +38,7 @@ import {
   AmountInput,
   AmountInputWraper,
   BalanceSummary,
+  Loader,
 } from './styles';
 
 const log = logger();
@@ -205,14 +206,14 @@ export class PaymentConfirmation extends Component {
             value={amountsCurrent}
             disabled={payment.amount != 0}
             onChange={e => {
-                this.setState({ amountsCurrent: e.target.value });
-                payments.estimate.run(
-                  payment.wuid,
-                  e.target.value / denominations[selectedDenomination].price,
-                  payment.asset,
-                  payment.amount != 0,
-                  { origin: payment.origin },
-                );
+              this.setState({ amountsCurrent: e.target.value });
+              payments.estimate.run(
+                payment.wuid,
+                e.target.value / denominations[selectedDenomination].price,
+                payment.asset,
+                payment.amount != 0,
+                { origin: payment.origin },
+              );
             }}
             required
           />
@@ -237,7 +238,12 @@ export class PaymentConfirmation extends Component {
           appearance="onlyBalance"
           denomination={selectedDenomination}
           accounts={accounts}
-          notEnough={!payments.estimate.loading && !payments.estimate.debouncing && payments.estimate.error && payments.estimate.error.code === '403RPA01'}
+          notEnough={
+            !payments.estimate.loading &&
+            !payments.estimate.debouncing &&
+            payments.estimate.error &&
+            payments.estimate.error.code === '403RPA01'
+          }
         />
         {false && <Message type="error"> {{}.message} </Message>}
         {payments.estimate.error && !payments.estimate.loading && !payments.estimate.debouncing && (
@@ -266,30 +272,35 @@ export class PaymentConfirmation extends Component {
             <Span>Description</Span> <Span>{payment.description}</Span>
           </Description>
         ) : null}
-        <Fees loading={payments.estimate.loading || payments.estimate.debouncing}>
+        <Fees>
           <Span>
             <Tip id="feesTooltip">{t([`tips.fees.${payment.type}`])}</Tip>
             Fee
           </Span>
           <Span>
-            {denominations &&
-              denominations[selectedDenomination].toString({
-                omitDirection: true,
-              }).fees}
+            {payments.estimate.loading || payments.estimate.debouncing
+              ? [denominations && denominations[selectedDenomination].sign, <Loader />]
+              : denominations &&
+                denominations[selectedDenomination].toString({
+                  omitDirection: true,
+                }).fees}
           </Span>
         </Fees>
         <Submit
           primary
           type="submit"
-          loading={payments.estimate.loading || payments.estimate.debouncing}
-          disabled={payments.estimate.error}
+          disabled={
+            payments.estimate.loading || payments.estimate.debouncing || payments.estimate.error
+          }
         >
           <Span>Pay</Span>
           <Span>
-            {denominations &&
-              denominations[selectedDenomination].toString({
-                omitDirection: true,
-              }).total}
+            {payments.estimate.loading || payments.estimate.debouncing
+              ? [denominations && denominations[selectedDenomination].sign, <Loader />]
+              : denominations &&
+                denominations[selectedDenomination].toString({
+                  omitDirection: true,
+                }).total}
           </Span>
         </Submit>
       </Root>

@@ -60,7 +60,9 @@ export class PaymentConfirmation extends Component {
 
   componentDidMount() {
     const { payments, payment } = this.props;
-    payments.estimate.run(payment.wuid, payment.amount, payment.asset, payment.amount != 0);
+    payments.estimate.run(payment.wuid, payment.amount, payment.asset, payment.amount != 0, {
+      origin: payment.origin,
+    });
   }
 
   componentWillUnmount() {
@@ -210,6 +212,7 @@ export class PaymentConfirmation extends Component {
                   e.target.value / denominations[selectedDenomination].price,
                   payment.asset,
                   payment.amount != 0,
+                  { origin: payment.origin },
                 );
               }
             }}

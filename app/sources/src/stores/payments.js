@@ -111,10 +111,10 @@ const payments = {
         ...(await payments.calcDenominations({ ...error, ...JSON.parse(options.body) })),
       };
     },
-    async run(to, amount, asset, fixedAmount) {
+    async run(to, amount, asset, fixedAmount, { origin } = {}) {
       return this.startFetching({
         debounce: !fixedAmount && amount != 0 ? 500 : undefined,
-        body: { to, amount, asset },
+        body: { to, amount, asset, origin },
       });
     },
     onError(error) {

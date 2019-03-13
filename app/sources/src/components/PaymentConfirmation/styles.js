@@ -38,7 +38,7 @@ export const BalanceSummary = styled(BalanceSummaryRaw)`
   margin-bottom: auto;
 `;
 
-export const Submit = styled(Button)`
+export const Submit = withLoader(styled(Button)`
   border: none;
   border-radius: unset;
   display: flex;
@@ -59,7 +59,7 @@ export const Submit = styled(Button)`
     font: var(--fonts__text);
     font-size: 1em;
   }
-`;
+`);
 
 export const SwitchDenomination = styled(Button)`
   position: absolute;
@@ -73,7 +73,7 @@ export const SwitchDenomination = styled(Button)`
   right: 0;
 `;
 
-export const Fees = styled(P)`
+export const Fees = withLoader(styled(P)`
   font: var(--fonts__text);
   width: 100%;
   display: flex;
@@ -90,7 +90,7 @@ export const Fees = styled(P)`
     margin-bottom: 0.2em;
     align-items: center;
   }
-`;
+`);
 
 export const Description = styled(P)`
   position: relative;

@@ -150,7 +150,7 @@ export class PaymentConfirmation extends Component {
             value: payment.amount * 10 ** 8,
           });
         }}
-        loading={payments.estimate.loading || payments.send.loading}
+        loading={payments.send.loading}
       >
         {payments.send.data ? (
           <SendResult status={payments.send.data.status}>
@@ -205,7 +205,6 @@ export class PaymentConfirmation extends Component {
             value={amountsCurrent}
             disabled={payment.amount != 0}
             onChange={e => {
-              if (!payments.estimate.loading) {
                 this.setState({ amountsCurrent: e.target.value });
                 payments.estimate.run(
                   payment.wuid,
@@ -214,7 +213,6 @@ export class PaymentConfirmation extends Component {
                   payment.amount != 0,
                   { origin: payment.origin },
                 );
-              }
             }}
             required
           />
@@ -239,10 +237,10 @@ export class PaymentConfirmation extends Component {
           appearance="onlyBalance"
           denomination={selectedDenomination}
           accounts={accounts}
-          notEnough={payments.estimate.error && payments.estimate.error.code === '403RPA01'}
+          notEnough={!payments.estimate.loading && !payments.estimate.debouncing && payments.estimate.error && payments.estimate.error.code === '403RPA01'}
         />
         {false && <Message type="error"> {{}.message} </Message>}
-        {payments.estimate.error && (
+        {payments.estimate.error && !payments.estimate.loading && !payments.estimate.debouncing && (
           <Message type="error">
             {t([`errors.${payments.estimate.error.code}`, 'errors.default'], {
               amountString:
@@ -268,7 +266,7 @@ export class PaymentConfirmation extends Component {
             <Span>Description</Span> <Span>{payment.description}</Span>
           </Description>
         ) : null}
-        <Fees>
+        <Fees loading={payments.estimate.loading || payments.estimate.debouncing}>
           <Span>
             <Tip id="feesTooltip">{t([`tips.fees.${payment.type}`])}</Tip>
             Fee
@@ -280,7 +278,12 @@ export class PaymentConfirmation extends Component {
               }).fees}
           </Span>
         </Fees>
-        <Submit primary type="submit" disabled={payments.estimate.error}>
+        <Submit
+          primary
+          type="submit"
+          loading={payments.estimate.loading || payments.estimate.debouncing}
+          disabled={payments.estimate.error}
+        >
           <Span>Pay</Span>
           <Span>
             {denominations &&

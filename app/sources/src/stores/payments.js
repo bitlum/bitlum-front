@@ -130,6 +130,7 @@ const payments = {
       return {
         url: '/payments/receive',
         method: 'POST',
+        preventRefetch: false,
         headers: {
           Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
         },

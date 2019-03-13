@@ -101,6 +101,8 @@ const GenericApiStore = {
 
   loading: undefined,
 
+  debouncing: undefined,
+
   startedAt: -Infinity,
 
   finishedAt: -Infinity,
@@ -266,7 +268,13 @@ const GenericApiStore = {
 
     if (options.debounce) {
       clearTimeout(this.debounceTimeout);
+      runInAction(`onDebounceStartDefault (${this.name})`, () => {
+        this.debouncing = true;
+      });
       this.debounceTimeout = setTimeout(async () => {
+        runInAction(`onDebounceEndDefault (${this.name})`, () => {
+          this.debouncing = false;
+        });
         if (this.loading && options.preventRefetch) {
           log.debug(`${this.name} is already loading`);
           return { loading: true };
@@ -292,6 +300,7 @@ const GenericApiStore = {
 
     runInAction(`onStartDefault (${this.name})`, () => {
       this.loading = true;
+      this.debouncing = undefined;
       this.startedAt = new Date().getTime();
     });
 

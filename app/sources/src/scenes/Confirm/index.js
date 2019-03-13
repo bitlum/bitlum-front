@@ -37,7 +37,6 @@ class Wrapper extends React.Component {
         payment = undefined;
       }
     }
-
     if (!payment.origin) {
       try {
         const clipboardPayment = JSON.parse(localStorage.getItem('latestCopiedWuid'));
@@ -92,6 +91,16 @@ class Wrapper extends React.Component {
       } catch (error) {
         log.error(error);
         payment = undefined;
+      }
+    }
+    if (!payment.origin) {
+      try {
+        const clipboardPayment = JSON.parse(localStorage.getItem('latestCopiedWuid'));
+        if (clipboardPayment.wuid === payment.wuid) {
+          payment.origin = clipboardPayment.origin;
+        }
+      } catch (e) {
+        console.log(e);
       }
     }
     return React.createElement(observer(view), { ...this.props, payment });

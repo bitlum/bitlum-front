@@ -111,9 +111,10 @@ const payments = {
         ...(await payments.calcDenominations({ ...error, ...JSON.parse(options.body) })),
       };
     },
-    async run(to, amount, asset, { origin } = {}) {
+    async run(to, amount, asset, fixedAmount) {
       return this.startFetching({
-        body: { to, amount, asset, origin },
+        debounce: !fixedAmount && amount != 0 ? 500 : undefined,
+        body: { to, amount, asset },
       });
     },
     onError(error) {
@@ -202,6 +203,9 @@ payments.getById = createDataFetcher({
     }
     return {
       url: `/payments/${puid}`,
+      headers: {
+        Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
+      },
     };
   },
   parseData(data) {
@@ -224,14 +228,6 @@ payments.getById = createDataFetcher({
         };
       }),
     );
-  },
-  async run(puid) {
-    return this.startFetching({
-      puid,
-      headers: {
-        Authorization: `Bearer ${accounts.authenticate.data && accounts.authenticate.data.token}`,
-      },
-    });
   },
   onError(error) {
     if (error.code.match('^401.*$')) {

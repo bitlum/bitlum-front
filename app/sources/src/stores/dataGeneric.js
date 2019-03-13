@@ -233,6 +233,7 @@ const GenericApiStore = {
 
   async startFetching(passedOptions = {}) {
     let options = this.fetchOptionsDefault;
+    let errorParsed;
     if (typeof this.fetchOptions === 'function') {
       options = {
         ...options,
@@ -247,11 +248,6 @@ const GenericApiStore = {
       };
     }
 
-    if (this.loading && options.preventRefetch) {
-      log.debug(`${this.name} is already loading`);
-      return { loading: true };
-    }
-    let errorParsed;
     if (options.body && typeof passedOptions.body !== 'string' && !options.localOnly) {
       try {
         options.body = JSON.stringify(options.body);
@@ -268,6 +264,32 @@ const GenericApiStore = {
       options.headers['Content-Type'] = 'application/json; charset=utf-8';
     }
 
+    if (options.debounce) {
+      clearTimeout(this.debounceTimeout);
+      this.debounceTimeout = setTimeout(async () => {
+        if (this.loading && options.preventRefetch) {
+          log.debug(`${this.name} is already loading`);
+          return { loading: true };
+        }
+
+        runInAction(`onStartDefault (${this.name})`, () => {
+          this.loading = true;
+          this.startedAt = new Date().getTime();
+        });
+
+        await this.onStart(options);
+        const result = await this.performFetch(options);
+        await this.endFetching(result.dataParsed, result.errorParsed, options);
+      }, options.debounce);
+      log.debug(`${this.name} is debounced by ${options.debounce}`);
+      return { debounced: true };
+    }
+
+    if (this.loading && options.preventRefetch) {
+      log.debug(`${this.name} is already loading`);
+      return { loading: true };
+    }
+
     runInAction(`onStartDefault (${this.name})`, () => {
       this.loading = true;
       this.startedAt = new Date().getTime();
@@ -275,6 +297,13 @@ const GenericApiStore = {
 
     await this.onStart(options);
 
+    const result = await this.performFetch(options);
+    await this.endFetching(result.dataParsed, result.errorParsed, options);
+
+    return result.response;
+  },
+
+  async performFetch(options = {}) {
     let response;
     let fetchedOnline;
     if (options.localOnly) {
@@ -295,7 +324,7 @@ const GenericApiStore = {
               message: `No local value found and no default value passed ${this.name}`,
               code: '500___000',
             };
-            errorParsed = await this.parseError(error, options);
+            const errorParsed = await this.parseError(error, options);
             await this.onErrorDefault(errorParsed, undefined, options);
             return errorParsed;
           }
@@ -327,6 +356,7 @@ const GenericApiStore = {
     }
 
     let dataParsed;
+    let errorParsed;
     if (response.data) {
       dataParsed = await this.parseData(response.data, options);
       if (dataParsed.error) {
@@ -350,14 +380,16 @@ const GenericApiStore = {
       await this.cleanup('error');
     }
 
+    return { response, dataParsed, errorParsed };
+  },
+
+  async endFetching(dataParsed, errorParsed, options) {
     await this.onFinish(dataParsed, errorParsed, options);
 
     runInAction(`onFinishDefault (${this.name})`, () => {
       this.loading = false;
       this.finishedAt = new Date().getTime();
     });
-
-    return response;
   },
 };
 

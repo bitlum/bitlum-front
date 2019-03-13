@@ -27,7 +27,7 @@ class Wrapper extends React.Component {
       },
     } = this.props;
 
-    payments.getById.run(puid);
+    payments.getById.run({ puid });
   }
 
   componentWillUnmount() {

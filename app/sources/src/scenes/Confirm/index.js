@@ -70,10 +70,6 @@ class Wrapper extends React.Component {
 
     vendors.get.run(payment.vuid, { origin: payment.origin });
 
-    if (payment) {
-      payments.estimate.run(payment);
-    }
-
     accounts.get.run();
     this.polling = setInterval(() => {
       accounts.get.run();

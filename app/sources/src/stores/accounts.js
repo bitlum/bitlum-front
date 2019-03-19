@@ -50,7 +50,8 @@ const accounts = {
         };
         result[balance].denominationsAvailable[denomination].toString = () => {
           return denominations.get.data[balance][denomination].stringify(amountAvailable, {
-            omitDirection: true,
+            omitDirection: false,
+            directionsShown: ['negative'],
           });
         };
 
@@ -60,7 +61,8 @@ const accounts = {
         };
         result[balance].denominationsPending[denomination].toString = () => {
           return denominations.get.data[balance][denomination].stringify(amountPending, {
-            omitDirection: true,
+            omitDirection: false,
+            directionsShown: ['negative'],
           });
         };
       });

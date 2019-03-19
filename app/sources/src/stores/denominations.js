@@ -30,10 +30,23 @@ const denominations = {
         round(number) {
           return round(number, this.precision, this.precisionMax);
         },
-        stringify(number, { omitDirection = false, omitSign = false } = {}) {
-          return `${omitDirection ? '' : number === 0 ? '' : number > 0 ? '+ ' : '- '}${
-            omitSign ? '' : `${this.sign} `
-          }${this.round(Math.abs(number))
+        stringify(
+          number,
+          { omitDirection = false, omitSign = false, directionsShown = ['positive', 'negative'] } = {},
+        ) {
+          return `${
+            omitDirection
+              ? ''
+              : number === 0
+              ? ''
+              : number > 0
+              ? directionsShown.includes('positive')
+                ? '+ '
+                : ''
+              : directionsShown.includes('negative')
+              ? '- '
+              : ''
+          }${omitSign ? '' : `${this.sign} `}${this.round(Math.abs(number))
             .toFixed(this.precisionMax || 1)
             .replace(/0+$/, '')
             .replace(/\.$/, '')}`;
@@ -47,10 +60,23 @@ const denominations = {
         round(number) {
           return round(number, this.precision, this.precisionMax);
         },
-        stringify(number, { omitDirection = false, omitSign = false } = {}) {
-          return `${omitDirection ? '' : number === 0 ? '' : number > 0 ? '+ ' : '- '}${
-            omitSign ? '' : `${this.sign} `
-          }${this.round(Math.abs(number))
+        stringify(
+          number,
+          { omitDirection = false, omitSign = false, directionsShown = ['positive', 'negative'] } = {},
+        ) {
+          return `${
+            omitDirection
+              ? ''
+              : number === 0
+              ? ''
+              : number > 0
+              ? directionsShown.includes('positive')
+                ? '+ '
+                : ''
+              : directionsShown.includes('negative')
+              ? '- '
+              : ''
+          }${omitSign ? '' : `${this.sign} `}${this.round(Math.abs(number))
             .toFixed(this.precisionMax || 1)
             .replace(/0+$/, '')
             .replace(/\.$/, '')}`;

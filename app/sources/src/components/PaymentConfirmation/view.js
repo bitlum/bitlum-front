@@ -259,12 +259,37 @@ export class PaymentConfirmation extends Component {
                 denominations[selectedDenomination].toString({
                   omitDirection: true,
                 }).fees,
+              pendingRequestsSum:
+                payments.estimate.error.pendingRequestsSum &&
+                denominations[selectedDenomination].stringify(
+                  payments.estimate.error.pendingRequestsSum *
+                    denominations[selectedDenomination].price,
+                  { omitDirection: true },
+                ),
             })}
           </Message>
         )}
         {payments.send.error && (
           <Message type="error">
-            {t([`errors.${payments.send.error.code}`, 'errors.default'])}
+            {t([`errors.${payments.send.error.code}`, 'errors.default'], {
+              amountString:
+                denominations &&
+                denominations[selectedDenomination].toString({
+                  omitDirection: true,
+                }).amount,
+              feeString:
+                denominations &&
+                denominations[selectedDenomination].toString({
+                  omitDirection: true,
+                }).fees,
+              pendingRequestsSum:
+                payments.send.error.pendingRequestsSum &&
+                denominations[selectedDenomination].stringify(
+                  payments.send.error.pendingRequestsSum *
+                    denominations[selectedDenomination].price,
+                  { omitDirection: true },
+                ),
+            })}
           </Message>
         )}
         {payment.description ? (

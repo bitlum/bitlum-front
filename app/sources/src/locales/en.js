@@ -61,12 +61,16 @@ export default {
     '422MWA00': 'Invoice is already expired',
     '403RPA01':
       'You do not have enough balance to pay {{amountString}} with {{feeString}} payment fees',
+    '403RPA07':
+      'You have unfinished payment requests for {{pendingRequestsSum}} and your balance is not enough to pay them and {{amountString}} with {{feeString}} payment fees',
+    '403RPA06': 'You trying to send payments too often.\nNeed to send frequently? Contact us!',
     default: 'Oops, something went wrong',
   },
   tips: {
     fees: {
       lightning: 'We are charging 0.5% fee\nfor all lightning payments you send',
-      blockchain: 'We are charging 0.5% fee\n+ fixed 0.00006 BTC fee\nfor all blockchain payments you send',
+      blockchain:
+        'We are charging 0.5% fee\n+ fixed 0.00006 BTC fee\nfor all blockchain payments you send',
     },
   },
   account: {

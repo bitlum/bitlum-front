@@ -15,6 +15,7 @@ import styled from 'styled-components';
 
 export const Message = styled.div`
   word-break: break-word;
+  white-space: pre-wrap;
   display: flex;
   flex-direction: column;
   width: 100%;

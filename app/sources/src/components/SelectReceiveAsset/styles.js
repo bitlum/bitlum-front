@@ -77,12 +77,7 @@ export const AssetItem = styled.div`
 `;
 
 export const Root = styled.div`
-  height: 100%;
-  top: 0;
-  width: 100%;
-  height: 100%;
   background-color: var(--colors__bg);
-  z-index: 10;
   justify-content: center;
   display: flex;
   flex-direction: column;

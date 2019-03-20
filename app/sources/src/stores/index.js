@@ -11,6 +11,7 @@ import accounts from './accounts';
 import payments from './payments';
 import wallets from './wallets';
 import vendors from './vendors';
+import info from './info';
 import settings from './settings';
 import denominations from './denominations';
 import ui from './ui';
@@ -28,7 +29,7 @@ const init = async () => {
   }
 };
 
-export { accounts, payments, wallets, settings, vendors, denominations, ui, init };
+export { accounts, payments, wallets, settings, vendors, info, denominations, ui, init };
 
 export default {
   accounts,
@@ -36,6 +37,7 @@ export default {
   wallets,
   settings,
   vendors,
+  info,
   denominations,
   init,
   ui,

@@ -24,7 +24,7 @@ const log = logger();
 
 class Wrapper extends React.Component {
   async componentDidMount() {
-    const { vendors, accounts, payments } = this.props;
+    const { vendors, accounts, info } = this.props;
     const query = window.location.hash.match(/\?(.*)/);
 
     let payment;
@@ -68,10 +68,12 @@ class Wrapper extends React.Component {
     });
 
     vendors.get.run(payment.vuid, { origin: payment.origin });
-
     accounts.get.run();
+    info.get.run();
+
     this.polling = setInterval(() => {
       accounts.get.run();
+      info.get.run();
     }, 5000);
   }
 
@@ -109,4 +111,4 @@ class Wrapper extends React.Component {
 
 Wrapper.propTypes = {};
 
-export default inject('payments', 'vendors', 'accounts')(observer(Wrapper));
+export default inject('payments', 'vendors', 'accounts', 'info')(observer(Wrapper));

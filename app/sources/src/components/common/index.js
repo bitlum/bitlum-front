@@ -26,7 +26,7 @@ export const Pre = styled.pre``;
 
 export const Tip = styled(({ className, id, children, ...rest } = {}) => (
   <Span data-tip="React-tooltip" data-for={id} className={className}>
-    <ReactTooltip id={id} effect="solid">
+    <ReactTooltip id={id} effect="solid" {...rest}>
       {children}
     </ReactTooltip>
   </Span>

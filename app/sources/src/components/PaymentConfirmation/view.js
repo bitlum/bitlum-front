@@ -39,6 +39,7 @@ import {
   AmountInputWraper,
   BalanceSummary,
   Loader,
+  Maintenance,
 } from './styles';
 
 const log = logger();
@@ -90,7 +91,7 @@ export class PaymentConfirmation extends Component {
   }
 
   render() {
-    const { payment, payments, vendors, accounts, className, t } = this.props;
+    const { payment, payments, vendors, accounts, info, className, t } = this.props;
     const {
       amountsOriginal,
       amountsPrevious,
@@ -245,7 +246,12 @@ export class PaymentConfirmation extends Component {
             payments.estimate.error.code === '403RPA01'
           }
         />
-        {false && <Message type="error"> {{}.message} </Message>}
+        {info.get.data && info.get.data.status === 'maintenance' && info.get.data.statusMessage ? (
+          <Maintenance>
+            <Span>{info.get.data.statusMessage.split('\n')[0]}</Span>
+            {info.get.data.statusMessage.split('\n').slice(1).join('\n')}
+          </Maintenance>
+        ) : null}
         {payments.estimate.error && !payments.estimate.loading && !payments.estimate.debouncing && (
           <Message type="error">
             {t([`errors.${payments.estimate.error.code}`, 'errors.default'], {
@@ -315,7 +321,7 @@ export class PaymentConfirmation extends Component {
           primary
           type="submit"
           disabled={
-            payments.estimate.loading || payments.estimate.debouncing || payments.estimate.error
+            payments.estimate.loading || payments.estimate.debouncing || payments.estimate.error || info.get.data && info.get.data.status === 'maintenance'
           }
         >
           <Span>Pay</Span>

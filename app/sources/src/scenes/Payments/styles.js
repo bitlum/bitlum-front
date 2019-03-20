@@ -22,6 +22,7 @@ import {
   withLoader,
   Support as SupportRaw,
   ShareLink,
+  Tip,
 } from 'components/common';
 
 import BalanceSummaryRaw from 'components/BalanceSummary';
@@ -83,6 +84,11 @@ export const PayButton = styled(NavLink)`
   &:hover {
     opacity: 1;
   }
+  ${({ disabled }) =>
+    disabled &&
+    `pointer-events: none;
+     opacity: 0.5;
+     background-color: var(--colors__bg_dark);`}
 `;
 
 export const Settings = styled(NavLink)`
@@ -216,6 +222,33 @@ export const Permissions = styled(MessageRaw)`
     font-size: 0.99em;
     font-weight: 500;
     text-decoration: underline;
+  }
+`;
+
+export const Maintenance = styled(MessageRaw)`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  white-space: pre-wrap;
+  text-align: center;
+  margin-bottom: -3.5em;
+  background: var(--colors__bg_warn);
+  font-weight: 400;
+  & * {
+    word-break: break-word;
+  }
+  & > ${Span} {
+    font-weight: 600 !important;;
+    padding: 0 !important;
+  }
+  & > ${Tip} {
+    margin-left: 0.5em;
+  }
+  & > ${Tip}:before {
+    background: none;
+    border: 0.1em solid black;
   }
 `;
 

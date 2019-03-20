@@ -9,7 +9,18 @@
 
 import styled from 'styled-components';
 
-import { withLoader, Form, Span, P, Input, Img, Button, Tip, Loader } from 'components/common';
+import {
+  withLoader,
+  Form,
+  Span,
+  P,
+  Input,
+  Img,
+  Button,
+  Tip,
+  Loader,
+  Message as MessageRaw,
+} from 'components/common';
 
 import BalanceSummaryRaw from 'components/BalanceSummary';
 
@@ -47,7 +58,8 @@ export const Submit = withLoader(styled(Button)`
   padding: 0.7em 0;
   ${({ disabled }) =>
     disabled &&
-    `pointer-events: none;
+    `cursor: initial;
+     pointer-events: none;
      opacity: 0.5;
      background-color: var(--colors__bg_dark);`}
   & ${Span}:first-child {
@@ -276,6 +288,25 @@ export const SendResultCta = styled.a`
   color: var(--colors__bg_accent);
   font-size: 0.8em;
   margin-top: 1em;
+`;
+
+export const Maintenance = styled(MessageRaw)`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  white-space: pre-wrap;
+  text-align: center;
+  background: var(--colors__bg_warn);
+  font-weight: 400;
+  & * {
+    word-break: break-word;
+  }
+  & > ${Span} {
+    font-weight: 600;
+    padding: 0!important;
+  }
 `;
 
 export const Root = withLoader(styled(Form)`

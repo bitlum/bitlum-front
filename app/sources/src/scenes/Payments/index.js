@@ -18,16 +18,18 @@ import view from './view';
 // -----------------------------------------------------------------------------
 
 const Wrapper = props => {
-  const { payments, accounts, ui } = props;
+  const { payments, accounts, ui, info } = props;
 
   useEffect(() => {
     accounts.get.run();
     payments.get.run();
     ui.getLiveChat.run();
+    info.get.run();
 
     const polling = setInterval(() => {
       payments.get.run();
       accounts.get.run();
+      info.get.run();
     }, 3000);
 
     return () => {
@@ -42,4 +44,4 @@ Wrapper.propTypes = {
   // payments: PropTypes.observableObject.isRequired,
 };
 
-export default withNamespaces()(inject('payments', 'accounts', 'settings', 'ui')(Wrapper));
+export default withNamespaces()(inject('payments', 'accounts', 'settings', 'info', 'ui')(Wrapper));

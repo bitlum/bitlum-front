@@ -119,7 +119,7 @@ const setUninstallUrl = account => {
 
 (async () => {
   await stores.init();
-  const { accounts, payments, ui } = stores;
+  const { accounts, payments, ui, info } = stores;
 
   const latestPaymentRequests = {};
 
@@ -224,6 +224,10 @@ const setUninstallUrl = account => {
     if (accounts.authenticate.data) {
       accounts.get.run({ localLifetime: 0 });
     }
+  }, 3000);
+
+  const infoFetcher = setInterval(async () => {
+    info.get.run({ localLifetime: 0 });
   }, 3000);
 
   const chatUnreadChecker = setInterval(async () => {

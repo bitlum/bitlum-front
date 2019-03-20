@@ -43,6 +43,8 @@ import {
   Settings,
   CloseIcon,
   ShareLink,
+  Maintenance,
+  Tip,
 } from './styles';
 
 // -----------------------------------------------------------------------------
@@ -115,7 +117,7 @@ const ListGroups = observer(({ payments }) => {
 });
 
 // eslint-disable-next-line
-const Payments = ({ settings, payments, accounts, ui, t }) => {
+const Payments = ({ settings, payments, accounts, ui, info, t }) => {
   const totalBalance =
     accounts.get.data &&
     Object.keys(accounts.get.data.balances)
@@ -138,11 +140,21 @@ const Payments = ({ settings, payments, accounts, ui, t }) => {
           <Settings to="/settings" />
           <Support unreadCounter={LiveChatUnread} className="openIntercom" />
         </Header>
+        {info.get.data && info.get.data.status === 'maintenance' && info.get.data.statusMessage ? (
+          <Maintenance>
+            <Span>{info.get.data.statusMessage.split('\n')[0]}</Span>
+            {info.get.data.statusMessage
+              .split('\n')
+              .slice(1)
+              .join('\n')}
+          </Maintenance>
+        ) : null}
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
         <PayButton
           id="payButton"
           to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
+          disabled={info.get.data && info.get.data.status === 'maintenance'}
         >
           {/* <Img src={newPaymentIcon} /> */}
           <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
@@ -165,11 +177,21 @@ const Payments = ({ settings, payments, accounts, ui, t }) => {
           <Settings to="/settings" />
           <Support unreadCounter={LiveChatUnread} className="openIntercom" />
         </Header>
+        {info.get.data && info.get.data.status === 'maintenance' && info.get.data.statusMessage ? (
+          <Maintenance>
+            <Span>{info.get.data.statusMessage.split('\n')[0]}</Span>
+            {info.get.data.statusMessage
+              .split('\n')
+              .slice(1)
+              .join('\n')}
+          </Maintenance>
+        ) : null}
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
         <PayButton
           id="payButton"
           to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
+          disabled={info.get.data && info.get.data.status === 'maintenance'}
         >
           {/* <Img src={newPaymentIcon} /> */}
           <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
@@ -192,6 +214,15 @@ const Payments = ({ settings, payments, accounts, ui, t }) => {
           <Settings to="/settings" />
           <Support unreadCounter={LiveChatUnread} className="openIntercom" />
         </Header>
+        {info.get.data && info.get.data.status === 'maintenance' && info.get.data.statusMessage ? (
+          <Maintenance>
+            <Span>{info.get.data.statusMessage.split('\n')[0]}</Span>
+            {info.get.data.statusMessage
+              .split('\n')
+              .slice(1)
+              .join('\n')}
+          </Maintenance>
+        ) : null}
         {accounts.get.data &&
         accounts.get.data.restrictions.unconfirmed &&
         accounts.get.data.restrictions.unconfirmed.value &&
@@ -214,6 +245,7 @@ const Payments = ({ settings, payments, accounts, ui, t }) => {
         <PayButton
           id="payButton"
           to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
+          disabled={info.get.data && info.get.data.status === 'maintenance'}
         >
           {/* <Img src={newPaymentIcon} /> */}
           <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
@@ -289,6 +321,15 @@ const Payments = ({ settings, payments, accounts, ui, t }) => {
         <Settings to="/settings" />
         <Support unreadCounter={LiveChatUnread} className="openIntercom" />
       </Header>
+      {info.get.data && info.get.data.status === 'maintenance' && info.get.data.statusMessage ? (
+        <Maintenance>
+          <Span>{info.get.data.statusMessage.split('\n')[0]}</Span>
+          {info.get.data.statusMessage
+            .split('\n')
+            .slice(1)
+            .join('\n')}
+        </Maintenance>
+      ) : null}
       {accounts.get.data &&
       accounts.get.data.restrictions.unconfirmed &&
       accounts.get.data.restrictions.unconfirmed.value &&
@@ -348,6 +389,7 @@ const Payments = ({ settings, payments, accounts, ui, t }) => {
       <PayButton
         id="payButton"
         to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
+        disabled={info.get.data && info.get.data.status === 'maintenance'}
       >
         {window.scrollY === 0 &&
           document.querySelector('.intercom-messenger-frame') === null &&

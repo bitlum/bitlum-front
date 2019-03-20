@@ -19,7 +19,8 @@ import view from './view';
 
 class Wrapper extends React.Component {
   async componentDidMount() {
-    const { payments } = this.props;
+    const { payments, info } = this.props;
+    info.get.run();
     payments.receive.run('blockchain', null, 'BTC');
   }
 
@@ -35,4 +36,4 @@ class Wrapper extends React.Component {
 
 Wrapper.propTypes = {};
 
-export default withNamespaces()(inject('payments')(observer(Wrapper)));
+export default withNamespaces()(inject('payments', 'info')(observer(Wrapper)));

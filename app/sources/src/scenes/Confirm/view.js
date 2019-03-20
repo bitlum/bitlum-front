@@ -19,7 +19,7 @@ const log = logger();
 // Code
 // -----------------------------------------------------------------------------
 
-const Confirm = ({ payments, vendors, payment, accounts }) => {
+const Confirm = ({ payments, vendors, payment, accounts, info }) => {
   return (
     <Root>
       <Header>
@@ -33,6 +33,7 @@ const Confirm = ({ payments, vendors, payment, accounts }) => {
           payments={payments}
           vendors={vendors}
           accounts={accounts}
+          info={info}
         />
       ) : (
         <P>No payment provided to confirm</P>

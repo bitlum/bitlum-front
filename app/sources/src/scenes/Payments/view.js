@@ -140,10 +140,10 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
           <Settings to="/settings" />
           <Support unreadCounter={LiveChatUnread} className="openIntercom" />
         </Header>
-        {info.get.data && info.get.data.status === 'maintenance' && info.get.data.statusMessage ? (
+        {info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance' && info.get.data.status.message ? (
           <Maintenance>
-            <Span>{info.get.data.statusMessage.split('\n')[0]}</Span>
-            {info.get.data.statusMessage
+            <Span>{info.get.data.status.message.split('\n')[0]}</Span>
+            {info.get.data.status.message
               .split('\n')
               .slice(1)
               .join('\n')}
@@ -154,7 +154,7 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
         <PayButton
           id="payButton"
           to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
-          disabled={info.get.data && info.get.data.status === 'maintenance'}
+          disabled={info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance'}
         >
           {/* <Img src={newPaymentIcon} /> */}
           <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
@@ -177,10 +177,10 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
           <Settings to="/settings" />
           <Support unreadCounter={LiveChatUnread} className="openIntercom" />
         </Header>
-        {info.get.data && info.get.data.status === 'maintenance' && info.get.data.statusMessage ? (
+        {info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance' && info.get.data.status.message ? (
           <Maintenance>
-            <Span>{info.get.data.statusMessage.split('\n')[0]}</Span>
-            {info.get.data.statusMessage
+            <Span>{info.get.data.status.message.split('\n')[0]}</Span>
+            {info.get.data.status.message
               .split('\n')
               .slice(1)
               .join('\n')}
@@ -191,7 +191,7 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
         <PayButton
           id="payButton"
           to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
-          disabled={info.get.data && info.get.data.status === 'maintenance'}
+          disabled={info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance'}
         >
           {/* <Img src={newPaymentIcon} /> */}
           <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
@@ -214,10 +214,10 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
           <Settings to="/settings" />
           <Support unreadCounter={LiveChatUnread} className="openIntercom" />
         </Header>
-        {info.get.data && info.get.data.status === 'maintenance' && info.get.data.statusMessage ? (
+        {info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance' && info.get.data.status.message ? (
           <Maintenance>
-            <Span>{info.get.data.statusMessage.split('\n')[0]}</Span>
-            {info.get.data.statusMessage
+            <Span>{info.get.data.status.message.split('\n')[0]}</Span>
+            {info.get.data.status.message
               .split('\n')
               .slice(1)
               .join('\n')}
@@ -245,7 +245,7 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
         <PayButton
           id="payButton"
           to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
-          disabled={info.get.data && info.get.data.status === 'maintenance'}
+          disabled={info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance'}
         >
           {/* <Img src={newPaymentIcon} /> */}
           <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
@@ -321,10 +321,10 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
         <Settings to="/settings" />
         <Support unreadCounter={LiveChatUnread} className="openIntercom" />
       </Header>
-      {info.get.data && info.get.data.status === 'maintenance' && info.get.data.statusMessage ? (
+      {info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance' && info.get.data.status.message ? (
         <Maintenance>
-          <Span>{info.get.data.statusMessage.split('\n')[0]}</Span>
-          {info.get.data.statusMessage
+          <Span>{info.get.data.status.message.split('\n')[0]}</Span>
+          {info.get.data.status.message
             .split('\n')
             .slice(1)
             .join('\n')}
@@ -389,7 +389,7 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
       <PayButton
         id="payButton"
         to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
-        disabled={info.get.data && info.get.data.status === 'maintenance'}
+        disabled={info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance'}
       >
         {window.scrollY === 0 &&
           document.querySelector('.intercom-messenger-frame') === null &&

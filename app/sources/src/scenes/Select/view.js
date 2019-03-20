@@ -29,17 +29,17 @@ const Select = ({ payments, info, t }) => (
         })}
       </Message>
     ) : null}
-    {info.get.data && info.get.data.status === 'maintenance' && info.get.data.statusMessage ? (
+    {info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance' && info.get.data.status.message ? (
       <Maintenance>
-        <Span>{info.get.data.statusMessage.split('\n')[0]}</Span>
-        {info.get.data.statusMessage
+        <Span>{info.get.data.status.message.split('\n')[0]}</Span>
+        {info.get.data.status.message
           .split('\n')
           .slice(1)
           .join('\n')}
       </Maintenance>
     ) : null}
     <SelectReceiveAsset
-      disabled={payments.receive.error || (info.get.data && info.get.data.status === 'maintenance')}
+      disabled={payments.receive.error || (info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance')}
     />
   </Root>
 );

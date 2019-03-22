@@ -22,7 +22,7 @@ const Select = ({ payments, info, t }) => (
       <P>Receive</P>
       <Support className="openIntercom" />
     </Header>
-    {payments.receive.error ? (
+    {payments.receive.error && !(info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance' && info.get.data.status.message) ? (
       <Message type="error">
         {t([`errors.${payments.receive.error.code}`, 'errors.default'], {
           ...payments.receive.error,

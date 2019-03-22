@@ -179,7 +179,9 @@ export class ReceivePayment extends Component {
           ))}
         {payments.receive.error && (
           <Message type="error">
-            {t([`errors.${payments.receive.error.code}`, 'errors.default'])}
+            {t([`errors.${payments.receive.error.code}`, 'errors.default'], {
+              ...payments.receive.error,
+            })}
           </Message>
         )}
         <Footer>

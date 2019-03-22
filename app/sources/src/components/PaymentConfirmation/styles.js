@@ -290,25 +290,6 @@ export const SendResultCta = styled.a`
   margin-top: 1em;
 `;
 
-export const Maintenance = styled(MessageRaw)`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  white-space: pre-wrap;
-  text-align: center;
-  background: var(--colors__bg_warn);
-  font-weight: 400;
-  & * {
-    word-break: break-word;
-  }
-  & > ${Span} {
-    font-weight: 600;
-    padding: 0!important;
-  }
-`;
-
 export const Root = withLoader(styled(Form)`
   flex-grow: 2;
 

@@ -246,12 +246,6 @@ export class PaymentConfirmation extends Component {
             payments.estimate.error.code === '403RPA01'
           }
         />
-        {info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance' && info.get.data.status.message ? (
-          <Maintenance>
-            <Span>{info.get.data.status.message.split('\n')[0]}</Span>
-            {info.get.data.status.message.split('\n').slice(1).join('\n')}
-          </Maintenance>
-        ) : null}
         {payments.estimate.error && !payments.estimate.loading && !payments.estimate.debouncing && (
           <Message type="error">
             {t([`errors.${payments.estimate.error.code}`, 'errors.default'], {

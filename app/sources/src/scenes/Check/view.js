@@ -19,7 +19,7 @@ const log = logger();
 // Code
 // -----------------------------------------------------------------------------
 
-const Send = ({ wallets, wallet, accounts }) => {
+const Send = ({ wallets, wallet, accounts, info }) => {
   return (
     <Root>
       <Header>
@@ -27,7 +27,7 @@ const Send = ({ wallets, wallet, accounts }) => {
         <P>Pay</P>
         <Support className="openIntercom" />
       </Header>
-      <CheckDestination wallets={wallets} wallet={wallet} accounts={accounts} />
+      <CheckDestination wallets={wallets} wallet={wallet} accounts={accounts} info={info} />
     </Root>
   );
 };

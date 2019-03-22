@@ -24,8 +24,10 @@ const log = logger();
 
 class Wrapper extends React.Component {
   async componentDidMount() {
-    const { wallets } = this.props;
+    const { wallets, info } = this.props;
     const query = window.location.hash.match(/\?(.*)/);
+    
+    info.get.run();
 
     let wallet;
     if (query) {
@@ -72,4 +74,4 @@ class Wrapper extends React.Component {
 
 Wrapper.propTypes = {};
 
-export default inject('payments', 'wallets', 'accounts')(observer(Wrapper));
+export default inject('payments', 'wallets', 'accounts', 'info')(observer(Wrapper));

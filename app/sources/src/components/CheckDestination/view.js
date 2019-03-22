@@ -13,7 +13,18 @@ import PropTypes from 'prop-types';
 import GA from 'utils/GA';
 import logger from 'utils/logging';
 
-import { Root, Input, Button, Message, P, Span, A, DestinationInfo, AmountInput } from './styles';
+import {
+  Root,
+  Input,
+  Button,
+  Message,
+  P,
+  Span,
+  A,
+  DestinationInfo,
+  AmountInput,
+  Maintenance,
+} from './styles';
 
 const log = logger();
 
@@ -28,11 +39,12 @@ export class CheckDestination extends Component {
   }
 
   render() {
-    const { wallets, wallet, className, history, t, accounts } = this.props;
+    const { wallets, wallet, className, history, t, accounts, info } = this.props;
 
     if (
       wallets.getDetails.data &&
-      !(wallets.getDetails.data.latestPayment && wallets.getDetails.data.type === 'lightning')
+      !(wallets.getDetails.data.latestPayment && wallets.getDetails.data.type === 'lightning') &&
+      !(info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance')
     ) {
       history.push(
         `/payments/confirm?payment=${JSON.stringify({ ...wallet, ...wallets.getDetails.data })}`,
@@ -55,12 +67,34 @@ export class CheckDestination extends Component {
             wallets.getDetails.run(e.target.value, 'BTC');
           }}
           required
+          disabled={
+            info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance'
+          }
         />
-        {wallets.getDetails.error && (
-          <Message type="error">
-            {t([`errors.${wallets.getDetails.error.code}`, 'errors.default'])}
-          </Message>
-        )}
+        {wallets.getDetails.error &&
+          document.getElementById('sendAddress').value !== '' &&
+          !(
+            info.get.data &&
+            info.get.data.status &&
+            info.get.data.status.type === 'maintenance' &&
+            info.get.data.status.message
+          ) && (
+            <Message type="error">
+              {t([`errors.${wallets.getDetails.error.code}`, 'errors.default'])}
+            </Message>
+          )}
+        {info.get.data &&
+        info.get.data.status &&
+        info.get.data.status.type === 'maintenance' &&
+        info.get.data.status.message ? (
+          <Maintenance>
+            <Span>{info.get.data.status.message.split('\n')[0]}</Span>
+            {info.get.data.status.message
+              .split('\n')
+              .slice(1)
+              .join('\n')}
+          </Maintenance>
+        ) : null}
         {wallets.getDetails.data &&
           wallets.getDetails.data.latestPayment &&
           wallets.getDetails.data.type === 'lightning' && (
@@ -71,7 +105,15 @@ export class CheckDestination extends Component {
               accounts.get.data.auid === wallets.getDetails.data.latestPayment.auid ? (
                 <Span
                   onClick={() => {
-                    history.push(`/payments/${wallets.getDetails.data.latestPayment.puid}`);
+                    if (
+                      !(
+                        info.get.data &&
+                        info.get.data.status &&
+                        info.get.data.status.type === 'maintenance'
+                      )
+                    ) {
+                      history.push(`/payments/${wallets.getDetails.data.latestPayment.puid}`);
+                    }
                   }}
                 >
                   Go to payment details

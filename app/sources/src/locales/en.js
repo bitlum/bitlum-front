@@ -65,6 +65,7 @@ export default {
       'You have unfinished payment requests for {{pendingRequestsSum}} and your balance is not enough to pay them and {{amountString}} with {{feeString}} payment fees',
     '403RPA06': 'You trying to send requests too often.\nNeed to send frequently? Contact us!',
     '403RPA09': 'You already have {{activeInvoices}} unexpired invoices\nwhile your limit is {{maxActiveInvoices}}.\n\nNeed more? Contact us!',
+    '403RPA10': 'You already generated {{generatedInvoices}} invoices\nwhile your daily limit is {{maxDailyInvoices}}.\n\nNeed more? Contact us!',
     default: 'Oops, something went wrong',
   },
   tips: {

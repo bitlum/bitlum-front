@@ -117,11 +117,22 @@ const setUninstallUrl = account => {
   });
 };
 
+const openConfirmationWindow = payment => {
+  window.open(
+    `chrome-extension://${
+      window.chrome.runtime.id
+    }/index.html#/payments/check?wallet=${payment}&nopopup=true`,
+    '_blank',
+    'width=450,height=700,titlebar=0,menubar=0,location=0',
+  );
+};
+
 (async () => {
   await stores.init();
-  const { accounts, payments, ui, info } = stores;
+  const { accounts, payments, ui, info, wallets } = stores;
 
   const latestPaymentRequests = {};
+  const latestClipboardChange = {};
 
   setUninstallUrl(accounts.get.data);
 
@@ -133,21 +144,17 @@ const setUninstallUrl = account => {
 
   window.chrome.runtime.onMessage.addListener(async req => {
     if (req.type === 'clipboardEvent') {
-      localStorage.setItem(
-        'latestCopiedWuid',
-        JSON.stringify({ wuid: getClipboardData(), origin: req.origin }),
-      );
+      if (req.action === 'copy') {
+        localStorage.setItem(
+          'latestCopiedWuid',
+          JSON.stringify({ wuid: getClipboardData(), origin: req.origin }),
+        );
+      }
     }
     if (req.type === 'newPayment') {
       if (new Date() - (latestPaymentRequests[req.payment.wuid] || 0) >= 500) {
         latestPaymentRequests[req.payment.wuid] = new Date().getTime();
-        window.open(
-          `chrome-extension://${
-            window.chrome.runtime.id
-          }/index.html#/payments/check?wallet=${JSON.stringify(req.payment)}&nopopup=true`,
-          '_blank',
-          'width=450,height=700,titlebar=0,menubar=0,location=0',
-        );
+        openConfirmationWindow(JSON.stringify(req.payment));
       }
     }
 
@@ -239,6 +246,27 @@ const setUninstallUrl = account => {
       window.chrome.browserAction.setBadgeText({ text: '' });
     }
   }, 3000);
+
+  // const clipboardChecker = setInterval(async () => {
+  //   const wuid = getClipboardData();
+  //   if (new Date() - latestClipboardChange.changedAt >= 1000 ||wuid !== latestClipboardChange.value) {
+  //     latestClipboardChange.changedAt = new Date();
+  //     await wallets.getDetails.run(
+  //       wuid.replace(/(bitcoin|lightning|LIGHTNING|BITCOIN):/, ''),
+  //       'BTC',
+  //     );
+
+  //     if (!wallets.getDetails.error) {
+  //       openConfirmationWindow(
+  //         JSON.stringify({
+  //           wuid,
+  //           asset: 'BTC',
+  //         }),
+  //       );
+  //     }
+  //   }
+  //   latestClipboardChange.value = wuid;
+  // }, 400);
 })();
 
 window.chrome.runtime.onInstalled.addListener(details => {

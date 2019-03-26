@@ -241,9 +241,9 @@
     });
   }
 
-  const clipboardListener = () => {
+  const clipboardListener = e => {
     const origin = window.location.hostname;
-    chrome.runtime.sendMessage({ type: 'clipboardEvent', origin });
+    chrome.runtime.sendMessage({ type: 'clipboardEvent', action: e.type, origin });
   };
   document.addEventListener('copy', clipboardListener);
   document.addEventListener('cut', clipboardListener);

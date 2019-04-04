@@ -65,7 +65,7 @@ const Wrapper = props => {
     }
   }
 
-  return React.createElement(observer(view), { ...props, receive });
+  return React.createElement(observer(view), { ...props, receive, nopopup: new URLSearchParams(query[0]).get('nopopup') });
 };
 
 Wrapper.propTypes = {};

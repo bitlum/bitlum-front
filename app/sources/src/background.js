@@ -127,12 +127,23 @@ const openConfirmationWindow = payment => {
   );
 };
 
+const openReceiveWindow = payment => {
+  window.open(
+    `chrome-extension://${
+      window.chrome.runtime.id
+    }/index.html#/payments/receive/confirm?receive=${payment}&nopopup=true`,
+    '_blank',
+    'width=450,height=700,titlebar=0,menubar=0,location=0',
+  );
+};
+
 (async () => {
   await stores.init();
   const { accounts, payments, ui, info, wallets } = stores;
 
   const latestPaymentRequests = {};
   const latestClipboardChange = {};
+  const withdrawalRequest = {};
 
   setUninstallUrl(accounts.get.data);
 
@@ -142,7 +153,7 @@ const openConfirmationWindow = payment => {
     });
   }
 
-  window.chrome.runtime.onMessage.addListener(async req => {
+  window.chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     if (req.type === 'clipboardEvent') {
       if (req.action === 'copy') {
         localStorage.setItem(
@@ -159,15 +170,76 @@ const openConfirmationWindow = payment => {
     }
 
     if (req.type === 'authenticated') {
-      await accounts.authenticate.run();
-      LiveChat.boot({
-        user_id: accounts.get.data && accounts.get.data.auid,
+      accounts.authenticate.run().then(r => {
+        LiveChat.boot({
+          user_id: accounts.get.data && accounts.get.data.auid,
+        });
+        setUninstallUrl(accounts.get.data);
       });
-      setUninstallUrl(accounts.get.data);
     }
 
     if (req.type === 'signedOut') {
       accounts.authenticate.cleanup('all');
+    }
+
+    if (req.type === 'weblnRequest') {
+      GA({
+        type: 'event',
+        category: 'extension',
+        action: 'weblnRequest',
+        label: req.method,
+      });
+      if (req.method === 'makeInvoice') {
+        const amount = req.options
+          ? (req.options.amount || req.options.defaultAmount) / 10 ** 8
+          : undefined;
+        // Return invoice with maximum amount by default
+        // instead of open withdraw confirmation window
+        // payments.receive
+        //   .run(
+        //     'lightning',
+        //     req.options ? (req.options.amount || req.options.defaultAmount) / 10 ** 8 : 0,
+        //     'BTC',
+        //   )
+        //   .then(response => {
+        //     if (response.data) {
+        //       sendResponse({ paymentRequest: response.data.wuid });
+        //     } else {
+        //       sendResponse({ response });
+        //     }
+        //   });
+        openReceiveWindow(
+          JSON.stringify({
+            amount,
+            type: 'lightning',
+            asset: 'BTC',
+            origin: req.origin,
+          }),
+        );
+        withdrawalRequest[`${req.origin}_${amount}`] = response => {
+          if (response.data) {
+            sendResponse({ paymentRequest: response.data.wuid });
+          } else {
+            sendResponse({ response });
+          }
+        };
+        return true;
+      }
+      if (req.method === 'sendPayment') {
+        openConfirmationWindow(
+          JSON.stringify({ wuid: req.options, asset: 'BTC', origin: req.origin }),
+        );
+      }
+    }
+
+    if (req.type === 'wuidGenerated') {
+      withdrawalRequest[`${req.initialRequest.origin}_${req.initialRequest.amount}`](req);
+      GA({
+        type: 'event',
+        category: 'extension',
+        action: 'weblnInvoicePassed',
+        label: req.initialRequest.origin,
+      });
     }
   });
   const paymentsFetcher = setInterval(async () => {
@@ -267,6 +339,11 @@ const openConfirmationWindow = payment => {
   //   }
   //   latestClipboardChange.value = wuid;
   // }, 400);
+
+  if (process.env.NODE_ENV === 'development') {
+    // Any configurations are optional
+    window.stores = stores;
+  }
 })();
 
 window.chrome.runtime.onInstalled.addListener(details => {

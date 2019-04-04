@@ -23,16 +23,20 @@ const denominations = {
   default: {
     BTC: {
       USD: {
-        price: 4000,
+        price: 4999,
         sign: 'USD',
         precision: 2,
         precisionMax: 5,
-        round(number) {
-          return round(number, this.precision, this.precisionMax);
+        round(number, { precisionMax, precision } = {}) {
+          return round(number, precision || this.precision, precisionMax || this.precisionMax);
         },
         stringify(
           number,
-          { omitDirection = false, omitSign = false, directionsShown = ['positive', 'negative'] } = {},
+          {
+            omitDirection = false,
+            omitSign = false,
+            directionsShown = ['positive', 'negative'],
+          } = {},
         ) {
           return `${
             omitDirection
@@ -57,12 +61,16 @@ const denominations = {
         sign: 'SAT',
         precision: 0,
         precisionMax: 0,
-        round(number) {
-          return round(number, this.precision, this.precisionMax);
+        round(number, { precisionMax, precision } = {}) {
+          return round(number, precision || this.precision, precisionMax || this.precisionMax);
         },
         stringify(
           number,
-          { omitDirection = false, omitSign = false, directionsShown = ['positive', 'negative'] } = {},
+          {
+            omitDirection = false,
+            omitSign = false,
+            directionsShown = ['positive', 'negative'],
+          } = {},
         ) {
           return `${
             omitDirection

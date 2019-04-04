@@ -30,9 +30,9 @@ import completedIcon from 'assets/icons/check-circle.svg';
 
 export * from 'components/common';
 
-export const CopyButton = styled(({ data, className }) => (
-  <CopyButtonRaw className={className} copyData={data}>
-    <CopyIcon />
+export const CopyButton = styled(({ data, className, inline, copiedText, copyText }) => (
+  <CopyButtonRaw className={className} copyData={data} copiedText={copiedText} copyText={copyText}>
+    {!inline ? <CopyIcon /> : null}
   </CopyButtonRaw>
 ))`
   font: var(--fonts__text);
@@ -45,7 +45,7 @@ export const CopyButton = styled(({ data, className }) => (
     width: 1.8em;
   }
   margin-top: -0.2em;
-  margin-left: 0.6em;
+  margin-left: ${({ inline }) => (inline ? '0' : '0.6em')};
 `;
 
 export const AssetSelector = styled.div`
@@ -181,6 +181,28 @@ export const SendResult = styled.div`
   }
 `;
 
+export const ReceiveResult = styled.div`
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  background: var(--colors__bg_bright);
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  white-space: pre;
+  z-index: 10;
+  & > ${P} {
+    font: var(--fonts__header_bold);
+    color: var(--colors__bg_dark);
+  }
+  & ${CopyButton} {
+    font-size: 1.2em;
+    padding-top: 0.5em;
+  }
+`;
+
 export const SendResultIcon = styled.div`
   background-image: url(${completedIcon});
   height: 8em;
@@ -192,6 +214,32 @@ export const SendResultIcon = styled.div`
   background-position: center;
   margin-top: 6em;
   margin-bottom: 2em;
+`;
+
+export const ReceiveResultIcon = styled.div`
+  background-image: url(${completedIcon});
+  height: 8em;
+  width: 8em;
+  background-color: var(--colors__bg_dark);
+  background-repeat: no-repeat;
+  border-radius: 50%;
+  background-size: 60%;
+  background-position: center;
+  margin-top: 6em;
+  margin-bottom: 2em;
+`;
+
+export const SendResultDesc = styled.p`
+  color: var(--colors__bg_dark);
+  font-size: 0.8em;
+  max-width: 90%;
+  word-break: break-word;
+  margin-top: 1em;
+`;
+export const SendResultCta = styled.a`
+  color: var(--colors__bg_accent);
+  font-size: 0.8em;
+  margin-top: 1em;
 `;
 
 export const Root = withLoader(styled(Form)`

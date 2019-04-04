@@ -109,7 +109,10 @@ export default {
       lightning: {
         beforeAmount:
           'Specify how much you want to receive.\nLeave 0 if you want to receive any amount',
+        onWithdrawBeforeAmount:
+          'Specify how much you want to withdraw',
         main: 'Send Lightning Network Bitcoin payment\non address below to deposit them on wallet',
+        onWithdrawMain: 'If you see an error on withdrawal try to\nmanually copy and paste the invoice below',
       },
     },
   },

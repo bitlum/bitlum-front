@@ -17,7 +17,7 @@ import { Button as ButtonCommon } from './Button';
 // -----------------------------------------------------------------------------
 
 export const CopyButton = styled(
-  ({ copyData, copyText = 'Copy', copiedText = 'Copied!', children, ...rest }) => (
+  ({ copyData, copyText = 'Copy', copiedText = 'Copied!', children, inline, ...rest }) => (
     <div
       onClick={e => {
         const copyContainer = document.createElement('input');

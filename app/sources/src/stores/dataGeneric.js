@@ -17,6 +17,8 @@ const log = logger();
 // Code
 // -----------------------------------------------------------------------------
 
+log.setLevel(log.levels.INFO);
+
 const fetchOnline = (url, options) =>
   fetch(url, options)
     .then(res => res.json())

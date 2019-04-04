@@ -5,6 +5,44 @@
 
   window[`walletIntegrated_${chrome.runtime.id}`] = true;
 
+  const weblnContainer = document.createElement('script');
+  weblnContainer.textContent = `
+    window.webln = { isEnabled: true };
+    window.webln.enable = async () => true;
+    const createWeblnPromise = (method, options) => new Promise(resolve => {
+      window.addEventListener('message', function(e) {
+        if (e.data.from === 'bitlum' && e.data.method === method) {
+          resolve(e.data.response);
+        }
+      }, true);
+      window.postMessage({ from: 'webln', method, options }, "*");
+    });
+    window.webln.makeInvoice = (options) => createWeblnPromise('makeInvoice', options);
+    window.webln.sendPayment = (options) => createWeblnPromise('sendPayment', options);
+  `;
+  (document.head || document.documentElement).appendChild(weblnContainer);
+  weblnContainer.remove();
+
+  window.addEventListener(
+    'message',
+    async e => {
+      if (e.data.from === 'webln') {
+        chrome.runtime.sendMessage(
+          {
+            type: 'weblnRequest',
+            method: e.data.method,
+            options: e.data.options,
+            origin: window.location.hostname,
+          },
+          response => {
+            window.postMessage({ from: 'bitlum', method: e.data.method, response }, '*');
+          },
+        );
+      }
+    },
+    true,
+  );
+
   const vendorHandlers = {
     default: {
       handleWuid(wuid, amount) {

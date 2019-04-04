@@ -31,6 +31,12 @@ export const Button = styled.button`
     fill: red;
     margin: 0 0.3em;
   }`};
+  ${({ disabled }) =>
+    disabled &&
+    `pointer-events: none;
+     opacity: 0.5;
+     background-color: var(--colors__bg_dark);
+     border-color: var(--colors__bg_dark);`}
 `;
 
 export default Button;

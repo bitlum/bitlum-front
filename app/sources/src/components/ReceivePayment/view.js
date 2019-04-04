@@ -30,6 +30,10 @@ import {
   Footer,
   SendResult,
   SendResultIcon,
+  SendResultDesc,
+  SendResultCta,
+  ReceiveResultIcon,
+  ReceiveResult,
 } from './styles';
 
 const log = logger();
@@ -40,8 +44,22 @@ const log = logger();
 
 export class ReceivePayment extends Component {
   state = {
-    amountsCurrent: undefined,
-    amountsPrevious: undefined,
+    amountsCurrent:
+      this.props.receive && this.props.receive.amount
+        ? this.props.denominations.get.data[this.props.receive.asset].main.round(
+            this.props.receive &&
+              this.props.receive.amount *
+                this.props.denominations.get.data[this.props.receive.asset].main.price,
+          )
+        : undefined,
+    amountsPrevious:
+      this.props.receive && this.props.receive.amount
+        ? this.props.denominations.get.data[this.props.receive.asset].additional.round(
+            this.props.receive &&
+              this.props.receive.amount *
+                this.props.denominations.get.data[this.props.receive.asset].additional.price,
+          )
+        : undefined,
     amountChanged: false,
     mountedAt: new Date().getTime(),
     selectedDenomination: 'main',
@@ -57,7 +75,7 @@ export class ReceivePayment extends Component {
   }
 
   render() {
-    const { payments, denominations, history, receive, className, t } = this.props;
+    const { payments, nopopup, denominations, history, receive, className, t } = this.props;
     const {
       selectedDenomination,
       denominationPairs,
@@ -90,6 +108,14 @@ export class ReceivePayment extends Component {
         payment => payment.receipt === payments.receive.data.wuid && payment.updatedAt >= mountedAt,
       );
 
+    if (payments.receive.data && payments.receive.data.type === receive.type && !isReceived) {
+      window.chrome.runtime.sendMessage({
+        type: 'wuidGenerated',
+        data: payments.receive.data,
+        initialRequest: receive,
+      });
+    }
+
     return (
       <Root
         className={className}
@@ -106,10 +132,14 @@ export class ReceivePayment extends Component {
       >
         <Message type="info" key="receiveText">
           {payments.receive.data
-            ? t(`receive.tips.${receive.type}.main`)
+            ? t(`receive.tips.${receive.type}.${nopopup ? 'onWithdrawMain' : 'main'}`)
             : t(
                 `receive.tips.${receive.type}.${
-                  receive.type === 'lightning' ? 'beforeAmount' : 'main'
+                  receive.type === 'lightning'
+                    ? nopopup
+                      ? 'onWithdrawBeforeAmount'
+                      : 'beforeAmount'
+                    : 'main'
                 }`,
               )}
         </Message>
@@ -170,11 +200,31 @@ export class ReceivePayment extends Component {
             </SendResult>
           ) : (
             [
-              <QRcode key="recaiveQR" value={payments.receive.data.wuid || ''} size={220} />,
-              <P>
-                <Span>{payments.receive.data.wuid}</Span>
-                <CopyButton data={payments.receive.data.wuid} />
-              </P>,
+              nopopup && (
+                <ReceiveResult>
+                  <ReceiveResultIcon />
+                  <P>{'Waiting for incoming\npayment'}</P>
+                  <SendResultDesc>
+                    {`If incoming withdrawal payment hasn't been received\nwithin two minutes, then use chat box in\nthe up-right corner to contact us.`}
+                    <CopyButton
+                      inline
+                      data={payments.receive.data.wuid}
+                      copyText="Copy invoice"
+                      copiedText="Invoice copied!"
+                    />
+                  </SendResultDesc>
+                  {/* <SendResultCta>as</SendResultCta> */}
+                </ReceiveResult>
+              ),
+              !nopopup && (
+                <QRcode key="recaiveQR" value={payments.receive.data.wuid || ''} size={220} />
+              ),
+              !nopopup && (
+                <P>
+                  <Span>{payments.receive.data.wuid}</Span>
+                  <CopyButton data={payments.receive.data.wuid} />
+                </P>
+              ),
             ]
           ))}
         {payments.receive.error && (
@@ -187,16 +237,19 @@ export class ReceivePayment extends Component {
         <Footer>
           {receive.type === 'lightning' &&
           (!payments.receive.data || payments.receive.data.type !== 'lightning') ? (
-            <Button primary type="submit">
-              Generate invoice to receive{'\n '}
-              {!amountsCurrent
-                ? 'any amount'
-                : `${denominations.get.data[receive.asset][selectedDenomination].stringify(
+            <Button primary type="submit" disabled={nopopup && !amountsCurrent}>
+              {nopopup && !amountsCurrent
+                ? 'You must specify amount\nfor withdrawal'
+                : !amountsCurrent
+                ? `Generate invoice to receive\nany amount`
+                : `${
+                    nopopup ? 'Request withdrawal of' : 'Generate invoice to receive'
+                  }\n${denominations.get.data[receive.asset][selectedDenomination].stringify(
                     amountsCurrent,
                     { omitDirection: true },
                   )}`}
             </Button>
-          ) : (
+          ) : !nopopup ? (
             <P
               primary
               onClick={e => {
@@ -207,11 +260,14 @@ export class ReceivePayment extends Component {
               }}
             >
               {!isReceived && (
-                <Span>After you will send payment you will see it in the payment list</Span>
+                <Span>
+                  After you will {nopopup ? 'receive withdrawal' : 'send payment'} you will see it
+                  in the payment list
+                </Span>
               )}
               <Span>Go to payments list</Span>
             </P>
-          )}
+          ) : null}
         </Footer>
       </Root>
     );

@@ -31,6 +31,13 @@ const wallets = {
         },
       };
     },
+    parseData(data) {
+      return {
+        ...data,
+        memo: data.memo && data.memo.replace(/&/g, '%26'),
+        description: data.description && data.description.replace(/&/g, '%26'),
+      };
+    },
     async run(wuid, asset) {
       return this.startFetching({
         asset,

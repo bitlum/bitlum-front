@@ -25,6 +25,7 @@ const Wrapper = props => {
     payments.get.run();
     ui.getLiveChat.run();
     info.get.run();
+    info.getSkippedAnnouncements.run();
 
     const polling = setInterval(() => {
       payments.get.run();

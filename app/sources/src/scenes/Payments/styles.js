@@ -23,6 +23,7 @@ import {
   Support as SupportRaw,
   ShareLink,
   Tip,
+  Div,
 } from 'components/common';
 
 import BalanceSummaryRaw from 'components/BalanceSummary';
@@ -236,11 +237,12 @@ export const Maintenance = styled(MessageRaw)`
   margin-bottom: -3.5em;
   background: var(--colors__bg_warn);
   font-weight: 400;
+  z-index: 10;
   & * {
     word-break: break-word;
   }
   & > ${Span} {
-    font-weight: 600 !important;;
+    font-weight: 600 !important;
     padding: 0 !important;
   }
   & > ${Tip} {
@@ -249,6 +251,46 @@ export const Maintenance = styled(MessageRaw)`
   & > ${Tip}:before {
     background: none;
     border: 0.1em solid black;
+  }
+`;
+
+export const Announcement = styled(Maintenance)`
+  z-index: 9;
+  background: var(--colors__bg_darkenbright);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-right: 1.3em;
+  padding: 1.3em;
+
+  & ${Div} {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: initial;
+  }
+  & ${Div} ${Div} {
+    align-items: center;
+  }
+  & ${Img} {
+    height: 5em;
+    border-radius: 50%;
+    margin-right: 1.2em;
+  }
+  & ${Span} {
+    padding-top: 0!important;
+    padding-bottom: 0.35em!important;
+  }
+  & ${Button} {
+    margin-top: 1.3em;
+  }
+  & ${Button}:last-child {
+    margin-top: 0.4em;
+    font-size: 0.8em;
+    text-decoration: underline;
+    color: gray;
+    font-weight: 500;
   }
 `;
 
@@ -277,6 +319,10 @@ export const Root = withLoader(styled.div`
     margin-left: 2rem;
     margin-right: 2rem;
     width: calc(100vw - 4rem);
+  }
+
+  ${Maintenance} + ${Announcement} {
+    margin-top: 3.5em;
   }
 
   ${({ empty }) =>

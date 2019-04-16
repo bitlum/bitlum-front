@@ -32,8 +32,7 @@ import {
   Separator,
   HeaderSecondary,
   Logo,
-  Legend,
-  LegendItem,
+  Div,
   Message,
   PayButton,
   Img,
@@ -44,6 +43,7 @@ import {
   CloseIcon,
   ShareLink,
   Maintenance,
+  Announcement,
   Tip,
 } from './styles';
 
@@ -140,7 +140,10 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
           <Settings to="/settings" />
           <Support unreadCounter={LiveChatUnread} className="openIntercom" />
         </Header>
-        {info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance' && info.get.data.status.message ? (
+        {info.get.data &&
+        info.get.data.status &&
+        info.get.data.status.type === 'maintenance' &&
+        info.get.data.status.message ? (
           <Maintenance>
             <Span>{info.get.data.status.message.split('\n')[0]}</Span>
             {info.get.data.status.message
@@ -149,12 +152,58 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
               .join('\n')}
           </Maintenance>
         ) : null}
+        {info.get.data &&
+        info.get.data.announcements &&
+        info.get.data.announcements.message &&
+        (!info.getSkippedAnnouncements.data ||
+          !info.getSkippedAnnouncements.data.includes(info.get.data.announcements.anuid)) ? (
+          <Announcement>
+            {info.get.data.announcements.attachements &&
+            info.get.data.announcements.attachements.imageUrl ? (
+              <Img src={info.get.data.announcements.attachements.imageUrl} />
+            ) : null}
+            <Div>
+              <Span>{info.get.data.announcements.message.split('\n')[0]}</Span>
+              {info.get.data.announcements.message
+                .split('\n')
+                .slice(1)
+                .join('\n')}
+              <Div>
+                {info.get.data.announcements.attachements &&
+                info.get.data.announcements.attachements.cta ? (
+                  <Button
+                    primary
+                    onClick={() => {
+                      info.engageInAnnouncement.run(info.get.data.announcements.anuid);
+                      window.open(info.get.data.announcements.attachements.ctaLink);
+                    }}
+                  >
+                    {info.get.data.announcements.attachements.cta}
+                  </Button>
+                ) : null}
+                {info.get.data.announcements.attachements &&
+                info.get.data.announcements.attachements.skipButton ? (
+                  <Button
+                    link
+                    onClick={() => {
+                      info.skipAnnouncement.run(info.get.data.announcements.anuid);
+                    }}
+                  >
+                    {info.get.data.announcements.attachements.skipButton}
+                  </Button>
+                ) : null}
+              </Div>
+            </Div>
+          </Announcement>
+        ) : null}
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
         <PayButton
           id="payButton"
           to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
-          disabled={info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance'}
+          disabled={
+            info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance'
+          }
         >
           {/* <Img src={newPaymentIcon} /> */}
           <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
@@ -177,7 +226,10 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
           <Settings to="/settings" />
           <Support unreadCounter={LiveChatUnread} className="openIntercom" />
         </Header>
-        {info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance' && info.get.data.status.message ? (
+        {info.get.data &&
+        info.get.data.status &&
+        info.get.data.status.type === 'maintenance' &&
+        info.get.data.status.message ? (
           <Maintenance>
             <Span>{info.get.data.status.message.split('\n')[0]}</Span>
             {info.get.data.status.message
@@ -186,12 +238,58 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
               .join('\n')}
           </Maintenance>
         ) : null}
+        {info.get.data &&
+        info.get.data.announcements &&
+        info.get.data.announcements.message &&
+        (!info.getSkippedAnnouncements.data ||
+          !info.getSkippedAnnouncements.data.includes(info.get.data.announcements.anuid)) ? (
+          <Announcement>
+            {info.get.data.announcements.attachements &&
+            info.get.data.announcements.attachements.imageUrl ? (
+              <Img src={info.get.data.announcements.attachements.imageUrl} />
+            ) : null}
+            <Div>
+              <Span>{info.get.data.announcements.message.split('\n')[0]}</Span>
+              {info.get.data.announcements.message
+                .split('\n')
+                .slice(1)
+                .join('\n')}
+              <Div>
+                {info.get.data.announcements.attachements &&
+                info.get.data.announcements.attachements.cta ? (
+                  <Button
+                    primary
+                    onClick={() => {
+                      info.engageInAnnouncement.run(info.get.data.announcements.anuid);
+                      window.open(info.get.data.announcements.attachements.ctaLink);
+                    }}
+                  >
+                    {info.get.data.announcements.attachements.cta}
+                  </Button>
+                ) : null}
+                {info.get.data.announcements.attachements &&
+                info.get.data.announcements.attachements.skipButton ? (
+                  <Button
+                    link
+                    onClick={() => {
+                      info.skipAnnouncement.run(info.get.data.announcements.anuid);
+                    }}
+                  >
+                    {info.get.data.announcements.attachements.skipButton}
+                  </Button>
+                ) : null}
+              </Div>
+            </Div>
+          </Announcement>
+        ) : null}
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
         <PayButton
           id="payButton"
           to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
-          disabled={info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance'}
+          disabled={
+            info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance'
+          }
         >
           {/* <Img src={newPaymentIcon} /> */}
           <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
@@ -214,7 +312,10 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
           <Settings to="/settings" />
           <Support unreadCounter={LiveChatUnread} className="openIntercom" />
         </Header>
-        {info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance' && info.get.data.status.message ? (
+        {info.get.data &&
+        info.get.data.status &&
+        info.get.data.status.type === 'maintenance' &&
+        info.get.data.status.message ? (
           <Maintenance>
             <Span>{info.get.data.status.message.split('\n')[0]}</Span>
             {info.get.data.status.message
@@ -222,6 +323,50 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
               .slice(1)
               .join('\n')}
           </Maintenance>
+        ) : null}
+        {info.get.data &&
+        info.get.data.announcements &&
+        info.get.data.announcements.message &&
+        (!info.getSkippedAnnouncements.data ||
+          !info.getSkippedAnnouncements.data.includes(info.get.data.announcements.anuid)) ? (
+          <Announcement>
+            {info.get.data.announcements.attachements &&
+            info.get.data.announcements.attachements.imageUrl ? (
+              <Img src={info.get.data.announcements.attachements.imageUrl} />
+            ) : null}
+            <Div>
+              <Span>{info.get.data.announcements.message.split('\n')[0]}</Span>
+              {info.get.data.announcements.message
+                .split('\n')
+                .slice(1)
+                .join('\n')}
+              <Div>
+                {info.get.data.announcements.attachements &&
+                info.get.data.announcements.attachements.cta ? (
+                  <Button
+                    primary
+                    onClick={() => {
+                      info.engageInAnnouncement.run(info.get.data.announcements.anuid);
+                      window.open(info.get.data.announcements.attachements.ctaLink);
+                    }}
+                  >
+                    {info.get.data.announcements.attachements.cta}
+                  </Button>
+                ) : null}
+                {info.get.data.announcements.attachements &&
+                info.get.data.announcements.attachements.skipButton ? (
+                  <Button
+                    link
+                    onClick={() => {
+                      info.skipAnnouncement.run(info.get.data.announcements.anuid);
+                    }}
+                  >
+                    {info.get.data.announcements.attachements.skipButton}
+                  </Button>
+                ) : null}
+              </Div>
+            </Div>
+          </Announcement>
         ) : null}
         {accounts.get.data &&
         accounts.get.data.restrictions.unconfirmed &&
@@ -245,7 +390,9 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
         <PayButton
           id="payButton"
           to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
-          disabled={info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance'}
+          disabled={
+            info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance'
+          }
         >
           {/* <Img src={newPaymentIcon} /> */}
           <Span>{totalBalance === 0 ? 'Receive funds' : 'Pay'}</Span>
@@ -321,7 +468,10 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
         <Settings to="/settings" />
         <Support unreadCounter={LiveChatUnread} className="openIntercom" />
       </Header>
-      {info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance' && info.get.data.status.message ? (
+      {info.get.data &&
+      info.get.data.status &&
+      info.get.data.status.type === 'maintenance' &&
+      info.get.data.status.message ? (
         <Maintenance>
           <Span>{info.get.data.status.message.split('\n')[0]}</Span>
           {info.get.data.status.message
@@ -329,6 +479,49 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
             .slice(1)
             .join('\n')}
         </Maintenance>
+      ) : null}
+      {info.get.data &&
+      info.get.data.announcements &&
+      info.get.data.announcements.message &&
+      !info.getSkippedAnnouncements.data.includes(info.get.data.announcements.anuid) ? (
+        <Announcement>
+          {info.get.data.announcements.attachements &&
+          info.get.data.announcements.attachements.imageUrl ? (
+            <Img src={info.get.data.announcements.attachements.imageUrl} />
+          ) : null}
+          <Div>
+            <Span>{info.get.data.announcements.message.split('\n')[0]}</Span>
+            {info.get.data.announcements.message
+              .split('\n')
+              .slice(1)
+              .join('\n')}
+            <Div>
+              {info.get.data.announcements.attachements &&
+              info.get.data.announcements.attachements.cta ? (
+                <Button
+                  primary
+                  onClick={async () => {
+                    await info.engageInAnnouncement.run(info.get.data.announcements.anuid);
+                    window.open(info.get.data.announcements.attachements.ctaLink);
+                  }}
+                >
+                  {info.get.data.announcements.attachements.cta}
+                </Button>
+              ) : null}
+              {info.get.data.announcements.attachements &&
+              info.get.data.announcements.attachements.skipButton ? (
+                <Button
+                  link
+                  onClick={() => {
+                    info.skipAnnouncement.run(info.get.data.announcements.anuid);
+                  }}
+                >
+                  {info.get.data.announcements.attachements.skipButton}
+                </Button>
+              ) : null}
+            </Div>
+          </Div>
+        </Announcement>
       ) : null}
       {accounts.get.data &&
       accounts.get.data.restrictions.unconfirmed &&
@@ -389,7 +582,9 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
       <PayButton
         id="payButton"
         to={totalBalance === 0 ? '/payments/receive/check' : '/payments/check'}
-        disabled={info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance'}
+        disabled={
+          info.get.data && info.get.data.status && info.get.data.status.type === 'maintenance'
+        }
       >
         {window.scrollY === 0 &&
           document.querySelector('.intercom-messenger-frame') === null &&

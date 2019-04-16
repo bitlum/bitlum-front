@@ -93,6 +93,8 @@ export const Global = createGlobalStyle`
   --colors__bg_dark: #C1C3C6;
   --colors__text_dark: #7a7d85;
 
+  --colors__bg_darkenbright: #e6e7e8;
+
   --colors__bg_bright: #FFF;
   --colors__text_bright: #7B7A7C;
 

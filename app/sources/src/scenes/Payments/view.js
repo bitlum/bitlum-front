@@ -152,50 +152,6 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
               .join('\n')}
           </Maintenance>
         ) : null}
-        {info.get.data &&
-        info.get.data.announcements &&
-        info.get.data.announcements.message &&
-        (!info.getSkippedAnnouncements.data ||
-          !info.getSkippedAnnouncements.data.includes(info.get.data.announcements.anuid)) ? (
-          <Announcement>
-            {info.get.data.announcements.attachements &&
-            info.get.data.announcements.attachements.imageUrl ? (
-              <Img src={info.get.data.announcements.attachements.imageUrl} />
-            ) : null}
-            <Div>
-              <Span>{info.get.data.announcements.message.split('\n')[0]}</Span>
-              {info.get.data.announcements.message
-                .split('\n')
-                .slice(1)
-                .join('\n')}
-              <Div>
-                {info.get.data.announcements.attachements &&
-                info.get.data.announcements.attachements.cta ? (
-                  <Button
-                    primary
-                    onClick={() => {
-                      info.engageInAnnouncement.run(info.get.data.announcements.anuid);
-                      window.open(info.get.data.announcements.attachements.ctaLink);
-                    }}
-                  >
-                    {info.get.data.announcements.attachements.cta}
-                  </Button>
-                ) : null}
-                {info.get.data.announcements.attachements &&
-                info.get.data.announcements.attachements.skipButton ? (
-                  <Button
-                    link
-                    onClick={() => {
-                      info.skipAnnouncement.run(info.get.data.announcements.anuid);
-                    }}
-                  >
-                    {info.get.data.announcements.attachements.skipButton}
-                  </Button>
-                ) : null}
-              </Div>
-            </Div>
-          </Announcement>
-        ) : null}
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
         <PayButton
@@ -237,50 +193,6 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
               .slice(1)
               .join('\n')}
           </Maintenance>
-        ) : null}
-        {info.get.data &&
-        info.get.data.announcements &&
-        info.get.data.announcements.message &&
-        (!info.getSkippedAnnouncements.data ||
-          !info.getSkippedAnnouncements.data.includes(info.get.data.announcements.anuid)) ? (
-          <Announcement>
-            {info.get.data.announcements.attachements &&
-            info.get.data.announcements.attachements.imageUrl ? (
-              <Img src={info.get.data.announcements.attachements.imageUrl} />
-            ) : null}
-            <Div>
-              <Span>{info.get.data.announcements.message.split('\n')[0]}</Span>
-              {info.get.data.announcements.message
-                .split('\n')
-                .slice(1)
-                .join('\n')}
-              <Div>
-                {info.get.data.announcements.attachements &&
-                info.get.data.announcements.attachements.cta ? (
-                  <Button
-                    primary
-                    onClick={() => {
-                      info.engageInAnnouncement.run(info.get.data.announcements.anuid);
-                      window.open(info.get.data.announcements.attachements.ctaLink);
-                    }}
-                  >
-                    {info.get.data.announcements.attachements.cta}
-                  </Button>
-                ) : null}
-                {info.get.data.announcements.attachements &&
-                info.get.data.announcements.attachements.skipButton ? (
-                  <Button
-                    link
-                    onClick={() => {
-                      info.skipAnnouncement.run(info.get.data.announcements.anuid);
-                    }}
-                  >
-                    {info.get.data.announcements.attachements.skipButton}
-                  </Button>
-                ) : null}
-              </Div>
-            </Div>
-          </Announcement>
         ) : null}
         <BalanceSummary key="BalanceSummary" accounts={accounts} />
         {/* <HeaderSecondary>Payments</HeaderSecondary> */}
@@ -324,50 +236,6 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
               .join('\n')}
           </Maintenance>
         ) : null}
-        {info.get.data &&
-        info.get.data.announcements &&
-        info.get.data.announcements.message &&
-        (!info.getSkippedAnnouncements.data ||
-          !info.getSkippedAnnouncements.data.includes(info.get.data.announcements.anuid)) ? (
-          <Announcement>
-            {info.get.data.announcements.attachements &&
-            info.get.data.announcements.attachements.imageUrl ? (
-              <Img src={info.get.data.announcements.attachements.imageUrl} />
-            ) : null}
-            <Div>
-              <Span>{info.get.data.announcements.message.split('\n')[0]}</Span>
-              {info.get.data.announcements.message
-                .split('\n')
-                .slice(1)
-                .join('\n')}
-              <Div>
-                {info.get.data.announcements.attachements &&
-                info.get.data.announcements.attachements.cta ? (
-                  <Button
-                    primary
-                    onClick={() => {
-                      info.engageInAnnouncement.run(info.get.data.announcements.anuid);
-                      window.open(info.get.data.announcements.attachements.ctaLink);
-                    }}
-                  >
-                    {info.get.data.announcements.attachements.cta}
-                  </Button>
-                ) : null}
-                {info.get.data.announcements.attachements &&
-                info.get.data.announcements.attachements.skipButton ? (
-                  <Button
-                    link
-                    onClick={() => {
-                      info.skipAnnouncement.run(info.get.data.announcements.anuid);
-                    }}
-                  >
-                    {info.get.data.announcements.attachements.skipButton}
-                  </Button>
-                ) : null}
-              </Div>
-            </Div>
-          </Announcement>
-        ) : null}
         {accounts.get.data &&
         accounts.get.data.restrictions.unconfirmed &&
         accounts.get.data.restrictions.unconfirmed.value &&
@@ -410,6 +278,7 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
   }
 
   const paymentsGrouped = {};
+  let outgoingPaymentsCount = 0;
   payments.get.data.forEach(payment => {
     const dayOfPayment = new Date(
       payment.status === 'pending' ? '01-01-9999' : payment.updatedAt,
@@ -424,6 +293,9 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
       paymentsGrouped[
         `${dayOfPayment}_${payment.vuid}_${payment.vendorName}_${payment.status}`
       ].push(payment);
+    }
+    if (payment.direction === 'outgoing') {
+      outgoingPaymentsCount += 1;
     }
   });
   const paymentGroupsList = Object.entries(paymentsGrouped)
@@ -480,10 +352,12 @@ const Payments = ({ settings, payments, accounts, ui, info, t }) => {
             .join('\n')}
         </Maintenance>
       ) : null}
-      {info.get.data &&
+      {outgoingPaymentsCount >= 1 &&
+      info.get.data &&
       info.get.data.announcements &&
       info.get.data.announcements.message &&
-      !info.getSkippedAnnouncements.data.includes(info.get.data.announcements.anuid) ? (
+      (!info.getSkippedAnnouncements.data ||
+        !info.getSkippedAnnouncements.data.includes(info.get.data.announcements.anuid)) ? (
         <Announcement>
           {info.get.data.announcements.attachements &&
           info.get.data.announcements.attachements.imageUrl ? (

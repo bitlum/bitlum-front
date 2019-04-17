@@ -63,6 +63,17 @@ class App extends Component {
     const { history, accounts } = this.props;
     GA({ type: 'pageview', page: window.location.pathname });
     const query = window.location.hash.match(/\?(.*)/);
+    const updatedAt = localStorage.getItem('updatedAt');
+    const updatedEventSentAt = localStorage.getItem('updatedEventSentAt');
+    if (updatedEventSentAt <= updatedAt) {
+      GA({
+        type: 'event',
+        category: 'extension',
+        action: 'update',
+        label: window.chrome.runtime.getManifest().version,
+      });
+      localStorage.setItem('updatedEventSentAt', new Date().getTime());
+    }
     if (!query || (query && !new URLSearchParams(query[0]).get('nopopup'))) {
       window.chrome.tabs.query({ active: true, highlighted: true }, tab => {
         GA({

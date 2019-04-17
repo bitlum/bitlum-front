@@ -366,12 +366,6 @@ window.chrome.runtime.onInstalled.addListener(details => {
   } else if (details.reason === 'update') {
     const info = localStorage.getItem('updatedV');
     if (info === null || info !== window.chrome.runtime.getManifest().version) {
-      GA({
-        type: 'event',
-        category: 'extension',
-        action: 'update',
-        label: window.chrome.runtime.getManifest().version,
-      });
       localStorage.setItem('updatedAt', new Date().getTime());
       localStorage.setItem('updatedV', window.chrome.runtime.getManifest().version);
       log.debug(`Extension update to v${window.chrome.runtime.getManifest().version} recorded`);

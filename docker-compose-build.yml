@@ -7,6 +7,6 @@ services:
       context: ./app
       target: builder
     volumes:
-      - ./build:/opt/app/build-prod:delegated
+      - ./build:/opt/app/build-prod
     environment:
       - NODE_ENV=production

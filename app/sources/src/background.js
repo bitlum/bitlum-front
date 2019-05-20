@@ -88,6 +88,24 @@ window.chrome.webRequest.onCompleted.addListener(
   { urls: ['http://*/*', 'https://*/*'] },
 );
 
+// window.chrome.tabs.onUpdated.addListener(tabId => {
+//   window.chrome.permissions.contains(
+//     {
+//       origins: ['http://*/*', 'https://*/*'],
+//     },
+//     granted => {
+//       if (granted) {
+//         if (tabId >= 0) {
+//           window.chrome.tabs.executeScript(tabId, {
+//             file: 'content.js',
+//             allFrames: true,
+//           });
+//         }
+//       }
+//     },
+//   );
+// });
+
 const getClipboardData = () => {
   const clipBoardInput = document.createElement('input');
   clipBoardInput.style = 'position: absolute;';

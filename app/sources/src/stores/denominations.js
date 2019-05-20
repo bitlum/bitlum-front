@@ -23,7 +23,7 @@ const denominations = {
   default: {
     BTC: {
       USD: {
-        price: 4999,
+        price: 7500,
         sign: 'USD',
         precision: 2,
         precisionMax: 5,

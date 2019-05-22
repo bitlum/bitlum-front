@@ -179,6 +179,9 @@ const openReceiveWindow = payment => {
           JSON.stringify({ wuid: getClipboardData(), origin: req.origin }),
         );
       }
+      if (req.action === 'copy' || req.action === 'cut') {
+        latestClipboardChange.value = '';
+      }
     }
     if (req.type === 'newPayment') {
       if (new Date() - (latestPaymentRequests[req.payment.wuid] || 0) >= 500) {
@@ -337,26 +340,26 @@ const openReceiveWindow = payment => {
     }
   }, 3000);
 
-  // const clipboardChecker = setInterval(async () => {
-  //   const wuid = getClipboardData();
-  //   if (new Date() - latestClipboardChange.changedAt >= 1000 ||wuid !== latestClipboardChange.value) {
-  //     latestClipboardChange.changedAt = new Date();
-  //     await wallets.getDetails.run(
-  //       wuid.replace(/(bitcoin|lightning|LIGHTNING|BITCOIN):/, ''),
-  //       'BTC',
-  //     );
-
-  //     if (!wallets.getDetails.error) {
-  //       openConfirmationWindow(
-  //         JSON.stringify({
-  //           wuid,
-  //           asset: 'BTC',
-  //         }),
-  //       );
-  //     }
-  //   }
-  //   latestClipboardChange.value = wuid;
-  // }, 400);
+  const clipboardChecker = setInterval(async () => {
+    const wuid = (getClipboardData() || '').replace(/(bitcoin|lightning|LIGHTNING|BITCOIN):/, '');
+    if (
+      wuid.match(/^ *(lnb|lntb).*/) &&
+      wuid !== latestClipboardChange.value &&
+      latestClipboardChange.value !== undefined
+    ) {
+      latestClipboardChange.changedAt = new Date();
+      await wallets.getDetails.run(wuid, 'BTC');
+      if (!wallets.getDetails.error) {
+        openConfirmationWindow(
+          JSON.stringify({
+            wuid,
+            asset: 'BTC',
+          }),
+        );
+      }
+    }
+    latestClipboardChange.value = wuid;
+  }, 400);
 
   if (process.env.NODE_ENV === 'development') {
     // Any configurations are optional

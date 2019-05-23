@@ -121,6 +121,8 @@ const GenericApiStore = {
 
   fetch: fetchOnline,
 
+  getApiUrl,
+
   getLocal,
 
   setLocal,
@@ -360,6 +362,9 @@ const GenericApiStore = {
       if (response === undefined || response.error !== undefined) {
         log.debug(`Trying to fetch ${this.name} online`);
         response = await this.fetch(getApiUrl(options.url), options);
+        if (!response.data && options.defaultValue) {
+          response = options.defaultValue;
+        }
         fetchedOnline = true;
       } else {
         log.debug(`${options.url} returned from local storage, online fetch skipped`);

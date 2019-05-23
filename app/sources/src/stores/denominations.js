@@ -97,14 +97,23 @@ const denominations = {
 denominations.get = createDataFetcher({
   name: 'DenominationsGet',
   fetchOptions: {
-    localOnly: true,
+    url: '/rates/BTC',
+    localFirst: true,
+    preserveDataOnError: true,
+    preventRefetch: false,
+    localLifetime: 2 * 60 * 60 * 1000,
     defaultValue: { data: denominations.default },
   },
-  async parseData(localDenominations) {
+  async parseData(pricesFetched) {
     const allDenominations = {
       ...denominations.default,
-      ...localDenominations,
     };
+
+    Object.keys(allDenominations).forEach(asset => {
+      if (allDenominations[asset].USD && Number(pricesFetched[asset].value)) {
+        allDenominations[asset].USD.price = Number(pricesFetched[asset].value);
+      }
+    });
 
     if (!settings.get.data) {
       await settings.get.run();
